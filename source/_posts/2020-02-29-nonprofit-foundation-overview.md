@@ -11,12 +11,9 @@ copyright: true
 comment: true
 ---
 
->     **For the benefit of all.** —– [NASA motto.](https://en.wikiquote.org/wiki/NASA)
+> For the benefit of all. —– [NASA motto.](https://en.wikiquote.org/wiki/NASA)
 
 在去年的时候就计划着写一些关于美国非营利性组织的一些文章，比如关于 Linux  基金会、自由软件基金会、电子前哨基金会，拖延症犯了一直未能更新。最近因为疫情影响吧，也让我看到了这个社会公民自发自救的能力在官僚体制下被严格限制，几乎看不到独立的非盈利组织来进行自救。面对天灾人祸，让我想起了 BBC 的一遍报道 [汶川地震十年系列—公民社会从爆发到沉寂的艰难之路](https://www.bbc.com/zhongwen/simp/chinese-news-43972586) 。所以最近就开始打算写一些关于非营利性组织的事儿，今天就先开个头写个简单的介绍一下我所熟知的非营利性组织，绝大多数都是和开源软件、自由软件、互联网等相关的。也算是个普及，让大家知道自己所使用的开源软件/自由软件属于哪一些非盈利组织在维护和支持。
-
->   
->
 
 ![image-20200224135131632](https://blog.502.li/img/image-20200224135131632.png)
 
@@ -24,11 +21,11 @@ comment: true
 
 ### 基金会
 
->   在维基百科中描述到：基金会是利用自然人、法人或者其他组织捐赠的财产，从事慈善、公益事业的非营利性财团法人（Stiftung）。法人（Juristische Person）是自然人以外，由法律所创设，得为权利及义务主体的团体。自法人之组织内容观察，有以社员的集合为中心者称为“社团”，有以独立财产为中心者称为“财团”。法人本身为抽象的“单一体”（Einheit），与各社员或财产分离，具有独立的法人格，可以独立为法律行为。
+> 在维基百科中描述到：基金会是利用自然人、法人或者其他组织捐赠的财产，从事慈善、公益事业的非营利性财团法人（Stiftung）。法人（Juristische Person）是自然人以外，由法律所创设，得为权利及义务主体的团体。自法人之组织内容观察，有以社员的集合为中心者称为“社团”，有以独立财产为中心者称为“财团”。法人本身为抽象的“单一体”（Einheit），与各社员或财产分离，具有独立的法人格，可以独立为法律行为。
 
 ### 非盈利组织
 
->     非营利组织（英语：Nonprofit  Organization，NPO）是指不以营利为目的组织或团体[1]，其核心目标通常是支持或处理个人关心或者公众关注的议题或事件，因此其所涉及的领域非常广，从艺术、慈善、教育、政治、公共政策、宗教、学术、环保等，分别担任起弥补社会需求与政府供给间的落差。
+> 非营利组织（英语：Nonprofit  Organization，NPO）是指不以营利为目的组织或团体[1]，其核心目标通常是支持或处理个人关心或者公众关注的议题或事件，因此其所涉及的领域非常广，从艺术、慈善、教育、政治、公共政策、宗教、学术、环保等，分别担任起弥补社会需求与政府供给间的落差。
 
 摘自维基百科 [非营利组织](https://zh.wikipedia.org/wiki/非營利組織)
 
@@ -58,13 +55,13 @@ comment: true
 
 在许多类型的非营利组织中，享受最多税收优惠的是 501(c)(3)  类型的组织，即按税法第 501(c)(3)  条款成立的组织。它可豁免收入税、销售税甚至财产税。这个组织也可以接受抵税捐赠，享受较低邮费和可以接受资助。因此，这类组织是最多人希望成立的组织，也是最难获得批准的组织。慈善机构较能获得这类免税待遇，美国公民假如向这些组织捐款，纳税人能够在自己的收入税中抵税。没有这一条，许多非营利组织就不能收到足够的捐款。
 
->     根据美国法典第 26 章 501 条（严谨的写法是 [26 U.S. Code § 501(c)(3)](https://www.law.cornell.edu/uscode/text/26/501)） 的规定，如果一个机构运营的目的限定于一些特定领域，那么这个机构可以获得税务减免。这些特定领域包括（但不限于）：宗教，慈善，科学，文学，教育，保护妇女儿童和动物。同时根据相关法律，纳税人对部分501(c)(3)组织的捐款可以抵扣个人所得税。
+> 根据美国法典第 26 章 501 条（严谨的写法是 [26 U.S. Code § 501(c)(3)](https://www.law.cornell.edu/uscode/text/26/501)） 的规定，如果一个机构运营的目的限定于一些特定领域，那么这个机构可以获得税务减免。这些特定领域包括（但不限于）：宗教，慈善，科学，文学，教育，保护妇女儿童和动物。同时根据相关法律，纳税人对部分501(c)(3)组织的捐款可以抵扣个人所得税。
 
 `此处引用` [民间有高手——说说美国的501(c)(3)组织](https://leonson.me/2019/12/us-501c3)
 
->   这个由于特殊的环境因素，比较难以理解，因为都是美国的组织，不过我们在阅读这些基金会年度报表的只需要知道一点即可，那就是 501©(6) 和 501©(3)之间的区别。
+> 这个由于特殊的环境因素，比较难以理解，因为都是美国的组织，不过我们在阅读这些基金会年度报表的只需要知道一点即可，那就是 501©(6) 和 501©(3)之间的区别。
 >
->   比如Linux 基金会就是 501©(6) ，而Apache 软件基金会就是 501©(3) 类型的。具体有什么区别，请有心的看官查阅相关资料。但是在年度报告体现出来的就是Apache 软件基金会会事无巨细的将财务报告写上，而CNCF就不会有这方面的任何材料。
+> 比如Linux 基金会就是 501©(6) ，而Apache 软件基金会就是 501©(3) 类型的。具体有什么区别，请有心的看官查阅相关资料。但是在年度报告体现出来的就是Apache 软件基金会会事无巨细的将财务报告写上，而CNCF就不会有这方面的任何材料。
 
 ``此处引用`` [云原生的旭日东升 —— CNCF 2018年度报告解读](http://opensourceway.community/posts/foundation_introduce/review-cncf-2018-annual-report/)
 
@@ -200,69 +197,69 @@ comment: true
 
 Electronic Frontier Foundation 简称 EFF ，中文译名电子前哨基金会、电子前线基金会。该基金会成立于 1990 年 7 月，在成立的当天就 [史蒂夫•杰克逊游戏案](https://en.wikipedia.org/wiki/Steve_Jackson_Games,_Inc._v._United_States_Secret_Service) 宣布对美国特勤局提起诉讼，给政府找麻烦😂。以及后来的 [伯恩斯坦诉美国政府案](https://en.wikipedia.org/wiki/Bernstein_v._United_States) 。EFF 代理的这两个案件的胜诉有着及其重要的影响：史蒂夫·杰克逊游戏案第一次确立了执法部门在扣押和阅读所有电子邮件之前，必须持有特别描述所有电子邮件的搜查令；伯恩斯坦诉美国政府案第一次裁定软件源代码是受宪法第一修正案保护的言论。当然对于某些摸着石头过河的国家来说，这两个法案就是吃痴人说梦。
 
--   1990 年 3 月 1 日：美国特勤局突袭史蒂夫·杰克逊游戏公司
+- 1990 年 3 月 1 日：美国特勤局突袭史蒂夫·杰克逊游戏公司
 
--   1990 年 4 月：巴洛受到美国 [联邦调查局](https://zh.wikipedia.org/wiki/联邦调查局) 有关 Macintosh 系列 ROM 源代码盗窃和分发的调查
+- 1990 年 4 月：巴洛受到美国 [联邦调查局](https://zh.wikipedia.org/wiki/联邦调查局) 有关 Macintosh 系列 ROM 源代码盗窃和分发的调查
 
--   1990 年 6 月：巴洛公布了“罪与罚”一文 并宣布他和卡普尔计划建立一个组织 ， 来“为教育、游说和诉讼与网上言论相关的领域以及关于宪法进入网络空间的扩充筹集和支付经费。
+- 1990 年 6 月：巴洛公布了“罪与罚”一文 并宣布他和卡普尔计划建立一个组织 ， 来“为教育、游说和诉讼与网上言论相关的领域以及关于宪法进入网络空间的扩充筹集和支付经费。
 
--   1990 年 7 月 6 日：EFF 电子前哨基金会成立并宣布帮助史蒂夫·杰克起诉美国特勤局
+- 1990 年 7 月 6 日：EFF 电子前哨基金会成立并宣布帮助史蒂夫·杰克起诉美国特勤局
 
--   1990年7月10日：电子前线基金会，由卡普尔、[约翰·吉尔摩](https://zh.wikipedia.org/w/index.php?title=约翰·吉尔摩&action=edit&redlink=1) 和巴洛，正式成立于。初始资金由卡普尔，[斯蒂夫·沃兹尼亚克](https://zh.wikipedia.org/wiki/斯蒂夫·沃兹尼亚克) （苹果创始人之一）和一个匿名人士提供。 
+- 1990年7月10日：电子前线基金会，由卡普尔、[约翰·吉尔摩](https://zh.wikipedia.org/w/index.php?title=约翰·吉尔摩&action=edit&redlink=1) 和巴洛，正式成立于。初始资金由卡普尔，[斯蒂夫·沃兹尼亚克](https://zh.wikipedia.org/wiki/斯蒂夫·沃兹尼亚克) （苹果创始人之一）和一个匿名人士提供。 
 
--   2002 年：为域名系统的开放，透明治理而斗争。
+- 2002 年：为域名系统的开放，透明治理而斗争。
 
--   2004 年：Tor 项目
+- 2004 年：Tor 项目
 
--   2020 年：拯救 org 域名行动  [SaveDotOrg](https://savedotorg.org/) 。PS：希望大家都能点进去这个网站来支持这个行动。
+- 2020 年：拯救 org 域名行动  [SaveDotOrg](https://savedotorg.org/) 。PS：希望大家都能点进去这个网站来支持这个行动。
 
 ### 参与的立法斗争
 
--   DOPA (Deleting Online Predators Act of 2006) 删除在线侵犯者法案。[法案详情](https://www.govtrack.us/congress/bills/110/hr1120/text) 与 [维基百科](https://en.wikipedia.org/wiki/Deleting_Online_Predators_Act_of_2006)
+- DOPA (Deleting Online Predators Act of 2006) 删除在线侵犯者法案。[法案详情](https://www.govtrack.us/congress/bills/110/hr1120/text) 与 [维基百科](https://en.wikipedia.org/wiki/Deleting_Online_Predators_Act_of_2006)
 
--   PCNAA (Protecting Cyberspace as a National Asset Act )将网络空间作为国家财产保护法。[法案详情](https://www.govtrack.us/congress/bills/111/hr5548/text) 与 [维基百科](Protecting Cyberspace as a National Asset Act)
+- PCNAA (Protecting Cyberspace as a National Asset Act )将网络空间作为国家财产保护法。[法案详情](https://www.govtrack.us/congress/bills/111/hr5548/text) 与 [维基百科](Protecting Cyberspace as a National Asset Act)
 
--   COICA (Combating Online Infringement and Counterfeits Act )打击在线侵权和假冒法案。[法案详情](https://www.govtrack.us/congress/bills/111/s3804/text) 与 [维基百科](https://en.wikipedia.org/wiki/Combating_Online_Infringement_and_Counterfeits_Act)
+- COICA (Combating Online Infringement and Counterfeits Act )打击在线侵权和假冒法案。[法案详情](https://www.govtrack.us/congress/bills/111/s3804/text) 与 [维基百科](https://en.wikipedia.org/wiki/Combating_Online_Infringement_and_Counterfeits_Act)
 
--   SOPA（Stop Online Piracy Act ）禁止网络盗版法案。[法案详情](https://www.congress.gov/bill/112th-congress/house-bill/3261) 与 [维基百科](https://en.wikipedia.org/wiki/Stop_Online_Piracy_Act)
--   PIPA （Preventing Real Online Threats to Economic Creativity and Theft of Intellectual Property Act ）保护知识产权法案。[维基百科](https://en.wikipedia.org/wiki/PROTECT_IP_Act)与[法案详情](https://www.govtrack.us/congress/bills/112/s968/text)
--   CISPA（Cyber Intelligence Sharing and Protection Act）网络情报共享与保护法案。[法案详情](https://www.congress.gov/bill/114th-congress/house-bill/234)与[维基百科](https://en.wikipedia.org/wiki/Cyber_Intelligence_Sharing_and_Protection_Act)
+- SOPA（Stop Online Piracy Act ）禁止网络盗版法案。[法案详情](https://www.congress.gov/bill/112th-congress/house-bill/3261) 与 [维基百科](https://en.wikipedia.org/wiki/Stop_Online_Piracy_Act)
+- PIPA （Preventing Real Online Threats to Economic Creativity and Theft of Intellectual Property Act ）保护知识产权法案。[维基百科](https://en.wikipedia.org/wiki/PROTECT_IP_Act)与[法案详情](https://www.govtrack.us/congress/bills/112/s968/text)
+- CISPA（Cyber Intelligence Sharing and Protection Act）网络情报共享与保护法案。[法案详情](https://www.congress.gov/bill/114th-congress/house-bill/234)与[维基百科](https://en.wikipedia.org/wiki/Cyber_Intelligence_Sharing_and_Protection_Act)
 
 大家有没有觉着这些法案听起来初衷很美好？但是，美国网民都很清楚，这些法案绝对会被滥用，用来限制互联网自由，所以反抗的人也特别多。其中最臭名昭著的莫过于 SOPA 法案和 PIPA 法案。在这些反对的声音中，最具影响力代表人物的当属于互联网之子 Aaron Swartz  ，亚伦·斯沃茨通过他的求进会网聚众反对SOPA 法案和政府做斗争，最终导致了整个社会都在反对SOPA，也导致了那些议员纷纷改变自己的想法，并导致了白宫最终放弃了这个法案。 
 
->   他在自杀前曾经领导过一场漂亮的胜利，那就是反对 [SOPA （禁止网络盗版法案）](https://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Stop_Online_Piracy_Act)的运动。这是亚伦短暂一生中的高光时刻，也是互联网力量在推动社会革新上的一次闪耀。SOPA 的初衷是保护版权，但实际的处理方式严重动摇了互联网信息开放的根基，并要求互联网平台进行自我审查，这是绝大部分互联网公司所不能容忍的。而支持  SOPA 的则是传统的版权方，包括出版公司，唱片公司，电影公司等，这背后蕴藏着巨大的利益。SOPA  提出时得到了很多国会议员的支持，信奉信息自由的亚伦自然不希望这个法案通过，为此他创办了「求进会」（Demand  Progress），通过组织群众游说号召普通民众一起给国会请愿反对 SOPA。
+> 他在自杀前曾经领导过一场漂亮的胜利，那就是反对 [SOPA （禁止网络盗版法案）](https://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Stop_Online_Piracy_Act)的运动。这是亚伦短暂一生中的高光时刻，也是互联网力量在推动社会革新上的一次闪耀。SOPA 的初衷是保护版权，但实际的处理方式严重动摇了互联网信息开放的根基，并要求互联网平台进行自我审查，这是绝大部分互联网公司所不能容忍的。而支持  SOPA 的则是传统的版权方，包括出版公司，唱片公司，电影公司等，这背后蕴藏着巨大的利益。SOPA  提出时得到了很多国会议员的支持，信奉信息自由的亚伦自然不希望这个法案通过，为此他创办了「求进会」（Demand  Progress），通过组织群众游说号召普通民众一起给国会请愿反对 SOPA。
 
->   在 SOPA 上，国会议员们显然低估了网民的力量。从全球著名域名商 GoDaddy 的倒戈便能看出来：GoDaddy 最初支持  SOPA，而这一举动引起了众多站长的抗议，包括维基百科在内的许多网站在两天之内迅速从 GoDaddy 撤出了37000多个域名，GoDaddy  于是迅速表示转投反对阵营。2012年1月18日，维基百科，Reddit，Craigslist， Mozilla  等网站决定关站24小时以表示抗议，这一天国会的电话被打爆，形势迅速发生逆转，第二天许多原来支持 SOPA 的议员被撼动，站到了反对的一边，最终  SOPA 没有被国会通过。亚伦非常高兴，这是他一生当中为数不多的胜利时刻，这一刻让他觉得自己的理念在现实世界中是行得通的。
+> 在 SOPA 上，国会议员们显然低估了网民的力量。从全球著名域名商 GoDaddy 的倒戈便能看出来：GoDaddy 最初支持  SOPA，而这一举动引起了众多站长的抗议，包括维基百科在内的许多网站在两天之内迅速从 GoDaddy 撤出了37000多个域名，GoDaddy  于是迅速表示转投反对阵营。2012年1月18日，维基百科，Reddit，Craigslist， Mozilla  等网站决定关站24小时以表示抗议，这一天国会的电话被打爆，形势迅速发生逆转，第二天许多原来支持 SOPA 的议员被撼动，站到了反对的一边，最终  SOPA 没有被国会通过。亚伦非常高兴，这是他一生当中为数不多的胜利时刻，这一刻让他觉得自己的理念在现实世界中是行得通的。
 
->   毫无疑问，互联网已经渗入到我们生活的方方面面。即便是 SOPA  这样有巨大利益集团和政治力量所推进的法案也敌不过千千万万使用互联网的普通民众。如果一个网络公司支持  SOPA，用户可以用脚投票让它无法存活；如果有人动摇互联网的根基，各大互联网公司会毫不犹豫地进行联合抗议，它们造成的放大效应比街头抗议强上数百倍。SOPA  的推行者们没有意识到这样一个逆流而动的法案所面对的阻力是如此之大，而亚伦也没有意识到互联网的力量在政治上已经相当成熟，他刚开始并没有抱太大希望。无论如何，这是美国政治史上的大事件，亚伦也成为了这个大事件中的大人物。
+> 毫无疑问，互联网已经渗入到我们生活的方方面面。即便是 SOPA  这样有巨大利益集团和政治力量所推进的法案也敌不过千千万万使用互联网的普通民众。如果一个网络公司支持  SOPA，用户可以用脚投票让它无法存活；如果有人动摇互联网的根基，各大互联网公司会毫不犹豫地进行联合抗议，它们造成的放大效应比街头抗议强上数百倍。SOPA  的推行者们没有意识到这样一个逆流而动的法案所面对的阻力是如此之大，而亚伦也没有意识到互联网的力量在政治上已经相当成熟，他刚开始并没有抱太大希望。无论如何，这是美国政治史上的大事件，亚伦也成为了这个大事件中的大人物。
 >
->   此处引用自 [支乎](https://www.zhihu.com/question/24928691)
+> 此处引用自 [支乎](https://www.zhihu.com/question/24928691)
 
 值得一提的是，Aaron Swartz 在青年时期就深深受到  John Perry Barlow（电子前线基金会 EFF 的创始人）的影响😂。这也不难想象，在当时，一个十五六岁的青少年就已经开始思考网络审查的弊端这种问题了。对比某些比较历害的国家，成长在 GFW 下的一代，他们十五六岁时在想什么？
 
->   Aaron 深受 John Perry Barlow（电子前线基金会 EFF 的创始人）的影响。在 Aaron 中学时代，John到他们学校演讲，Aaron 听了这个演讲之后，深受影响。后来 Aaron 的爸爸说那天他回家就像变了一个人一样。以及后来 Aaron 和 Tim Berners-Lee 在一起工作，等等。按照他的年龄，很难想象和这些互联网的创建者们一起工作和活动。但是他和他们相处很好，这些人也都喜欢他。
+> Aaron 深受 John Perry Barlow（电子前线基金会 EFF 的创始人）的影响。在 Aaron 中学时代，John到他们学校演讲，Aaron 听了这个演讲之后，深受影响。后来 Aaron 的爸爸说那天他回家就像变了一个人一样。以及后来 Aaron 和 Tim Berners-Lee 在一起工作，等等。按照他的年龄，很难想象和这些互联网的创建者们一起工作和活动。但是他和他们相处很好，这些人也都喜欢他。
 
 ``此处引用`` [对话霍炬 | 互联网之子 Aaron Swartz 想要看到的世界](https://medium.com/@blockchaineconomicsstudio/%E5%AF%B9%E8%AF%9D%E9%9C%8D%E7%82%AC-%E4%BA%92%E8%81%94%E7%BD%91%E4%B9%8B%E5%AD%90-aaron-swartz-%E6%83%B3%E8%A6%81%E7%9C%8B%E5%88%B0%E7%9A%84%E4%B8%96%E7%95%8C-dc2dccd08cca)
 
 ### 参考
 
--   [美国网络审查](https://zh.wikipedia.org/wiki/美国网络审查)
--   [EFF 受理案件列表](https://www.eff.org/zh-hans/cases)
+- [美国网络审查](https://zh.wikipedia.org/wiki/美国网络审查)
+- [EFF 受理案件列表](https://www.eff.org/zh-hans/cases)
 
--   [https://www.govtrack.us](https://www.govtrack.us/) 
+- [https://www.govtrack.us](https://www.govtrack.us/) 
 
--   [Internet “Kill Switch” Legislation: Can Obama Turn Off the Internet?](http://btlj.org/2011/03/internet-kill-switch-legislation-can-obama-turn-off-the-internet/)
+- [Internet “Kill Switch” Legislation: Can Obama Turn Off the Internet?](http://btlj.org/2011/03/internet-kill-switch-legislation-can-obama-turn-off-the-internet/)
 
--   [steve-jackson-games-v-secret-service-case-archive](https://www.eff.org/zh-hans/cases/steve-jackson-games-v-secret-service-case-archive) 
+- [steve-jackson-games-v-secret-service-case-archive](https://www.eff.org/zh-hans/cases/steve-jackson-games-v-secret-service-case-archive) 
 
--   [一段在法律与技术冲突的地方捍卫自由的历史](https://blog.502.li/archives/A-History-of-Protecting-Freedom-Where-Law-and-Technology-Collide)
--    [A History of Protecting Freedom Where Law and Technology Collide](https://www.eff.org/about/history)
+- [一段在法律与技术冲突的地方捍卫自由的历史](https://blog.502.li/archives/A-History-of-Protecting-Freedom-Where-Law-and-Technology-Collide)
+-  [A History of Protecting Freedom Where Law and Technology Collide](https://www.eff.org/about/history)
 
 ## 启示
 
->   “如果出问题，他们随时会把我们赶走，”陈健民说：“但一做出点效果，他们就出来‘插旗’claim credit（领功）。”
+> “如果出问题，他们随时会把我们赶走，”陈健民说：“但一做出点效果，他们就出来‘插旗’claim credit（领功）。”
 >
->   这一幕，是当时中国民间组织与政府之间关系的写照。
+> 这一幕，是当时中国民间组织与政府之间关系的写照。
 
 ``此处引用`` [汶川地震十年系列—公民社会从爆发到沉寂的艰难之路](https://www.bbc.com/zhongwen/simp/chinese-news-43972586) 
 
@@ -270,28 +267,28 @@ Electronic Frontier Foundation 简称 EFF ，中文译名电子前哨基金会�
 
 ## 参考
 
--   [The Linux Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/460503801)
--   [Free Software Foundation Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/42888848)
--   [Mozilla Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/200097189)
--   [Wikimedia Foundation Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/200049703)
--   [Software In The Public Interest Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/113390208)
--   [Openstack Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/460618689)
--   [Apache Software Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/470825376)
--   [Python Software Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/43594598)
--   [Gnome Foundation Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/43572618)
--   [Open Networking Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/273327530)
--   [The Freebsd Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/841545163)
--   [Open Source Initiative - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/912037395)
--   [Tor Project Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/208096820)
--   [Freedom Of The Press Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/460967274)
--   [Committee To Protect Journalists Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/133081500)
--   [World Wide Web Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/262852431)
--   [Epic - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/370794792)
--   [Electronic Privacy Information Center - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/522225921)
--   [Epic Foundation Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/260707261)
--   [Software Freedom Conservancy Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/412203632)
--   [Software Freedom Law Center Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/412165986)
--   [Internet Archive - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/943242767)
--   [Risc V Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/474893089)
--   [Creative Commons Corporation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/43585301)
--   [Internet Security Research Group - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/463344200)
+- [The Linux Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/460503801)
+- [Free Software Foundation Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/42888848)
+- [Mozilla Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/200097189)
+- [Wikimedia Foundation Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/200049703)
+- [Software In The Public Interest Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/113390208)
+- [Openstack Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/460618689)
+- [Apache Software Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/470825376)
+- [Python Software Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/43594598)
+- [Gnome Foundation Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/43572618)
+- [Open Networking Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/273327530)
+- [The Freebsd Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/841545163)
+- [Open Source Initiative - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/912037395)
+- [Tor Project Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/208096820)
+- [Freedom Of The Press Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/460967274)
+- [Committee To Protect Journalists Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/133081500)
+- [World Wide Web Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/262852431)
+- [Epic - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/370794792)
+- [Electronic Privacy Information Center - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/522225921)
+- [Epic Foundation Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/260707261)
+- [Software Freedom Conservancy Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/412203632)
+- [Software Freedom Law Center Inc - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/412165986)
+- [Internet Archive - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/943242767)
+- [Risc V Foundation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/474893089)
+- [Creative Commons Corporation - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/43585301)
+- [Internet Security Research Group - Nonprofit Explorer - ProPublica](https://projects.propublica.org/nonprofits/organizations/463344200)
