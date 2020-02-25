@@ -1374,7 +1374,7 @@ A： 我们正在调研 Loki，Grafana Labs 已经用 loki 提供日志服务了
 
 A：收集日志的 agent 最好用比较轻量一点的比如 fluentbit，可以把 fluentd 作为 fluentbit 的接收者，用 fluentd 实现集中的解析后再发到最终的存储，这样就不用每个节点去部署 fluentd 了。类似这样的架构
 
-![-](https://blog.502.li/img/1575857978783.png)
+![-](https://img.502.li/1575857978783.png)
 
 > Q：请问一下，单台日志量多少？
 
@@ -1658,7 +1658,7 @@ A：对于emptydir，我们使用xfs quota限制。对于PV/PVC，我们在contr
 
 > Q：ceph rbd和本地磁盘有做过benchmark么？cg v2应该只能限制本地盘吧？
 
-A：![-](https://blog.502.li/img/1575857922468.png)
+A：![-](https://img.502.li/1575857922468.png)
 
 > Q：kernel network storage有没有什么好的学习材料？
 
@@ -1730,7 +1730,7 @@ A：金丝雀部署功能已提供，容器这块暂时还没有开放出去，�
 
 A：文件其实是不存在的，是直接脚本生成yaml数据，通过api调用，python脚本会写好基本变量，只需要传值即可，脚本截取部分你应该能看明白。
 
-![-](https://blog.502.li/img/1575858093193.png)
+![-](https://img.502.li/1575858093193.png)
 
 > Q：听说你们汇桔网大裁员啊！还有几个运维？？
 
