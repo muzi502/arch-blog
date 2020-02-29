@@ -1,6 +1,6 @@
 ---
 title: 深入理解 Linux 内核读书笔记
-date: 2019-10-20
+date: 2018-10-20
 updated:
 categories: 阅读
 slug:  

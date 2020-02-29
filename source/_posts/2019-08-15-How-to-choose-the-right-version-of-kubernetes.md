@@ -1,7 +1,7 @@
 ---
 title: 生产环境如何保守地选择 kubernetes 版本
 date: 2019-08-15
-updated: 2019-12-11
+updated: 2020-03-01
 categories: 技术
 slug:  How-to-choose-the-right-version-of-kubernetes
 tag:
@@ -24,6 +24,8 @@ comment: true
 
 | month   | stable                                                       | stable                                                       | stable                                                       | stable                                                       |
 | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 2020-02 | [v1.17.3](https://github.com/kubernetes/kubernetes/releases/tag/v1.17.3) | [v1.16.7](https://github.com/kubernetes/kubernetes/releases/tag/v1.16.7) | [v1.15.10](https://github.com/kubernetes/kubernetes/releases/tag/v1.15.10) |                                                              |
+| 2020-01 | [v1.17.2](https://github.com/kubernetes/kubernetes/releases/tag/v1.17.2)<br>[v1.17.1](https://github.com/kubernetes/kubernetes/releases/tag/v1.17.1) | [v1.16.6](https://github.com/kubernetes/kubernetes/releases/tag/v1.16.6)<br>[v1.16.5](https://github.com/kubernetes/kubernetes/releases/tag/v1.16.5) | [v1.15.9](https://github.com/kubernetes/kubernetes/releases/tag/v1.15.9)<br>[v1.15.8](https://github.com/kubernetes/kubernetes/releases/tag/v1.15.8) | CVE                                                          |
 | 2019-12 | [v1.17.0](https://github.com/kubernetes/kubernetes/releases/tag/v1.17.0) | [v1.16.4](https://github.com/kubernetes/kubernetes/releases/tag/v1.16.4) | [v1.15.7](https://github.com/kubernetes/kubernetes/releases/tag/v1.15.7) | [v1.14.10](https://github.com/kubernetes/kubernetes/releases/tag/v1.14.10) |
 | 2019-11 | [v1.16.3](https://github.com/kubernetes/kubernetes/releases/tag/v1.16.3) | [v1.15.6](https://github.com/kubernetes/kubernetes/releases/tag/v1.15.6) | [v1.14.9](https://github.com/kubernetes/kubernetes/releases/tag/v1.14.9) |                                                              |
 | 2019-10 | [v1.16.1](https://github.com/kubernetes/kubernetes/releases/tag/v1.16.1) <br>[v1.16.2](https://github.com/kubernetes/kubernetes/releases/tag/v1.16.2) | [v1.15.5](https://github.com/kubernetes/kubernetes/releases/tag/v1.15.5) | [v1.14.8](https://github.com/kubernetes/kubernetes/releases/tag/v1.14.8) | [v1.13.12](https://github.com/kubernetes/kubernetes/releases/tag/v1.13.12) |
@@ -76,15 +78,11 @@ comment: true
 | [AKS](https://azure.microsoft.com/en-us/services/kubernetes-service/) |      1.15.5(GA), 1.14.8, 1.13.12, 1.12.10       |        |           |
 |            [EKS](https://aws.amazon.com/cn/eks/)             |   1.14.6(default), 1.13.10, 1.12.10, 1.11.10    |        |           |
 
-## 云计算厂商
-
-下面的不是最新的，是九月份时候的，已经过时了，还是参考上面的吧
-
 ## 2. Google kubernetes
 
 **Google kubernetes [官方文档](https://cloud.google.com/kubernetes-engine/docs/release-notes)**
 
-### August 1, 2019
+ August 1, 2019
 
 ```ini
 1.13.7-gke.15
@@ -131,8 +129,6 @@ comment: true
 1.13.x clusters v1.13.5-gke.10 and newer
 1.14.x (Alpha) clusters v1.14.1-gke.5 and newer
 ```
-
-
 
 ## 3. AWS kubernetes
 
@@ -230,4 +226,4 @@ Linux deploy 3.10.0-957.el7.x86_64 #1 SMP Thu Nov 8 23:39:32 UTC 2018
 
 ## 6. 综上
 
-综上所述，汝对 Kubernetes 版本的选择也有了个大致的方向。在此我并没有使用国内的一些云计算厂商做测试。总的来说吧 Google 对 Kubernetes 的驾驭程度肯定要秒杀其他云计算厂商吧，毕竟是亲爹嘛。所以当汝也开始选择 Kubernetes 版本时，适用于生产环境的话，还是要再小版本号 6 以上才合适，比如 1.14.6 1.15.6 1.13.8 等等，都是比较保守的选择。之前的版本可以做测试用。其实选择 1.14.5 1.15.5 等也合适，M$ 家得 kubernetes 就是从 5 开始 GA 的。
+综上所述，汝对 Kubernetes 版本的选择也有了个大致的方向。在此我并没有使用国内的一些云计算厂商做测试。总的来说吧 Google 对 Kubernetes 的驾驭程度肯定要秒杀其他云计算厂商吧，毕竟是亲爹嘛。所以当汝也开始选择 Kubernetes 版本时，适用于生产环境的话，还是要再小版本号 6 以上才合适，比如 1.14.6 1.15.6 1.13.8 等等，都是比较保守的选择。之前的版本可以做测试用。其实选择 1.14.5 1.15.5 等也合适，M$ 家的 kubernetes 就是从 5 开始 GA 的。

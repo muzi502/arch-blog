@@ -1,7 +1,7 @@
 ---
 title: 知名软件基金会概览
-date: 2020-02-29
-update: 2020-02-29
+date: 2020-02-28
+updated: 2020-03-01
 slug: 
 categories: 互联网
 tag:
