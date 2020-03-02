@@ -45,6 +45,7 @@ lsmod | grep br_netfilter
 
 1.安装 yum-utils 提供 yum-config-manager 工具
 devicemapper存储驱动依赖 device-mapper-persistent-data 和 lvm2
+
 ```sudo yum install -y yum-utils device-mapper-persistent-data lvm2```
 
 2.添加aliyun软件包源
@@ -53,8 +54,10 @@ devicemapper存储驱动依赖 device-mapper-persistent-data 和 lvm2
 3.安装docker-ce-stable
 官方文档写了建议安装18.06.2，其他版本的docker支持的不太好
 On each of your machines, install Docker. Version 18.06.2 is recommended, but 1.11, 1.12, 1.13, 17.03 and 18.09 are known to work as well. Keep track of the latest verified Docker version in the Kubernetes release notes.
-```sudo yum list docker-ce.x86_64  --showduplicates |sort -r``` 选择```docker-ce-18.06.1.ce-3.el7```版
-```yum install -y docker-ce-18.06.1.ce-3.el7```
+
+`sudo yum list docker-ce.x86_64  --showduplicates |sort -r` 选择`docker-ce-18.06.1.ce-3.el7`版
+
+`yum install -y docker-ce-18.06.1.ce-3.el7`
 
 4.添加Docker 用户和用户组(可选)
 ```sudo usermod -aG docker $USER```
@@ -111,11 +114,11 @@ docker save -o k8s.tar $(docker images | grep B | cut -d ' ' -f1)
 gzip k8s.tar k8s.tar.gz
 ```
 
-将这些镜像导出并压缩，传输回国内。http方式多线程传输最快。IDM64线程能跑满带宽😂，不到一分钟就下载到本地。然后再scp传输回国内的云服务器上。grep B是为了过滤掉输出结果第一行显示的 ```REPOSITORY  TAG  IMAGE ID  CREATED  SIZE```😂
+将这些镜像导出并压缩，传输回国内。http方式多线程传输最快。IDM64线程能跑满带宽😂，不到一分钟就下载到本地。然后再scp传输回国内的云服务器上。grep B是为了过滤掉输出结果第一行显示的 `REPOSITORY  TAG  IMAGE ID  CREATED  SIZE`😂
 在使用docker save的时候，要指定镜像的名称，不要指定镜像的ID，不然你装载镜像的时候全是node的镜像，是启动不起来的😥
-ps：第一次我使用的是```docker save $(docker images -q)```导出了所有的镜像。在装入镜像的时候发现镜像NAME全是node😂。使用```docker images | grep B | cut -d ' ' -f1```过滤出的是带NAME的镜像。
+ps：第一次我使用的是`docker save $(docker images -q)`导出了所有的镜像。在装入镜像的时候发现镜像NAME全是node😂。使用`docker images | grep B | cut -d ' ' -f1`过滤出的是带NAME的镜像。
 
-```docker save -o k8s.tar $(docker images | grep B | cut -d ' ' -f1) | gzip k8s.tar k8s.tar.gz```
+`docker save -o k8s.tar $(docker images | grep B | cut -d ' ' -f1) | gzip k8s.tar k8s.tar.gz`
 
 然后你在国内的服务器上执行`docker load < k8s.tar.gz`，不用手动 gzip 解压，docker load 会自动解压并把镜像加载进去。
 
@@ -139,7 +142,8 @@ systemctl enable kubelet && systemctl start kubelet
 ## 4.初始化集群
 
 使用kubeadm init初始化kubernetes集群，可以指定配置文件，把IP替换为这台机器的内网IP，要k8s-node节点能够访问得到IP。
-```kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=IP```
+
+`kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=IP`
 
 最后初始化成功的话会出现以下:
 
@@ -195,8 +199,10 @@ ba61bed68ecc        k8s.gcr.io/pause:3.1   "/pause"                 9 minutes ag
 
 ## 5.将node加入到master管理当中来
 
-node节点的安装过程和master一样，只是在最后一步时不相同。master为init初始化k8s集群，而node节点为join集群当中来。安装docker、kubelet 、kubeadm 、kubectl好，并导入所需要的镜像。再执行
+node节点的安装过程和master一样，只是在最后一步时不相同。master为init初始化k8s集群，而node节点为join集群当中来。安装 docker、kubelet 、kubeadm 、kubectl好，并导入所需要的镜像。再执行
 
-```kubeadm join IP:6443 --token ************ \--discovery-token-ca-cert-hashsha256:******```
-也就是master节点初始化成功后生成的那个😂。注意这个token是有有效期的，默认是3h。也可以手动生成token给node加入master来用。ttl为token有效期，为0的话就是永久生效。
-```kubeadm token create $(kubeadm token generate)  --print-join-command --ttl=0```
+`kubeadm join IP:6443 --token ************ \--discovery-token-ca-cert-hashsha256:******`
+
+也就是 master 节点初始化成功后生成的那个😂。注意这个 token 是有有效期的，默认是 3h。也可以手动生成 token 给 node 加入 master 来用。ttl为token有效期，为 0 的话就是永久生效。
+
+`kubeadm token create $(kubeadm token generate)  --print-join-command --ttl=0`
