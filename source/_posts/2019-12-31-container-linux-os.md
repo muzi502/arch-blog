@@ -3,7 +3,7 @@ title : Container Linux OS 从入坑到爬出来😂
 date: 2019-12-31
 updated:
 categories: 技术
-slug:  
+slug:
 tag:
   - docker
   - 容器
@@ -70,7 +70,7 @@ PPT 做的不错呦😂
 >
 > For more information, see the [datasheet](https://vmware.github.io/photon/assets/files/photon-os-datasheet.pdf).
 >
-> Track our progress in earning the Linux Foundation's Core Infrastructure Initiative's Best Practices Badge. 
+> Track our progress in earning the Linux Foundation's Core Infrastructure Initiative's Best Practices Badge.
 
 可以看出 Photon OS™ 是针对 VMware vSphere® 虚拟化平台进行内核优化的容器专用操作系统，就和 CoreOS 一样。十分适合专门用来运行容器，当作 Kubernetes 集群中的工作负载来使用。
 
@@ -98,8 +98,6 @@ RancherOS 是 Rancher 团队所维护的开源项目，也是对标 CoreOS 一�
 
 ![How it works](https://blog.502.li/img/rancheroshowitworks.png)
 
-
-
 ## 安装体验
 
 咱的虚拟化平台是 VMware vSphere ，因为硬件服务器大多数都是 Dell 的，而  Dell  是 VMware 母公司，对于我司这种传统企业来讲使用 VMware vSphere 这种用户 UI 友好的虚拟化无疑是最好的选择，哈哈😂。其他虚拟化平台比如 OpenStack 安装步骤会有所不同。
@@ -124,7 +122,7 @@ RancherOS 是 Rancher 团队所维护的开源项目，也是对标 CoreOS 一�
 
 - #### [OVA](https://github.com/vmware/photon/wiki/Downloading-Photon-OS)
 
-	> Pre-installed minimal environment, customized for VMware hypervisor  environments. These customizations include a highly sanitized and  optimized kernel to give improved boot and runtime performance for  containers and Linux applications. Since an OVA is a complete virtual  machine definition, we've made available a Photon OS OVA that has  virtual hardware version 11; this will allow for compatibility with  several versions of VMware platforms or allow for the latest and  greatest virtual hardware enhancements.
+> Pre-installed minimal environment, customized for VMware hypervisor  environments. These customizations include a highly sanitized and  optimized kernel to give improved boot and runtime performance for  containers and Linux applications. Since an OVA is a complete virtual  machine definition, we've made available a Photon OS OVA that has  virtual hardware version 11; this will allow for compatibility with  several versions of VMware platforms or allow for the latest and  greatest virtual hardware enhancements.
 
 根据官方文档所描述的 OVA 虚拟机模板是针对  VMware hypervisor  虚拟化环境进行优化定制的。
 
@@ -222,7 +220,7 @@ Swap:            0B          0B          0B
 
 - 启动 docker 进程之后的占用情况，也仅仅 109Mi
 
-```
+```bash
 root@photon-machine [ ~ ]# free -h
               total        used        free      shared  buff/cache   available
 Mem:          2.0Gi       109Mi       1.6Gi       0.0Ki       238Mi       1.8Gi
@@ -298,7 +296,6 @@ tmpfs           200M     0  200M   0% /run/user/0
              │ └─167 /lib/systemd/systemd-timesyncd
              └─systemd-logind.service
                └─195 /lib/systemd/systemd-logind
-
 ```
 
 ### 包管理工具
@@ -409,7 +406,7 @@ Live Restore Enabled: false
 较传统的 Linux 发行版，精简了大量不必要的服务和软件，甚至连 tar 命令都没有……。如果把它当作 kubenetes 工作负载 Node 节点来使用，需要注意的是，kube-proxy 依赖的一些工具并没有安装上。我使用 kubeadm 将该节点加入到集群当中的时候就提示缺少以下几个工具： `ipset socat ethtool ebtables` ，这些对于 IPVS 都是需要的。最好使用 tdnf 一并安装上，并且开启相应的 IPVS 内核模块。
 
 ```bash
-tdnf install ipset socat ethtool ebtables tar -y 
+tdnf install ipset socat ethtool ebtables tar -y
 modprobe -- ip_vs
 modprobe -- ip_vs_rr
 modprobe -- ip_vs_wrr
@@ -417,7 +414,7 @@ modprobe -- ip_vs_sh
 modprobe -- nf_conntrack
 ```
 
-虽然经过了 3 个版本的更新迭代，但 Photon OS 用于生产环境还需要进行稳定性测试，它不如 CoreOS 那样已经在大规模集群中得到的实践，目前用 Photon OS 的企业我目前还未见到过。而 CoreOS 
+虽然经过了 3 个版本的更新迭代，但 Photon OS 用于生产环境还需要进行稳定性测试，它不如 CoreOS 那样已经在大规模集群中得到的实践，目前用 Photon OS 的企业我目前还未见到过。而 CoreOS
 
 > “作为 Linux 以及开源软件的支持者，我们相信与 CoreOS  这样的开源社区创新先锋合作是非常重要的。我们希望通过这样的合作来为云平台用户带来更多、更灵活的选择。” 微软 Azure 的首席技术官 Mark Russinovich 提到， “CoreOS Linux  与高性能、大规模的微软云相结合，无疑将会促进各种应用服务的创新、以及全球团队的协作。”
 
@@ -504,7 +501,7 @@ These [platforms and providers](http://coreos.com/os/docs/latest/community-platf
 
 ```bash
 ╭─@debian ~
-╰─$ openssl passwd -1                                                                         
+╰─$ openssl passwd -1
 Password:
 Verifying - Password:
 $1$nCzW8953$un/JUMJDE2588l7Y6KkP.
@@ -633,8 +630,6 @@ Live Restore Enabled: false
 
 ![image-20191231135348120](https://blog.502.li/img/image-20191231135348120.png)
 
-
-
 ### 进程和服务
 
 ```bash
@@ -689,7 +684,6 @@ Live Restore Enabled: false
              │ └─634 /usr/lib/systemd/systemd-timesyncd
              └─systemd-logind.service
                └─672 /usr/lib/systemd/systemd-logind
-
 ```
 
 ### 包管理工具
@@ -816,8 +810,6 @@ Connection to 10.20.172.119 closed.
 
 ```
 
-
-
 ### 内核以及发行版信息
 
 ```bash
@@ -918,7 +910,7 @@ Server:
 
 - 初始化启动后内存使用了 1224MB😂，要比 CoreOS 和 Photon OS 加起来还多😂
 
-```
+```bash
 [rancher@rancher ~]$ free -m
              total       used       free     shared    buffers     cached
 Mem:          3947       1224       2722        993          0        993
@@ -1157,35 +1149,31 @@ GLOBAL OPTIONS:
 ```bash
 [root@rancher rancher]# ros service ps
 Name                    Command                                                            State                     Ports
-docker                  ros user-docker                                                    Up 9 minutes             
-logrotate               /usr/bin/entrypoint.sh /usr/sbin/logrotate -v /etc/logrotate.conf  Created                  
-system-cron             container-crontab                                                  Up 9 minutes             
-container-data-volumes  /usr/bin/ros entrypoint echo                                       Created                  
-console                 /usr/bin/ros entrypoint ros console-init                           Up 9 minutes             
-system-volumes          /usr/bin/ros entrypoint echo                                       Created                  
-ntp                     /usr/bin/ros entrypoint /bin/start_ntp.sh                          Up 9 minutes             
-subscriber              /usr/bin/ros entrypoint os-subscriber                              Exited (0) 2 minutes ago 
-syslog                  /usr/bin/entrypoint.sh rsyslogd -n                                 Up 9 minutes             
-media-volumes           /usr/bin/ros entrypoint echo                                       Created                  
-preload-user-images     /usr/bin/ros entrypoint ros preload-images                         Exited (0) 9 minutes ago 
-udev                    /usr/bin/ros entrypoint udevd                                      Up 9 minutes             
-udev-cold               /usr/bin/ros entrypoint ros udev-settle                            Exited (0) 9 minutes ago 
-network                 /usr/bin/ros entrypoint netconf                                    Up 9 minutes             
-open-vm-tools           /usr/bin/ros entrypoint /usr/bin/vmtoolsd                          Up 9 minutes             
-acpid                   /usr/bin/ros entrypoint /usr/sbin/acpid -f                         Up 9 minutes             
-command-volumes         /usr/bin/ros entrypoint echo                                       Created                  
-cloud-init-execute      /usr/bin/ros entrypoint cloud-init-execute -pre-console            Exited (0) 9 minutes ago 
-user-volumes            /usr/bin/ros entrypoint echo                                       Created                  
-all-volumes             /usr/bin/ros entrypoint echo          
+docker                  ros user-docker                                                    Up 9 minutes
+logrotate               /usr/bin/entrypoint.sh /usr/sbin/logrotate -v /etc/logrotate.conf  Created
+system-cron             container-crontab                                                  Up 9 minutes
+container-data-volumes  /usr/bin/ros entrypoint echo                                       Created
+console                 /usr/bin/ros entrypoint ros console-init                           Up 9 minutes
+system-volumes          /usr/bin/ros entrypoint echo                                       Created
+ntp                     /usr/bin/ros entrypoint /bin/start_ntp.sh                          Up 9 minutes
+subscriber              /usr/bin/ros entrypoint os-subscriber                              Exited (0) 2 minutes ago
+syslog                  /usr/bin/entrypoint.sh rsyslogd -n                                 Up 9 minutes
+media-volumes           /usr/bin/ros entrypoint echo                                       Created
+preload-user-images     /usr/bin/ros entrypoint ros preload-images                         Exited (0) 9 minutes ago
+udev                    /usr/bin/ros entrypoint udevd                                      Up 9 minutes
+udev-cold               /usr/bin/ros entrypoint ros udev-settle                            Exited (0) 9 minutes ago
+network                 /usr/bin/ros entrypoint netconf                                    Up 9 minutes
+open-vm-tools           /usr/bin/ros entrypoint /usr/bin/vmtoolsd                          Up 9 minutes
+acpid                   /usr/bin/ros entrypoint /usr/sbin/acpid -f                         Up 9 minutes
+command-volumes         /usr/bin/ros entrypoint echo                                       Created
+cloud-init-execute      /usr/bin/ros entrypoint cloud-init-execute -pre-console            Exited (0) 9 minutes ago
+user-volumes            /usr/bin/ros entrypoint echo                                       Created
+all-volumes             /usr/bin/ros entrypoint echo
 ```
 
 ###  包管理器
 
 和 CoreOS 一样，RancherOS 也没得相应的包管理器😂，都是采用容器来运行所需的服务，使用 `ros` 命令来管理相应的服务。如果想要运行一个服务的话，需要使用 ros 来创建相应的容器来运行才可以。而使用 ros 来创建服务
-
-
-
-### 使用体验
 
 ## 结束
 

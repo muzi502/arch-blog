@@ -46,10 +46,10 @@ lsmod | grep br_netfilter
 1.安装 yum-utils 提供 yum-config-manager 工具
 devicemapper存储驱动依赖 device-mapper-persistent-data 和 lvm2
 
-```sudo yum install -y yum-utils device-mapper-persistent-data lvm2```
+`sudo yum install -y yum-utils device-mapper-persistent-data lvm2`
 
 2.添加aliyun软件包源
-```sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo```
+`sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo`
 
 3.安装docker-ce-stable
 官方文档写了建议安装18.06.2，其他版本的docker支持的不太好
@@ -59,8 +59,7 @@ On each of your machines, install Docker. Version 18.06.2 is recommended, but 1.
 
 `yum install -y docker-ce-18.06.1.ce-3.el7`
 
-4.添加Docker 用户和用户组(可选)
-```sudo usermod -aG docker $USER```
+4.添加Docker 用户和用户组(可选) `sudo usermod -aG docker $USER`
 
 5.修改docker daemon配置文件
 
@@ -78,7 +77,7 @@ cat > /etc/docker/daemon.json <<EOF
 EOF
 ```
 
-不修改的话后面初始化的时候会warning😂
+不修改的话后面初始化的时候会 warning😂
 
 ```bash
 [WARNING IsDockerSystemdCheck]: detected "cgroupfs" as the Docker cgroup driver. The recommended driver is "systemd". Please follow the guide at https://kubernetes.io/docs/setup/cri/
@@ -120,7 +119,7 @@ ps：第一次我使用的是`docker save $(docker images -q)`导出了所有的
 
 `docker save -o k8s.tar $(docker images | grep B | cut -d ' ' -f1) | gzip k8s.tar k8s.tar.gz`
 
-然后你在国内的服务器上执行`docker load < k8s.tar.gz`，不用手动 gzip 解压，docker load 会自动解压并把镜像加载进去。
+然后你在国内的服务器上执行 `docker load < k8s.tar.gz` ，不用手动 gzip 解压，docker load 会自动解压并把镜像加载进去。
 
 ## 3.安装 kubelet kubeadm kubectl
 

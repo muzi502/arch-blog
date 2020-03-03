@@ -15,10 +15,10 @@ comment: true
 
 ----
 
-今天看到推特上RedHat换了新的logo，不过还是那顶红帽子。其实RedHat曾经被Oracle绿过，换成绿帽子再适合不过了。😂
-即兴找了一下当年Oracle撕碎RedHat的报道文章。
-Oracle曾诚意满满地派了100多个程序员帮助红帽子公司开发RedHat Linux发行版，慢慢地Oracle公司的员工逐渐掌握了RedHat的开发，相当于把RedHat架空了。RedHat被绿了一把😂。后来Oracle推出了自己的Oracle Linux，接着收购SUN公司。拥有了硬件基础。自此Oracle从硬件到OS再到数据库都有了自己的产品。推出了Oracle一体机。
-很难想象不可一世的RedHat被Oracle打趴在地。
+今天看到推特上 RedHat 换了新的 logo，不过还是那顶红帽子。其实 RedHat 曾经被 Oracle 绿过，换成绿帽子再适合不过了。😂
+即兴找了一下当年 Oracle 撕碎 RedHat 的报道文章。
+Oracle 曾诚意满满地派了 100 多个程序员帮助红帽子公司开发 RedHat Linux 发行版，慢慢地Oracle公司的员工逐渐掌握了 RedHat 的开发，相当于把 RedHat 架空了。RedHat 被绿了一把😂。后来 Oracle 推出了自己的 Oracle Linux，接着收购 SUN公司。拥有了硬件基础。自此 Oracle 从硬件到 OS 再到数据库都有了自己的产品。推出了 Oracle 一体机。
+很难想象不可一世的 RedHat 被 Oracle 打趴在地。
 
 ----
 

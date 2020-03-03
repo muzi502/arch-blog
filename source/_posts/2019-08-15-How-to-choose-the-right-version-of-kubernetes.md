@@ -188,8 +188,8 @@ AWS 的 Kubernetes 平台叫做 EKS，在创建 kubernetes 集群时可以选择
 
     since this release
 
-    -   Preview Features
-        -   Kubernetes 1.14.3 is now available for preview users.
+    - Preview Features
+        - Kubernetes 1.14.3 is now available for preview users.
 
 看来 M$ 的 kubernetes 平台比 Google 更新的还要快，版本 GA 的时候也要早于 GKE 。即便如此，各大云计算厂商仍然会倾向于等到 kubernetes 版本修复得差不了才将上线新版本。
 

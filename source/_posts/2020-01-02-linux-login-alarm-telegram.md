@@ -108,9 +108,9 @@ telegram 中每个用户、频道、群组都会有一个 chat ID ，而 telegra
 https://api.telegram.org/bot（ 这里加上你的token ）/sendMessage?chat_id=66666666 &text=message
 ```
 
--   例如：
+- 例如：
 
-```
+```bash
 https://api.telegram.org/bot1067796083:AAFjONLJ9-F2Y6IRSmQoBVAAgRhd589MXpk/sendMessage?chat_id=613640483&text=message
 ```
 
@@ -159,9 +159,9 @@ message=$(hostname && TZ=UTC-8 date && who && w | awk  'BEGIN{OFS="\t"}{print $1
 curl -s "https://api.telegram.org/bot${token}/sendMessage?chat_id=${id}" --data-binary "&text=${message}"
 ```
 
--   将该脚本放到 `/etc/profile.d/` 目录下，并 把该脚本的权限设置为` 555` ，即任何用户都可执行。
--   `/etc/profile.d/` 下的脚本文件会在用户登录成功后自动执行，如还需要其他的操作追加在脚本里即可。
--   message 需要传递的数据根据自身需求设定即可，通过 `&&`  将多个命令的执行结果传递到 message 变量。`hostname` 获取主机名，以区分多台服务器；`TZ=UTC-8 date` 来获取登录时刻的北京时间；`who` 用来获取当前用户和 IP 等信息；`w` 命令用于获取当前用户登录后执行的命令。
+- 将该脚本放到 `/etc/profile.d/` 目录下，并 把该脚本的权限设置为` 555` ，即任何用户都可执行。
+- `/etc/profile.d/` 下的脚本文件会在用户登录成功后自动执行，如还需要其他的操作追加在脚本里即可。
+- message 需要传递的数据根据自身需求设定即可，通过 `&&`  将多个命令的执行结果传递到 message 变量。`hostname` 获取主机名，以区分多台服务器；`TZ=UTC-8 date` 来获取登录时刻的北京时间；`who` 用来获取当前用户和 IP 等信息；`w` 命令用于获取当前用户登录后执行的命令。
 
 #### 大功告成啦
 
@@ -175,8 +175,6 @@ ubuntu   pts/0        2020-01-02 09:23 (5.129.16.28)
 USER WHAT
 ubuntu -bash
 ```
-
-
 
 ![image-20200102222349027](https://blog.502.li/img/image-20200102222349027.png)
 

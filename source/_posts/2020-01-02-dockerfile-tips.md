@@ -176,7 +176,8 @@ Thu Jan  2 03:44:13 Asia 2020
 - 通过时区文件来设定时区
 
 ```bash
-apt 
+apt update ;\
+apt install tzdata -y ;\
 cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime ;\
 echo "Asia/shanghai" > /etc/timezone ;\
 ```

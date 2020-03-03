@@ -1,5 +1,5 @@
 ---
-title: 一段在法律与技术冲突的地方捍卫自由的历史
+title: 【翻译】一段在法律与技术冲突的地方捍卫自由的历史
 date: 2019-10-14
 categories: 互联网
 slug:  A-History-of-Protecting-Freedom-Where-Law-and-Technology-Collide

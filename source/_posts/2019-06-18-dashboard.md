@@ -12,17 +12,17 @@ comment: true
 
 ## 0.踩坑
 
-部署完kubernets dashborad后，官方给出的四种访问模式，都很坑😫。
+部署完 kubernets dashborad 后，官方给出的四种访问模式，都很坑😫。
 
 ### 1.kubectl proxy
 
-只能通过本机访问，部署在VPS上的是无法登录的。
+只能通过本机访问，部署在 VPS 上的是无法登录的。
 
 ### 2.NodePort
 
 ```txt
 In case you are trying to expose Dashboard using NodePort on a multi-node cluster, then you have to find out IP of the node on which Dashboard is running to access it. Instead of accessing https://<master-ip>:<nodePort> you should access https://<node-ip>:<nodePort>.
-暴漏node IP一个端口来访问，同样浏览器会提示证书问题拒绝访问，测试chrome edge ie均无法访问，需要自己加个证书才行。下面就讲解用自己的域名签个证书来用。NodePort是将节点直接暴露在外网的一种方式，只建议在开发环境，单节点的安装方式中使用。
+暴漏 node IP 一个端口来访问，同样浏览器会提示证书问题拒绝访问，测试 chrome edge ie 均无法访问，需要自己加个证书才行。下面就讲解用自己的域名签个证书来用。NodePort 是将节点直接暴露在外网的一种方式，只建议在开发环境，单节点的安装方式中使用。
 ```
 
 ### 3.API Server
@@ -47,9 +47,9 @@ acme.sh脚本从 letsencrypt 可以生成免费的证书
 
 1.安装脚本
 ```cd ~ && curl  https://get.acme.sh | sh && alias acme.sh=~/.acme.sh/acme.sh```
-2.配置好nginx
-我的nginx在另一台机器上，需要在域名解析那里添加A记录解析到nginx服务器上。添加子域名未k8s，并在nginx那里配置好。
-这一步一定要做，不然的话无法通过http验证该域名所属。当然也可以选用dns的方式来验证，在这里就不赘述了。
+2.配置好 nginx
+我的 nginx 在另一台机器上，需要在域名解析那里添加A记录解析到 nginx 服务器上。添加子域名为 k8s，并在 nginx 那里配置好。
+这一步一定要做，不然的话无法通过http验证该域名所属。当然也可以选用 dns 的方式来验证，在这里就不赘述了。
 
 ```conf
 server {
@@ -64,8 +64,8 @@ server {
 3.生成证书，默认会保存在~/.acme.sh/mydomain.com
 acme.sh --issue  -d mydomain.com   --nginx
 
-4.上传证书到k8s-master节点
-只需要mydomain.com.cer和mydomain.com.key这两个文件，其中把mydomain.com.cer命名为dashboard.crt ，mydomain.com.key命名为dashboard.key。然后你想办法把这两个文件传到k8s-master机器 ~/certs目录下。
+4.上传证书到 k8s-master 节点
+只需要 mydomain.com.cer 和 mydomain.com.key 这两个文件，其中把 mydomain.com.cer 命名为 dashboard.crt ，mydomain.com.key 命名为 dashboard.key 。然后你想办法把这两个文件传到 k8s-master 机器 ~/certs 目录下。
 
 ## 3.部署kubernetes-dashboard
 
@@ -96,14 +96,14 @@ spec:
   type: NodePort
 ```
 
-3.部署启动kubernetes-dashboard
+3.部署启动 kubernetes-dashboard
 ```kubectl create -f kubernetes-dashboard.yaml```
 
-4.获取kubernetes-dashboard的访问端口和IP
+4.获取 kubernetes-dashboard 的访问端口和IP
 
 ```kubectl -n kube-system get svc kubernetes-dashboard```
 
-5.创建授权用户获取token
+5.创建授权用户获取 token
 
 ```yml
 cat > dashboard-adminuser.yaml <<EOF
@@ -136,7 +136,7 @@ EOF
 kubectl apply -f  admin-user-role-binding.yaml
 ```
 
-获取登录要用到的token
+获取登录要用到的 token
 ```kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')```
 
 ```kubectl create secret generic kubernetes-dashboard-certs --from-file=certs -n kube-system```

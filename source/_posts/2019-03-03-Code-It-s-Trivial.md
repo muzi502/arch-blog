@@ -9,9 +9,8 @@ copyright: true
 comment: true
 ---
 
-本文转载至stack overflow 创始人 Jeff Atwood的[Code: It's Trivial](https://blog.codinghorror.com/code-its-trivial/)
-背景是：当时stack overflow 刚成立不久，而且使用的技术是Windows server 及.net，就有特别多的人喷stack overflow技术垃圾，声称花一个周末的时间就能开发出像stack overflow一样的网站。 Jeff Atwood 于是写这篇文章怼回去，仔细看看hack news上的评论挺有意思的。[hack news 的链接在这](https://news.ycombinator.com/item?id=678501)。还有当时的[droxbox](https://news.ycombinator.com/item?id=8863)和[Airbnb](https://news.ycombinator.com/item?id=426120)也被喷的狗血淋头。十年多过去了，喷他们的人只留下了一个ID，而被喷的人留下了一个伟大的网站。
-对于一个公司尤其是初创公司来讲，选用什么技术真的不是很重要，你看stack overflow 不就使用的Windows嘛🐎。
+本文转载至 stack overflow 创始人 Jeff Atwood 的[Code: It's Trivial](https://blog.codinghorror.com/code-its-trivial/)
+背景是：当时 stack overflow 刚成立不久，而且使用的技术是 Windows server 及.net，就有特别多的人喷 stack overflow 技术垃圾，声称花一个周末的时间就能开发出像 stack overflow 一样的网站。 Jeff Atwood 于是写这篇文章怼回去，仔细看看 hack news 上的评论挺有意思的。[hack news 的链接在这](https://news.ycombinator.com/item?id=678501) 。还有当时的 [droxbox](https://news.ycombinator.com/item?id=8863)和[Airbnb](https://news.ycombinator.com/item?id=426120) 也被喷的狗血淋头。十年多过去了，喷他们的人只留下了一个ID，而被喷的人留下了一个伟大的网站。
 
 ----------
 

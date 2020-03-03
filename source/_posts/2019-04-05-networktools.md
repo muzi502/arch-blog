@@ -12,7 +12,7 @@ slug:
 date: 2019-04-05
 ---
 
-不久前在twitter上看到一张描述45个Linux网络工具的[图片](https://wizardzines.com/networking-tools-poster/)，于是想整理一下它们常用功能
+不久前在 twitter 上看到一张描述 45 个 Linux 网络工具的 [图片](https://wizardzines.com/networking-tools-poster/)，于是想整理一下它们常用功能
 
 ----
 

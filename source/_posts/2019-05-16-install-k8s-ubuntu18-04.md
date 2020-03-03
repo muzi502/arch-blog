@@ -11,14 +11,13 @@ copyright: true
 comment: true
 ---
 
-注意: 这个部署在了digital ocean的VPS上，国内的机器需要代理。
+注意: 这个部署在了 digital ocean 的 VPS 上，国内的机器需要代理。
 
 ## 1.主机要求
 
-0.硬件要求2CPU 2GB RAM
+0.硬件要求 2CPU 2GB RAM
 
-1.临时关闭swap
-```swapoff -a```
+1.临时关闭 swap `swapoff -a`
 
 2.打开bridge-nf-call-iptables
 
@@ -31,14 +30,14 @@ EOF
 sysctl --system
 ```
 
-3.加载br_netfilter内核模块，安装docker后会默认开启
+3.加载 br_netfilter 内核模块，安装 docker 后会默认开启
 
 ```bash
 modprobe br_netfilter
 lsmod | grep br_netfilter
 ```
 
-4.临时关闭一下SELinux，怎么关闭的？？貌似我的digital ocean Ubuntu18.04没有安装SELinux🤔
+4.临时关闭一下SELinux，怎么关闭的？？貌似我的 digital ocean Ubuntu18.04 没有安装SELinux🤔
 
 在网上找了一篇文章临时关闭SELinux的[turn-off-selinux](https://www.revsys.com/writings/quicktips/turn-off-selinux.html)
 
@@ -85,7 +84,7 @@ apt-get update && apt-get install docker-ce=18.06.2~ce~3-0~ubuntu
 
 ### 2.修改一下Docker的daemon.json文件
 
-在这里需要把```native.cgroupdriver=```修改为systemd，默认的是docker。
+在这里需要把 `native.cgroupdriver=` 修改为 systemd，默认的是 docker。
 
 ```bash
 cat > /etc/docker/daemon.json <<EOF
@@ -107,9 +106,12 @@ EOF
 ```
 
 最后将docker加入开机自启，并重启一下docker
-```mkdir -p /etc/systemd/system/docker.service.d```
-```systemctl daemon-reload```
-```systemctl restart docker```
+
+```bash
+mkdir -p /etc/systemd/system/docker.service.d
+systemctl daemon-reload
+systemctl restart docker
+```
 
 3.(可选)CRI-O 容器运行时
 
@@ -178,7 +180,6 @@ systemctl restart containerd
 # 使用systemd
 systemd
 To use the systemd cgroup driver, set plugins.cri.systemd_cgroup = true in /etc/containerd/config.toml. When using kubeadm, manually configure the cgroup driver for kubelet as well
-
 ```
 
 ----
@@ -207,12 +208,12 @@ systemctl daemon-reload && systemctl restart kubelet
 
 ## 4.初始化kubernetes集群
 
-可以先把所需要的镜像pull下来
-```kubeadm config images pull```
+可以先把所需要的镜像pull下来 `kubeadm config images pull`
 
 执行期间不能中断shell，不然重新弄得话很头疼，最好先开个tmux
 使用kubeadm init初始化kubernetes集群，可以指定配置文件，把IP替换为这台机器的内网IP，要k8s-node节点能够访问得到
-```kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=IP```
+
+`kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=IP`
 
 最后初始化成功的话会出现以下，
 
@@ -347,9 +348,9 @@ error execution phase wait-control-plane: couldn't initialize a Kubernetes clust
 ~~如果你初始化失败的话，那就删除所有的容器，删除/etc/kubernetes/* 删除 /var/lib/etcd/*~~
 
 其实进行kubeadm reset重置再执行kubeadm init也行，这样更方便些😂
-然后再重新初始化
-```kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=157.230.164.247```
-加个参数```--ignore-preflight-errors=all```重新初始化
+然后再重新初始化 `kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=157.220.164.247`
+
+加个参数`--ignore-preflight-errors=all`重新初始化
 
 ----
 
@@ -363,9 +364,9 @@ kubeadm token create ljfmu1.5kek1jy2xdb8sopv  --print-join-command --ttl=0
 kubeadm token create $(kubeadm token generate)  --print-join-command --ttl=0
 ```
 
-只需要一个命令就可以将k8s-node节点加入到master的管理之下
+只需要一个命令就可以将 k8s-node 节点加入到 master 的管理之下
 
-```kubeadm join IP:6443 --token ljfmu1.5kek1jy2xdb8sopv --discovery-token-ca-cert-hash sha256:3b18b4cc1debc63d57e03da52424a3b3bacf03cc290b94cbe5b6aaf9c152f0cf```
+`kubeadm join IP:6443 --token ljfmu1.5kek1jy2xdb8sopv --discovery-token-ca-cert-hash sha256:3b18b4cc1debc63d57e03da52424a3b3bacf03cc290b94cbe5b6aaf9c152f0cf`
 
 加入成功后会提示以下内容😘
 
@@ -386,10 +387,8 @@ This node has joined the cluster:
 Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
 ```
 
-注意: 如果hostname如果是随机生成的带有```_```是不行的，那就使用 ```hostnamectl set-hostname k8s-node2 && bash```设置一下下😂
+注意: 如果hostname如果是随机生成的带有`_`是不行的，那就使用 ```hostnamectl set-hostname k8s-node2 && bash```设置一下下😂
 
 ```bash
 name: Invalid value: "vm_158_35_centos": a DNS-1123 subdomain must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character (e.g. 'example.com', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')
 ```
-
-----
