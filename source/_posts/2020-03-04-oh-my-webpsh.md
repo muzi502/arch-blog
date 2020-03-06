@@ -37,7 +37,7 @@ WebP 是一种衍生自 Google VP8 的图像格式，同时支持有损和无损
 - 官网 [webp.sh](https://webp.sh)
 - GitHub [webp-sh](https://github.com/webp-sh)
 
-webp server 顾名思义就是 webp 服务器啦，用于将网站里的图片（jpg、png、jpeg等）转换成 webp 图像编码格式，而且无须修改博客站点内图片的 url ，因此对于访问图片资源的客户端来讲是透明的。主流的 CDN 也支持这样类似的功能，比如 Cloudflare 的 [Polish]() ，可以参考 [Using Cloudflare Polish to compress images](https://support.cloudflare.com/hc/en-us/articles/360000607372-Using-Cloudflare-Polish-to-compress-images) 。但是天下没有免费的午餐，图片转码雨编码这都是要算力的，都是要计算资源的，都是要 CPU 的，收拾要花钱的😂。咱 webp server 是开源免费的。
+webp server 顾名思义就是 webp 服务器啦，用于将网站里的图片（jpg、png、jpeg等）转换成 webp 图像编码格式，而且无须修改博客站点内图片的 url ，因此对于访问图片资源的客户端来讲是透明的。主流的 CDN 也支持这样类似的功能，比如 Cloudflare 的 [Polish]() ，可以参考 [Using Cloudflare Polish to compress images](https://support.cloudflare.com/hc/en-us/articles/360000607372-Using-Cloudflare-Polish-to-compress-images) 。但是天下没有免费的午餐，图片转码与编码这都是要算力的，都是要计算资源的，都是要 CPU 的，都是要花钱的😂。说到底还是穷啊（咱 webp server 是开源免费的。
 
 > 最重要的一点是——我们访问的 URL 可以完全不用改变，访客访问的依然是 `https://image.nova.moe/tsuki/tsuki.jpg` ，但是得到的图片格式为：`image/webp`，而且体积减少了不少。
 
@@ -57,7 +57,7 @@ webp server 顾名思义就是 webp 服务器啦，用于将网站里的图片�
 
 首先到 [release](https://github.com/webp-sh/webp_server_go/releases) 页面下载已经编译好的二进制文件或者根据自己的发行版选择下载 rpm 或 deb 包，在此要注意选择下载符合自己的 arch 和 OS。
 
-至于安装路径，我个人更倾向于放在 `/opt/bin/` 目录下，因为这个目录下的东西都是自己安装的，而且也不依赖于特定的发行版，方便博客迁移（搬家），搬家的时候直接打包 `/opt` 目录，scp 一下卷铺盖走人，多方便呀😂。
+至于安装路径，我个人更倾向于放在 `/opt/` 目录下，因为这个目录下的东西都是自己安装的，而且也不依赖于特定的发行版，方便博客迁移（搬家），搬家的时候直接打包 `/opt` 目录，然后 scp 一下就卷铺盖走人，多方便呀😂。
 
 ### 2. 配置
 
@@ -69,7 +69,7 @@ webp server 顾名思义就是 webp 服务器啦，用于将网站里的图片�
   "PORT": "3333",
   "QUALITY": "80",
   "IMG_PATH": "/var/www/hexo",
-  "EXHAUST_PATH": "",
+  "EXHAUST_PATH": "./dist",
   "ALLOWED_TYPES": ["jpg","png","jpeg","bmp","gif"]
 }
 ```
@@ -107,11 +107,11 @@ server {
 }
 ```
 
-不过在此需要主义，nginx 的 location 字段的路径一定要和 webp server config.json 里的 `IMG_PATH` 相对应，不然会导致请求资源的 uri 与 webp server 转换后的文件路径不一致而导致资源 404 。
+不过在此需要主义，nginx 的 location 字段的路径一定要和 webp server `config.json` 里的 `IMG_PATH` 相对应，不然会导致请求资源的 uri 与 webp server 转换后的文件路径不一致而导致资源 404 。
 
 ### 3.启动
 
-手动运行起来很简单，`./webp-server -config /path/to/config.json` ，不过该服务挂掉了资源就 gg 了，所以还是选用一种稳定持久化的运行方式。咱推荐使用 systemd 来启动，这样 webp server 服务挂掉了也会自动拉起重启一下。首先要创建或修改一下 `webps.service` 配置文件。
+手动运行起来很简单，`./webp-server -config /path/to/config.json` ，如果该服务挂掉了资源就 gg 了，所以还是选用一种稳定持久化的运行方式。咱推荐使用 systemd 来启动，这样 webp server 服务挂掉了也会自动拉起重启一下。首先要创建或修改一下 `webps.service` 配置文件。
 
 ```bash
 [Unit]
@@ -312,9 +312,10 @@ src				dist		num
 ./webp-server -jobs 8 -config config.json -prefetch
 1345.73s user 10.84s system 888% cpu 2:32.64 total
 
-src		  		  dist		num
+src		  		dist		num
 3.8G			342M		2000
 
+73839511.png	4.1M		293K
 73839511.png	4.1M		293K
 66504933.png	4.1M		107K
 78316050.png	4.1M		319K
