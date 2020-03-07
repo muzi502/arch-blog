@@ -15,8 +15,9 @@ rename 's/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])-)//' *.md
 
 cd ${hexo_dir}
 rm -rf db.json public/*
-
+mv ${hexo_dir}/source/img ${public_dir}/
 hexo g
+cp -rf ${public_dir}/img ${hexo_dir}/source/
 rm -rf  ${post_dir}
 git checkout ${post_dir}
 find ${public_dir} -name '*.html' -type f -print0 | xargs -0 sed -i '/^[[:space:]]*$/d'
