@@ -103,11 +103,24 @@ server {
         }
         location ~* \.(png|jpg|jpeg)$ {
             proxy_pass http://127.0.0.1:3333;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_hide_header X-Powered-By;
+            proxy_set_header HOST $http_host;
+            add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
         }
 }
 ```
 
-不过在此需要主义，nginx 的 location 字段的路径一定要和 webp server `config.json` 里的 `IMG_PATH` 相对应，不然会导致请求资源的 uri 与 webp server 转换后的文件路径不一致而导致资源 404 。
+不过在此需要注意，nginx 的 location 字段的路径一定要和 webp server `config.json` 里的 `IMG_PATH` 相对应，不然会导致请求资源的 uri 与 webp server 转换后的文件路径不一致而导致资源 404 。还有一点就是 location 那里不能仅仅添加 `proxy_pass http://127.0.0.1:3333;` ，这样浏览器的 UA 会被 nginx 给吃掉😄，nginx 将请求 proxy 给 webp server 后无法从 headers 那里获取到 UA ，而导致 `Safari` 浏览器无法正常输出原图。所以以下几行添加在 `proxy_pass` 下面是必须的：
+
+```nginx
+            proxy_set_header HOST $http_host;
+            add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+```
+
+此外感谢好心读者的提醒才发现这个 bug 😘
+
+![image-20200307102856702](https://blog.502.li/img/image-20200307102856702.png)
 
 ### 3.启动
 
