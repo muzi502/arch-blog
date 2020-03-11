@@ -1,5 +1,5 @@
 ---
-title: 六年前思考的一些东西
+title: 时光痕迹：中学时我在想什么
 date: 2019-10-14
 categories: 阅读
 slug:  life-sciences
