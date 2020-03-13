@@ -421,6 +421,18 @@ src				dist		num
 
 为了做个对比，咱使用  `hexo.502.li` 这个域名为对照组，即输出源文件，使用 `blog.502.li` 这个域名为实验组加上 webp server 来测试，各位读者也可以分别访问这两个域名来实际体验之间的差别，肉眼可见😂。
 
+### no webps
+
+优化建议能节省 138s ，之前也有读者普遍反映图片打开极慢
+
+![nowebps](https://blog.502.li/img/no-webp.png)
+
+### webps yes!
+
+优化建议能节省 19s ，比不适用 webp 整整减少了将近 2 min😂，看来效果及其明显呀。
+
+![weith](https://blog.502.li/img/with-webp.png)
+
 选择两篇图片比较多的博客，测试链接为 ：
 
 - `https://blog.502.li/2020-Lunar-New-Year.html`
