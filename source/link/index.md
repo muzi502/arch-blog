@@ -22,8 +22,6 @@ comment: true
 
 ### 为什么要强调独立二字？
 
-
-
 {% raw %}
 <blockquote class="twitter-tweet"><p lang="zh" dir="ltr">自己收藏的个人独立博客<a href="https://t.co/PI0tGM2qHN">https://t.co/PI0tGM2qHN</a><br><br>我为什么要强调独立二字？<br><br>首先中文博客我不喜欢国内像 CSDN、 博客园那样的抄袭博客平台；其次，拥有独立博客、能自己建站、有自己的域名、会生成静态博客等等这些能力就已经帮你过滤掉那些还在用百度的菜鸡了；最后独立博客内容大多都是个人原创 <a href="https://t.co/KHFiZHZnVh">pic.twitter.com/KHFiZHZnVh</a></p>&mdash; 502.li (@muzi_ii) <a href="https://twitter.com/muzi_ii/status/1183394988517838848?ref_src=twsrc%5Etfw">October 13, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 {% endraw %}
@@ -36,7 +34,7 @@ comment: true
 
 ## 小伙伴
 
--   欢迎与咱交换友链或者 py 交易😂
+- 欢迎与咱交换友链或者 py 交易😂
 
 ```yaml
 title: 木子的博客
