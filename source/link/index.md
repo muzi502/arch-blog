@@ -73,6 +73,7 @@ rss: https://blog.502.li/atom.xml
 | [Himself65 Blog](https://www.himself65.com/)           | Rust、Node、前端                   | 扩散性百万甜面包                                             |
 | [Cocoa](https://blog.0xbbc.com/)                       | C/C++、Rust 、算法、iOS安全、Linux | 少女心满满😂                                                  |
 | [CrownDaisy](https://crowndaisy.com/)                  | Python、数据分析                   | 极简主义者                                                   |
+| [F4n9X's Blog](https://fanqxu.github.io/)              | InfoSec、PenTesting、CTF、Hacking  | 社工大佬                                                     |
 
 ### 个人收藏
 
