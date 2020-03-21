@@ -1,0 +1,98 @@
+baseURL = "https://blog.yoi.li"
+title = "Yoi Li's Blog"
+languageCode = "zh-hans"
+theme = "hermit"
+enableRobotsTXT = true
+enableEmoji = true
+paginate = 5
+rssLimit = 20
+hasCJKLanguage = true
+pygmentsCodefences = true
+pygmentsUseClasses  = true
+pygmentsCodefencesGuessSyntax = true
+pygmentsStyle = "dracula"
+defaultContentDir = "post"
+
+enableGitInfo = true
+
+[sitemap]
+  changefreq = "weekly"
+  priority = 0.5
+  filename = "sitemap.xml"
+
+[author]
+  name = "Yoi Li"
+
+[taxonomies]
+  tag = "tags"
+
+
+
+[params]
+  dateform        = "Jan 2, 2006"
+  dateformShort   = "Jan 2"
+  dateformNum     = "2006-01-02"
+  dateformNumTime = "2006-01-02 15:04"
+  [permalinks]
+    posts = "/:slug"
+
+  gitUrl = "https://github.com/muzi502/blog/commit/"
+
+  footerCopyright = ' &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
+  customCSS = ['css/main.css']
+  themeColor = "#ffffff"
+  logoImage = "favicon.png"
+  since = "2018"
+  homeFullContent = true
+  rssFullContent = true
+  archive-paginate = 10
+  dateFormatToUse = "2020-01-01"
+  moreMeta = true
+  showMenuLanguageChooser = true
+  showAuthorInfo = true
+  toc = true
+  photoswipe = true
+  keywords = ["Linux","Ops","kubernetes","docker","book","reading"]
+  description = "Yoi Li's blog, Happy Hacking!"
+  
+  [[params.social]]
+    name = "twitter"
+    url = "https://twitter.com/muzi_ii"
+
+  [[params.social]]
+    name = "github"
+    url = "https://github.com/muzi502"
+
+  [[params.social]]
+    name = "email"
+    url = "muzi502.li@gmail.com"
+
+  [[params.social]]
+    name = "telegram"
+    url = "https://t.me/muzi_ii"
+
+[params.meta]
+  description = "Yoi Li's Blog"
+  keywords = "Linux,Ops,kubernetes,prometheus,docker,books,reading"
+
+[menu]
+
+    [[menu.main]]
+    name = "About"
+    url = "about/"
+    weight = 20
+
+    [[menu.main]]
+    name = "Book"
+    url = "booklist/"
+    weight = 30
+
+    [[menu.main]]
+    name = "Kindle"
+    url = "https://kindle.502.li"
+    weight = 40
+
+    [[menu.main]]
+    name = "RSS"
+    url = "https://blog.502.li/feed"
+    weight = 40
