@@ -17,7 +17,7 @@ keywords:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://blog.502.li
+url: https://blog.k8s.li
 root: /
 permalink: :title.html
 permalink_defaults:
