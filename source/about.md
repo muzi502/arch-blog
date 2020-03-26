@@ -19,17 +19,17 @@ comment: true
 
 ## connect
 
-- **Blog** 🏠 [blog.502.li](https://blog.502.li)
+- **Blog** 🏠 [blog.k8s.li](https://blog.k8s.li)
 
 - **Email** 📧 [blog#502.li](mailto:blog@502.li)
 
 - **Twitter** 🕊 [muzi_ii](https://twitter.com/muzi_ii)
 
-- **GitHub** 🕸 [muzi](https://github.com/muzi502)
+- **GitHub** 🕸 [muzi502](https://github.com/muzi502)
 
 - **Telegram** ☎️ [muzi_ii](https://telegram.me/muzi_ii)
 
-- **Channel** 📣 [rss_kubernetes](https://t.me/rss_kubernetes)
+- **Channel** 📣 [rss_kubernetes](https://tg.k8s.li/)
 
 ## blog
 
