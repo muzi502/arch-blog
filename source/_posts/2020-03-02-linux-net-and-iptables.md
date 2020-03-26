@@ -380,7 +380,7 @@ Mangle 表包含五种内建链：PREROUTING、OUTPUT、FORWARD、INPUT、POSTRO
 
 ### 数据包流程
 
-![img](https://blog.502.li/img/iptables.png)
+![img](./img/iptables.png)
 
 在 Linux 下，从任何网络端口进来的每一个 IP 数据包都要从上到下的穿过这张图，iptabales 对从任何端口进入的数据包都会采取相同的处理方式。
 
