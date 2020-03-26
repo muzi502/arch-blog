@@ -146,11 +146,13 @@ ubuntu@blog:~$ curl https://t.me/s/rss_kubernetes | grep "<script src="
 
 这个文本替换功能很好玩儿，在 Cloudflare 官方的博客里还有个 demo [introducing-cloudflare-workers](https://cloudflareworkers.com/#c62c6c0002cb236166b794c440870cca:https://blog.cloudflare.com/introducing-cloudflare-workers) 。使用这个功能咱有解锁了一个玩具，稍后再讲😂。
 
->   Here is a worker which performs a site-wide search-and-replace, replacing the word "Worker" with "Minion". [Try it out on this blog post.](https://cloudflareworkers.com/#c62c6c0002cb236166b794c440870cca:https://blog.cloudflare.com/introducing-cloudflare-workers)
+> Here is a worker which performs a site-wide search-and-replace, replacing the word "Worker" with "Minion". [Try it out on this blog post.](https://cloudflareworkers.com/#c62c6c0002cb236166b794c440870cca:https://blog.cloudflare.com/introducing-cloudflare-workers)
 
 ~~剽窃~~修改好代码之后点击左下角的 `Save and Deploy` 然后 Preview 看看页面是否显示正常，如果显示正常恭喜你成功啦。
 
 ![image-20200326190914520](https://blog.502.li/img/image-20200326190914520.png)
+
+还有一点就是只要把 `const upstream_path = '/s/rss_kubernetes'` 后的  rss_kubernetes 替换为你想要代理的 telegram 频道 username，就能使用 Workers 代理所有电报频道。之所以加上 `upstream_path` 是为了防止别人滥用。
 
 ## 自定义域名
 
@@ -201,7 +203,7 @@ chanshiyucx/blog Issues - Made with love by RSSHub(https://github.com/DIYgod/RSS
 <link>https://github.com/chanshiyucx/blog/issues/108</link>
 ```
 
-其中的 `<guid isPermaLink="false"> ` 和 `<link>` 中的链接 github.com/chanshiyucx/blog/issues/ 替换为 chanshiyu,com/post/ 即可。于是还是同样的方法新建一个 Worker，然后修改一下 `worker.js` 的代码就可以啦。
+其中的 `<guid isPermaLink="false">` 和 `<link>` 中的链接 github.com/chanshiyucx/blog/issues/ 替换为 chanshiyu,com/post/ 即可。于是还是同样的方法新建一个 Worker，然后修改一下 `worker.js` 的代码就可以啦。
 
 ```javascript
 // Website you intended to retrieve for users.
@@ -299,12 +301,16 @@ async function fetchAndApply(request) {
 
 关于 Cloudflare 的 Workers 还有更多好玩的等待你去发现，咱就推荐一下啦：
 
--   [Cloudflare Worker 免费搭建镜像站](https://blog.ichr.me/post/cloudflare-worker-build-mirror-website/)
--   [从现在起，任何人都可以在Cloudflare上使用Workers运行JavaScript！](https://blog.cloudflare.com/zh/cloudflare-workers-unleashed-zh/)
--   [尽情编写代码吧：改善开发人员使用Cloudflare Workers的体验](https://blog.cloudflare.com/zh/just-write-code-improving-developer-experience-for-cloudflare-workers-zh/)
--   [使用 Cloudflare Workers 加速 Google Analytics](https://blog.skk.moe/post/cloudflare-workers-cfga)
--   [使用 Backblaze B2 和 Cloudflare Workers 搭建可以自定义域名的免费图床](https://blog.meow.page/2019/09/24/free-personal-image-hosting-with-backblaze-b2-and-cloudflare-workers)
--   [使用 Cloudflare Workers 提高 WordPress 速度和效能教學](https://free.com.tw/cloudflare-workers-wordpress/)
--   [使用Cloudflare Workers反带P站图片](https://yojigen.tech/archives/post19/)
+- [Cloudflare Worker 免费搭建镜像站](https://blog.ichr.me/post/cloudflare-worker-build-mirror-website/)
+- [从现在起，任何人都可以在Cloudflare上使用Workers运行JavaScript！](https://blog.cloudflare.com/zh/cloudflare-workers-unleashed-zh/)
+- [尽情编写代码吧：改善开发人员使用Cloudflare Workers的体验](https://blog.cloudflare.com/zh/just-write-code-improving-developer-experience-for-cloudflare-workers-zh/)
+- [使用 Cloudflare Workers 加速 Google Analytics](https://blog.skk.moe/post/cloudflare-workers-cfga)
+- [使用 Backblaze B2 和 Cloudflare Workers 搭建可以自定义域名的免费图床](https://blog.meow.page/2019/09/24/free-personal-image-hosting-with-backblaze-b2-and-cloudflare-workers)
+- [使用 Cloudflare Workers 提高 WordPress 速度和效能教學](https://free.com.tw/cloudflare-workers-wordpress/)
+- [使用Cloudflare Workers反带P站图片](https://yojigen.tech/archives/post19/)
 
 最后宣传一下咱的[@rss_kubernetes](https://t.me/rss_kubernetes) 频道，国内用户可以访问 [tg.k8s.li](https://tg.k8s.li)，如果你对 docker 、K8s、云原生等感兴趣，就到咱碗里来吧😂。不订阅咱的频道也可以通过咱的 [tg.k8s.li](https://tg.k8s.li) 镜像站来查看 RSS 推送信息。
+
+墙越来越高了，这个社会也……不知道未来的互联网会变成什么样子，但我们作为一只屁民能做的就是**不为墙添砖加瓦，不为极权专制独裁暴政唱赞歌**。最后一张自己制作 kindle 电子书时喜欢使用的封面图片送给大家。
+
+![image-20200326200247868](https://blog.502.li/img/image-20200326200247868.png)
