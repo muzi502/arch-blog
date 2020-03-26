@@ -14,11 +14,11 @@ comment: true
 
 ## 一次偶遇
 
-昨天在咱的 [让图片飞起来 oh-my-webp.sh ！](https://blog.k8s.li/oh-my-webpsh.html) 收到了 [Chris](https://ichr.me/) 大佬的回复，咱就拜访了一下大佬的博客😂，无意间发现 [Cloudflare Worder 免费搭建镜像站](https://blog.ichr.me/post/cloudflare-worker-build-mirror-website/) 这篇博客。于是呐，咱也想着能不能玩一玩这个 Workers 。虽然之前听说过有用 Workers 做很多好玩的事儿，比如加速网站、代理 Google 镜像站什么的。不过这些对于咱来说不是很刚需就没有折腾。刚好咱的 telegram 电报频道 [RSS Kubernetes](https://t.me/rss_kubernetes) 人也比较多了，为了提高一点影响力，咱就想着能不能把频道的预览界面 [t.me/s/rss_kubernetes](https://t.me/s/rss_kubernetes) 反代到咱域名上。虽然之前尝试使用 nginx 进行反代，但是效果不尽人意，于是当时就弃坑了。在春节的时候咱也看到过有人反代 [2019-nCoV疫情实时播报🅥](https://t.me/nCoV2019) 的，不过当时那个项目折腾起来也是很麻烦，咱这种菜鸡还是溜了溜了😂。直到今天看到 [Cloudflare Worder 免费搭建镜像站](https://blog.ichr.me/post/cloudflare-worker-build-mirror-website/) 这篇博客后就心血来潮，就搞一搞吧😂
+昨天在咱的 [让图片飞起来 oh-my-webp.sh ！](https://blog.k8s.li/oh-my-webpsh.html) 收到了 [ChrAlpha](https://ichr.me/) 大佬的回复，咱就拜访了一下大佬的博客😂，无意间发现 [Cloudflare Worder 免费搭建镜像站](https://blog.ichr.me/post/cloudflare-worker-build-mirror-website/) 这篇博客。于是呐，咱也想着能不能玩一玩这个 Workers 。虽然之前听说过有用 Workers 做很多好玩的事儿，比如加速网站、代理 Google 镜像站什么的。不过这些对于咱来说不是很刚需就没有折腾。刚好咱的 telegram 电报频道 [RSS Kubernetes](https://t.me/rss_kubernetes) 人也比较多了，为了提高一点影响力，咱就想着能不能把频道的预览界面 [t.me/s/rss_kubernetes](https://t.me/s/rss_kubernetes) 反代到咱域名上。虽然之前尝试使用 nginx 进行反代，但是效果不尽人意，于是当时就弃坑了。在春节的时候咱也看到过有人反代 [2019-nCoV疫情实时播报🅥](https://t.me/nCoV2019) 的，不过当时那个项目折腾起来也是很麻烦，咱这种菜鸡还是溜了溜了😂。直到今天看到 [Cloudflare Worder 免费搭建镜像站](https://blog.ichr.me/post/cloudflare-worker-build-mirror-website/) 这篇博客后就心血来潮，就搞一搞吧😂
 
 ## 劝退~~三~~一连
 
-首先你要有个 Cloudflare 账户，这时必须的。关于 Cloudflare 的注册咱就不多说啦，不过咱倒是建议大家伙把域名的 DNS 解析放到 Cloudflare 上来，好处多多：有把 https 小绿锁、免费的 ~~加速~~ 减速 CDN （墙内）、域名访问统计等等可玩性比较高😋。需要注意的是 Cloudflare 的 Worker 一天 10 万次免费额度，也够咱喝一壶的啦，不用担心不够用。
+首先你要有个 Cloudflare 账户，这是必须的。关于 Cloudflare 的注册咱就不多说啦，不过咱倒是建议大家伙把域名的 DNS 解析放到 Cloudflare 上来，好处多多：有把 https 小绿锁、免费的 ~~加速~~ 减速 CDN （墙内）、域名访问统计等等可玩性比较高😋。需要注意的是 Cloudflare 的 Worker 一天 10 万次免费额度，也够咱喝一壶的啦，不用担心不够用。
 
 ## 新建 Worker
 
@@ -35,12 +35,12 @@ const upstream = 't.me'
 // Custom pathname for the upstream website.
 const upstream_path = '/s/rss_kubernetes'
 
+// Whether to use HTTPS protocol for upstream address.
 const https = true
 
 // Replace texts.
 const replace_dict = {
-    '$upstream': '$custom_domain',
-    'telegram.org': '$custom_domain'
+    '$upstream': '$custom_domain'
 }
 
 addEventListener('fetch', event => {
@@ -58,7 +58,7 @@ async function fetchAndApply(request) {
     } else {
         url.protocol = 'http:';
     }
-    
+
     var upstream_domain = upstream;
     url.host = upstream_domain;
     if (url.pathname == '/') {
@@ -85,12 +85,6 @@ async function fetchAndApply(request) {
     let new_response_headers = new Headers(response_headers);
     let status = original_response.status;
 
-    new_response_headers.set('access-control-allow-origin', '*');
-    new_response_headers.set('access-control-allow-credentials', true);
-    new_response_headers.delete('content-security-policy');
-    new_response_headers.delete('content-security-policy-report-only');
-    new_response_headers.delete('clear-site-data');
-
     const content_type = new_response_headers.get('content-type');
     if (content_type.includes('text/html') && content_type.includes('UTF-8')) {
         original_text = await replace_response_text(original_response_clone, upstream_domain, url_hostname);
@@ -102,37 +96,24 @@ async function fetchAndApply(request) {
         status,
         headers: new_response_headers
     })
-    return response;
-}
-
-async function replace_response_text(response, upstream_domain, host_name) {
     let text = await response.text()
 
-    var i, j;
-    for (i in replace_dict) {
-        j = replace_dict[i]
-        if (i == '$upstream') {
-            i = upstream_domain
-        } else if (i == '$custom_domain') {
-            i = host_name
-        }
+// Modify it.
+let modified = text.replace(/telegram.org/g, "telegram.k8srss.workers.dev")
 
-        if (j == '$upstream') {
-            j = upstream_domain
-        } else if (j == '$custom_domain') {
-            j = host_name
-        }
-        
-        let re = new RegExp(i, 'g')
-        text = text.replace(re, j);
-    }
-    return text;
+// Return modified response.
+return new Response(modified, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: response.headers
+})
+    return response;
 }
 ```
 
-需要注意的是，像 `t.me` 域名下的站点，比如我的 `https://t.me/s/rss_kubernetes` ，它的 js 和 css 样式文件是使用的 telegram.org 域名。所以我们需要在 `replace_dict` 那里定义好替换的正则表达式，将  `https://t.me/s/rss_kubernetes`页面里的  `telegram.org` 同样进行反代才行。
+需要注意的是，像 `t.me` 域名下的站点，比如我的 `https://t.me/s/rss_kubernetes` ，它的 js 和 css 样式文件是使用的 telegram.org 域名。~~所以我们需要在 `replace_dict` 那里定义好替换的正则表达式，~~将  `https://t.me/s/rss_kubernetes`页面里的  `telegram.org` 同样进行反代才行，这需要为 telegram 建一个单独的 Worker 😑。这也是评论区  [ChrAlpha](https://ichr.me/) 小伙伴提到的办法。
 
-```shell
+```html
 ubuntu@blog:~$ curl https://t.me/s/rss_kubernetes | grep "<script src="
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
@@ -141,6 +122,25 @@ ubuntu@blog:~$ curl https://t.me/s/rss_kubernetes | grep "<script src="
     <script src="//telegram.org/js/jquery-ui.min.js"></script>
     <script src="//telegram.org/js/widget-frame.js?29"></script>
     <script src="//telegram.org/js/telegram-web.js?8"></script>
+```
+
+修改下处代码为，将`https://t.me/s/rss_kubernetes`页面里的  `telegram.org` 同样进行一次反代。这样访问到 `https://t.me/s/rss_kubernetes`页面时，把的 telegram.org 替换为另一个 Worker 的域名，比如我的 `telegram.k8srss.workers.dev`  。不过像频道里的图片、文件、视频等资源 telegram 是使用的 CDN ，而且有好几个域名……这点很僵硬，暂时找不到合适的办法。貌似一个 Worker 只能反代一个域名？如果汝有合适的办法，欢迎与咱交流，咱感激不尽😋 
+
+```javascript
+let modified = text.replace(/telegram.org/g, "telegram.k8srss.workers.dev")
+```
+
+这样再使用 curl 访问测试一下，原来的 telegram.org 已经全部替换成 telegram.k8srss.workers.dev 了😂。现在墙内用户也可以无痛访问啦。在此感谢  [ChrAlpha](https://ichr.me/)  小伙伴😂提出宝贵的建议。
+
+```html
+</main>
+    <script src="//telegram.k8srss.workers.dev/js/jquery.min.js"></script>
+    <script src="//telegram.k8srss.workers.dev/js/jquery-ui.min.js"></script>
+
+    <script src="//telegram.k8srss.workers.dev/js/widget-frame.js?29"></script>
+    <script src="//telegram.k8srss.workers.dev/js/telegram-web.js?8"></script>
+    
+<!-- page generated in 121.26ms -->
 ```
 
 这个文本替换功能很好玩儿，在 Cloudflare 官方的博客里还有个 demo [introducing-cloudflare-workers](https://cloudflareworkers.com/#c62c6c0002cb236166b794c440870cca:https://blog.cloudflare.com/introducing-cloudflare-workers) 。使用这个功能咱有解锁了一个玩具，稍后再讲😂。
@@ -310,6 +310,8 @@ async function fetchAndApply(request) {
 
 最后宣传一下咱的[@rss_kubernetes](https://t.me/rss_kubernetes) 频道，国内用户可以访问 [tg.k8s.li](https://tg.k8s.li)，如果你对 docker 、K8s、云原生等感兴趣，就到咱碗里来吧😂。不订阅咱的频道也可以通过咱的 [tg.k8s.li](https://tg.k8s.li) 镜像站来查看 RSS 推送信息。
 
-墙越来越高了，这个社会也……不知道未来的互联网会变成什么样子，但我们作为一只屁民能做的就是**不为墙添砖加瓦，不为极权专制独裁暴政唱赞歌**。最后一张自己制作 kindle 电子书时喜欢使用的封面图片送给大家。
+![image-20200327003346742](./img/image-20200327003346742.png)
+
+GitHub page 又被墙一波，rsshub.app 也被墙掉了。墙越来越高了，这个社会也来越可笑了……不知道未来的互联网会变成什么样子，但我们作为一只屁民能做的就是**不为墙添砖加瓦，不为极权专制独裁暴政唱赞歌**。最后一张自己制作 kindle 电子书时喜欢使用的封面图片送给大家。
 
 ![image-20200326200247868](./img/image-20200326200247868.png)
