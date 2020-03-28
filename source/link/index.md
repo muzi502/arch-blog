@@ -75,6 +75,7 @@ rss: https://blog.502.li/atom.xml
 | [CrownDaisy](https://crowndaisy.com/)                  | Python、数据分析                   | 极简主义者                                                   |
 | [F4n9X's Blog](https://fanqxu.github.io/)              | InfoSec、PenTesting、CTF、Hacking  | 社工大佬                                                     |
 | [ChrAlpha](https://ichr.me)                            | hexo、Cloudflare、加密、博客       | Keep foolish and<br> write some stupid codes                 |
+| [Nova Kwok's Awesome Blog](https://nova.moe/)          | Linux、Python、network、摄影       | LUNA 创始人                                                  |
 
 ### 个人收藏
 
@@ -94,7 +95,6 @@ rss: https://blog.502.li/atom.xml
 | [ 约伊兹的萌狼乡手札](https://blog.yoitsu.moe/)              | Archlinux、安卓、开源                                 | 喜欢用😂                                  |
 | [HuoJu's BLOG](https://jhuo.ca/)                             | 开源、互联网历史                                      | 开源是自由的，永远                       |
 | [依云's Blog](https://blog.lilydjwg.me/)                     | Archinux、内核                                        | 百合仙子😂                                |
-| [Nova Kwok's Awesome Blog](https://nova.moe/)                | Linux、Python                                         | LUNA 创始人                              |
 | [結城浩](http://hyuki.com/)                                  | 数学、《数学女孩》                                    | 日本作家                                 |
 | [王子亭的博客](https://jysperm.me/)                          | 后端、Node.js                                         | 资深老博主                               |
 | [浮生若梦](https://fs.tn/)                                   | 测试、Linux                                           | 一个测试萌新                             |

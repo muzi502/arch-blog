@@ -28,7 +28,7 @@ October 25, 2017
 
 四六级未过的工地英语翻译、希望各位读者雅正翻译不当的部分😁
 
-> ## Kubernetes Introduction for VMware Users – Part 1: The Theory
+## Kubernetes Introduction for VMware Users – Part 1: The Theory
 
 ## 给 VMware 用户的 Kubernetes 简介——第一部分：理论
 
@@ -50,7 +50,7 @@ October 25, 2017
 
 图片：Kubernetes 和 vSphere 整体架构对比
 
-> ## A little bit of history
+## A little bit of history
 
 ## 插曲
 
@@ -82,7 +82,7 @@ Docker 解决了交互和打包的一个大问题，但现在怎么办？作为�
 
 但是后来 Google 告诉世界，他们实际上运行容器很多年了（其实是他们发明的 - Google: cgroups），而这样做的正确方法是通过一个称为 Kubernetes平台，然后他们把 Kubernetes 作为礼物开源给了社区 ，这再次改变了一切。
 
-> ## Understanding Kubernetes by comparing it to vSphere
+## Understanding Kubernetes by comparing it to vSphere
 
 ## 通过和 vSphere 的比较来理解 Kubernetes
 
@@ -96,7 +96,7 @@ Docker 解决了交互和打包的一个大问题，但现在怎么办？作为�
 
 图片：从容器到 Kubernetes 的与VM 从 Workstation 到 vSphere 演进的对比
 
-> ## System Overview
+## System Overview
 
 ## 系统概览
 
@@ -120,7 +120,7 @@ You can see also that K8s has a key-value store called “etcd.” It is similar
 
 ![Kubernetes](./img/clidash-1024x563.png)
 
-> ## Workloads Form-factor
+## Workloads Form-factor
 
 ## 工作负载
 
@@ -140,7 +140,7 @@ You can see also that K8s has a key-value store called “etcd.” It is similar
 
 ![Kubernetes](./img/cli2-1024x450.png)
 
-> ## Management
+## Management
 
 ## 管理
 
@@ -150,7 +150,7 @@ You can see also that K8s has a key-value store called “etcd.” It is similar
 
 ![Kubernetes](./img/kubernetes-management-1024x469.png)
 
-> ## Configurations
+## Configurations
 
 ## 配置
 
@@ -164,7 +164,7 @@ Kubernetes 中非常重要的概念之一是所描述的配置状态。通过 YA
 
 ![Kubernetes](./img/kubernetes-confiugrations-1024x511.png)
 
-> ## Virtual Clusters
+## Virtual Clusters
 
 ## 虚拟化集群
 
@@ -174,7 +174,7 @@ In vSphere, we have physical ESXi hosts grouped logically to form clusters. We c
 
 ![Kubernetes](./img/kubernetes-namespaces-1024x651.png)
 
-> ## Resource Management
+## Resource Management
 
 ## 资源管理
 
@@ -184,7 +184,7 @@ In vSphere, we have physical ESXi hosts grouped logically to form clusters. We c
 
 ![Kubernetes](./img/kubernetes-resource-quotas.png)
 
-> ## Workloads Identification
+## Workloads Identification
 
 ## 标记工作负载
 
@@ -194,7 +194,7 @@ In vSphere, we have physical ESXi hosts grouped logically to form clusters. We c
 
 ![Kubernetes](./img/kubernetes-labels-1024x331.png)
 
-> ## Redundancy
+## Redundancy
 
 ## 冗余
 
@@ -204,7 +204,7 @@ In vSphere, we have physical ESXi hosts grouped logically to form clusters. We c
 
 ![Kubernetes](./img/kuberentes-replicasets-1024x546.png)
 
-> ## Load Balancing
+## Load Balancing
 
 ## 负载均衡
 
@@ -228,7 +228,7 @@ In vSphere, we have physical ESXi hosts grouped logically to form clusters. We c
 
 ![Kubernetes](./img/kubernetes-ingress-1024x532.png)
 
-> ## Storage & Networking
+## Storage & Networking
 
 ## 存储和网络
 
@@ -261,4 +261,3 @@ Kubernetes 具有不同的网络"插件"，你可以使用这些插件来设置�
 > Remember, we are examining here the kubernetes plugin, not CNI. The former is what GKE uses, and the way they do this is quite fascinating as it’s completely programmable and automated on their cloud. Those subnet allocations and associated routes are taken care of by GCP for you, as we will see in the next part.
 
 请记住，我们正在测试 kubernetes 插件而不是CNI。前者是 GKE 使用的，他们这样做的方式是相当棒的，因为它是完全可编程和自动化的云。这些子网分配和相关路由由 GCP 为你负责，我们将在下一部分中看到。
-
