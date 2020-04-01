@@ -12,17 +12,21 @@ copyright: true
 comment: true
 ---
 
-对于 CI/CD（持续集成与持续交付）的基本概念网络上已经有很多大佬在普及啦，咱才疏学浅怕误人子弟所以只能剽窃一下别人的解释啦😂。下面就剽窃一下红帽子家的 [CI/CD是什么？如何理解持续集成、持续交付和持续部署](https://www.redhat.com/zh/topics/devops/what-is-ci-cd) 官方文档
+对于 CI/CD（持续集成与持续交付）的基本概念网络上已经有很多大佬在普及啦，咱才疏学浅怕误人子弟所以就剽窃一下别人的解释啦😂。下面就剽窃一下红帽子家的 [CI/CD是什么？如何理解持续集成、持续交付和持续部署](https://www.redhat.com/zh/topics/devops/what-is-ci-cd) 官方文档：
 
 **CI 持续集成**
 
 ![Continuous integration puts the integration phase earlier in the development cycle](img/409-images-for-snap-blog-postedit_image1.png)
+
+图片剽窃自  [The Product Managers’ Guide to Continuous Delivery and DevOps](https://www.mindtheproduct.com/what-the-hell-are-ci-cd-and-devops-a-cheatsheet-for-the-rest-of-us/)
 
 > CI/CD 中的“CI”始终指持续集成，它属于开发人员的自动化流程。成功的 CI 意味着应用代码的新更改会定期构建、测试并合并到共享存储库中。该解决方案可以解决在一次开发中有太多应用分支，从而导致相互冲突的问题。
 
 **CD 持续交付**
 
 ![Continuous Delivery is a software development discipline ](img/409-images-for-snap-blog-postedit_image4-manual.png)
+
+图片剽窃自 [The Product Managers’ Guide to Continuous Delivery and DevOps](https://www.mindtheproduct.com/what-the-hell-are-ci-cd-and-devops-a-cheatsheet-for-the-rest-of-us/)
 
 > CI/CD 中的“CD”指的是持续交付和/或持续部署，这些相关概念有时会交叉使用。两者都事关管道后续阶段的自动化，但它们有时也会单独使用，用于说明自动化程度。
 >
@@ -32,15 +36,21 @@ comment: true
 
 ![Continuous Delivery is a software development discipline ](img/409-images-for-snap-blog-postedit_image4-manual-1585574252795.png)
 
+图片剽窃自  [The Product Managers’ Guide to Continuous Delivery and DevOps](https://www.mindtheproduct.com/what-the-hell-are-ci-cd-and-devops-a-cheatsheet-for-the-rest-of-us/)
+
 > 持续*部署*（另一种“CD”）指的是自动将开发人员的更改从存储库发布到生产环境，以供客户使用。它主要为了解决因手动流程降低应用交付速度，从而使运维团队超负荷的问题。持续部署以持续交付的优势为根基，实现了管道后续阶段的自动化。
 
-总之而言  CI/CD 是一整套软件开发的流水线，开发人员提交完更新的代码之后，根据流水线的触发情况来执行自定义的流水线任务，比如代码质量检测、构建 docker 镜像为交付产品、自动化部署到测试环境或生产环境。这些需要
+总之而言  CI/CD 是一整套软件开发的流水线，开发人员提交完更新的代码之后，根据流水线的触发情况来执行自定义的流水线任务，比如代码质量检测、构建 docker 镜像为交付产品、自动化部署到测试环境或生产环境等等。这些需要一系列相关的软件来构建这套 CI/CD 的系统，本文就通过 Gitlab + gitlab-ci + Harbor 构建一个简陋的 CI/CD 流水线。
+
+另外推荐读一下这篇 [The Product Managers’ Guide to Continuous Delivery and DevOps ](https://www.mindtheproduct.com/what-the-hell-are-ci-cd-and-devops-a-cheatsheet-for-the-rest-of-us/)
 
 ## 选型
 
-## 安装 GitlabSS
+根据  CI/CD 工具的占有率统计报告 []()，目前 CI 领域的老大哥依旧是 Jenkins 莫属啦，
 
-目前 Gitlab 官方给出的安装方式有很多种，普遍采用 Omnibus 包、Docker 安装。官方建议采用 Omnibus 方式安装：
+## 安装 Gitlab
+
+目前 Gitlab 官方给出的安装方式有很多种，普遍采用 O·mnibus 包、Docker 安装。官方建议采用 Omnibus 方式安装：
 
 > 我们强烈建议使用 Omnibus 包安装 GitLab ，因为它安装起来更快、更容易升级版本，而且包含了其他安装方式所没有的可靠性功能。
 
