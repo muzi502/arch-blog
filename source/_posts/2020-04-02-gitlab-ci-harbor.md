@@ -1,7 +1,7 @@
 ---
-title: 基于 Gitlab-ci + Harobr 的 CI/CD 流水线
-date: 2020-03-30
-updated: 2020-03-31
+title: 基于 Gitlab-ci + Harobr 的 CI 流水线
+date: 2020-04-02
+updated: 2020-04-02
 slug: 
 categories: 技术
 tag:
@@ -44,17 +44,17 @@ comment: true
 
 另外推荐读一下这篇 [The Product Managers’ Guide to Continuous Delivery and DevOps ](https://www.mindtheproduct.com/what-the-hell-are-ci-cd-and-devops-a-cheatsheet-for-the-rest-of-us/)
 
-## 选型
+## Gitlab
 
-根据  CI/CD 工具的占有率统计报告 []()，目前 CI 领域的老大哥依旧是 Jenkins 莫属啦，
+目前 Gitlab 官方给出的安装方式有很多种，普遍采用 Omnibus 包、Docker 安装。也可以用官方的 helm Chart 部署在 Kubernenets 集群中，然后使用网络存储，比如 Gluster、NFS、Ceph、vSAN 等进行 PG 数据库和代码仓库持久化存储。
 
-## 安装 Gitlab
-
-目前 Gitlab 官方给出的安装方式有很多种，普遍采用 O·mnibus 包、Docker 安装。官方建议采用 Omnibus 方式安装：
+**官方建议采用 Omnibus 方式安装：**
 
 > 我们强烈建议使用 Omnibus 包安装 GitLab ，因为它安装起来更快、更容易升级版本，而且包含了其他安装方式所没有的可靠性功能。
 
 ### Omnibus 包安装方式比较
+
+摘自官方文档
 
 - ✅ - Installed by default
 - ⚙ - Requires additional configuration, or GitLab Managed Apps
@@ -101,10 +101,26 @@ comment: true
 | [Jaeger integration](https://docs.gitlab.com/ee/development/architecture.html#jaeger) | Distributed tracing for deployed apps                        | [⤓](https://docs.gitlab.com/ee/user/project/operations/tracing.html) | [⤓](https://docs.gitlab.com/ee/user/project/operations/tracing.html) | [⤓](https://docs.gitlab.com/ee/user/project/operations/tracing.html) |
 | [GitLab Managed Apps](https://docs.gitlab.com/ee/development/architecture.html#gitlab-managed-apps) | Deploy [Helm](https://helm.sh/docs/), [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/), [Cert-Manager](https://docs.cert-manager.io/en/latest/), [Prometheus](https://prometheus.io/docs/introduction/overview/), a [Runner](https://docs.gitlab.com/runner/), [JupyterHub](https://jupyter.org/), [Knative](https://cloud.google.com/knative/) to a cluster | [⤓](https://docs.gitlab.com/ee/user/project/clusters/index.html#installing-applications) | [⤓](https://docs.gitlab.com/ee/user/project/clusters/index.html#installing-applications) | [⤓](https://docs.gitlab.com/ee/user/project/clusters/index.html#installing-applications) |
 
-也可以用官方的 helm Chart 部署在 Kubernenets 集群中，然后使用网络存储，比如 Gluster、NFS、Ceph、vSAN 等进行 PG 数据库和代码仓库持久化存储。
+## 安装 Gitlab
 
+咱遵从官方的建议，使用 Omnibus 包的方式来部署 Gitlab 实例。
 
-不过咱还是遵从官方的建议，使用 Omnibus 包 即 deb/rpm 包的方式来部署 Gitlab 实例。
+### Ubuntu 1804
+
+```bash
+sudo apt-get install openssh-server
+curl https://packages.gitlab.com/gpg.key 2> /dev/null | sudo apt-key add - &>/dev/null
+
+# 添加清华大学的镜像站源 bionic是 Ubuntu18.04 xenial是16.04，根据自己的 Ubuntu 发行版本修改一下下
+deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu bionic main
+sudo apt-get update
+sudo apt-get install gitlab-ce
+
+# 也可以考虑使用 wget 的方式把 deb 包下载下来
+wget https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu/pool/bionic/main/g/gitlab-ce/gitlab-ce_12.3.5-ce.0_amd64.deb
+
+opkg -i gitlab-ce/gitlab-ce_12.3.5-ce.0_amd64.deb
+```
 
 ### CentOS7
 
@@ -155,14 +171,11 @@ yum install gitlab-ce-12.8.2-ce.0.el7.x86_64.rpm
                 .,,,***,,,,
                     ,*,.
 
-
-
          _______ __  __          __
         / ____(_) /_/ /   ____ _/ /_
        / / __/ / __/ /   / __ `/ __ \
       / /_/ / / /_/ /___/ /_/ / /_/ /
       \____/_/\__/_____/\__,_/_.___/
-
 
     Thank you for installing GitLab!
     GitLab was unable to detect a valid hostname for your instance.
@@ -218,6 +231,39 @@ gitlab_rails['gitlab_email_from'] = ''
 打开浏览器进行初始化账户设定密码，这个密码为 root 管理员账户的密码。设置完密码之后会自动跳转到登录页面。username 为 `root` 密码为刚刚设置的密码。
 
 ## 安装 gitlab-runner
+
+### Debian/Ubuntu
+
+首先信任 GitLab 的 GPG 公钥:
+
+```bash
+curl https://packages.gitlab.com/gpg.key 2> /dev/null | sudo apt-key add - &>/dev/null
+```
+
+再选择你的 Debian/Ubuntu 版本，文本框中内容写进 `/etc/apt/sources.list.d/gitlab-runner.list`
+
+#### Debian
+
+根据自己的发行版代号修改一下 `stretch`
+
+```bash
+deb http://mirrors.tuna.tsinghua.edu.cn/gitlab-runner/debian stretch main
+```
+
+#### Ubuntu
+
+根据自己的发行版代号修改一下 `bionic`
+
+```bash
+deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-runner/ubuntu bionic main
+```
+
+配置好 deb 源之后再执行
+
+```bash
+sudo apt uodate
+apt install gitlab-runner -y
+```
 
 ### CentOS7
 
@@ -476,7 +522,6 @@ registryctl         /harbor/start.sh                 Up (healthy)
 
 ```json
 {
-  "registry-mirrors": ["http://f1361db2.m.daocloud.io"],
   "insecure-registries" : ["10.10.107.217"]
 }
 ```
@@ -722,4 +767,290 @@ SSH_PASSWORD: # 部署测试服务器 ssh 密码
 
 ![image-20200325163400519](img/image-20200325163400519.png)
 
-- 关于部署和测试需要根据项目的需求进行定制，在此构建完成 docker 镜像之后，只需要通过 ssh 登录到测试/部署服务器上把镜像 pull 下来，然后根据项目的需求启动相关容器。
+## 参考/推荐
+
+-   [GitLab Runner Docs](https://docs.gitlab.com/runner/)
+-   [GitLab Docs](https://docs.gitlab.com/ee/README.html)
+
+- [kubernetes系列之《构建企业级CICD平台(一)》](https://nicksors.cc/2019/07/12/kubernetes系列之《构建企业级CICD平台-一-》.html)
+- [GitLab的CI/CD使用问题汇总](https://notes.mengxin.science/2018/09/02/gitlab-ci-cd-question-and-answer/)
+- [基于 GitLab 的 CI 实践](https://moelove.info/2018/08/05/%E5%9F%BA%E4%BA%8E-GitLab-%E7%9A%84-CI-%E5%AE%9E%E8%B7%B5/)
+- [gitlab-notes](https://blog.fleeto.us/courses/gitlab-notes/)
+- [gitlab runner部署细节优化](https://xiaogenban1993.github.io/18.5/xiaomi_gitlabrunner.html)
+-  [Jenkins的Pipeline脚本在美团餐饮SaaS中的实践](https://tech.meituan.com/2018/08/02/erp-cd-jenkins-pipeline.html)
+- [GitLab CI 示例：Docker 镜像打包发布 & SSH 部署](https://laogen.site/gitlab-ci/example-docker-ssh-deploy/)
+- [gitlab CI/CD优化](https://theviper.xyz/gitlab-ci-cd-optimize.html)
+- [GitLab-CI使用Docker进行持续部署](http://zacksleo.top/2017/04/22/GitLab-CI%E4%BD%BF%E7%94%A8Docker%E8%BF%9B%E8%A1%8C%E6%8C%81%E7%BB%AD%E9%83%A8%E7%BD%B2/)
+- [Docker Gitlab CI 部署 Spring Boot 项目](https://furur.xyz/2019/11/03/docker-gitlab-ci-deploy-springboot-project/)
+- [RHEL7/CentOS7 在线和离线安装 GitLab 配置使用实践](https://wsgzao.github.io/post/gitlab/)
+- [GitLab Shell如何通过SSH工作](https://wayjam.me/post/how-gitlab-shell-works-with-ssh.md)
+- [GitLab镜像手册](https://websoft9.gitbook.io/gitlab-image-guide/)
+- [Gitlab部署和汉化以及简单运维](https://xuanwo.io/2016/04/13/gitlab-install-intro/)
+
+## 社群问答 QA | CI/CD 相关
+
+以下内容是整理摘自 [《(2000+) kubernetes 社群分享 QA 汇总》](https://blog.k8s.li/K8s-QA.html)，中有关 CI/CD 相关的问答，从 2000 多个 QA 里使用关键字搜索 Gitlab、CI/CD、Jenkins 等，然后将一些相关的问题进行汇总。方便问题自查和从中吸取经验。
+
+### 2019-04-03：容器环境下的持续集成最佳实践
+
+> Q：Kubernetes 上主流的 CI/CD 方案是啥？
+
+A：其实这无关Kubernetes，从市场占有率来看，前三名分别是 Jenkins、JetBrains TeamCity、CircleCI。[来源：](https://www.datanyze.com/market-share/ci)
+
+> Q：GitLab 自带的 CI 与Jenkins 和 GitLab 结合的 CI，该如何选择？想知道更深层次的理解。
+
+A：还是要结合自己团队的实际情况做选择。从成熟度来说，肯定是 Jenkins用户最多，成熟度最高，缺点是侧重 Java，配置相对繁琐。GitLab 自带的 CI相对简单，可以用 yaml，和 GitLab 结合的最好，但功能肯定没有 Jenkins全面。如果是小团队新项目，GitLab CI 又已经可以满足需求的话，并不需要上Jenkins，如果是较大的团队，又是偏 Java 的，个人更偏向 Jenkins。
+
+> Q：Jenkins 如果不想运行在 Kubernetes 里面，该怎么和 Kubernetes 集成？
+
+A：从 CI 的流程来说，CI 应用是不是跑在 Kubernetes 的并不重要，CI只要能访问代码库，有权限在生产环境发布，是不是跑在容器里从效果来说其实没有区别，只是用Kubernetes 部署 Jenkins的话，运维的一致性比较好，运维团队不用额外花时间维护一套物理机的部署方案。
+
+> Q：Kubernetes的回滚方案是回滚代码，重做镜像，还是先切流量，后做修改？
+
+A：代码一定是打包到镜像里的，镜像的版本就是代码的版本，所以一定是切镜像。至于回滚操作本身，Kubernetes已经内置了很多滚动发布（Rollingupdate）的策略，无论是发新版本还是回滚版本，都可以做到用户无感知。
+
+> Q：镜像大到几 G 的话如何更新部署，有什么好的实践呢，以及如何回滚？
+
+A：几个要点：> Q：Drone 开放 API 服务吗？这样方便其他系统集成。
+
+A：可以调整一下思路，直接把需要的功能做成镜像在 Drone 里调用就好了。
+
+> Q：如果有 Drone 的 Server怎么做高可用？
+
+A：Drone serve r用 Kubernetes部署的话本身只起到了一个任务调度的作用，很难会遇到性能瓶颈。真的有性能问题可以尝试水平扩展Drone server，共享同一数据库。
+
+### [基于 GitLab 的 CI 实践](https://moelove.info/2018/08/05/基于-GitLab-的-CI-实践/)
+
+> Q：您提到把各种依赖都以 Service 的提供，请问是以哪种方式呢？ 比如Python的依赖，怎么做成Service呢？
+
+A：Service 化的依赖，主要是指类似 DB / MySQL/ Reids 之类的。 或者是 dind 其实它提供的是 2375 端口的TCP服务。 Python 的依赖，我推荐的做法是， 构建一个换了源的 Python 镜像。 安装依赖的时候，耗时会少很多。 或者说， 可以在定义 Pipeline 的时候， 将虚拟环境的 venv 文件夹作为 cache ，之后的安装也会检查这个，避免不必要的安装。
+
+> Q：请问，你们为什么不用Jenkins Pipeline，而使用GitLab CI？
+
+A：主要原因是我提到的那几个方面。 集成较好， 界面美观优雅， 使用简单（所有有仓库写权限的人 都可以使用， 只要创建 .gitlab-ci.yml 并且配置了 Runner 即可使用） 。换个角度，我们来看下使用Jenkins 的问题， Jenkins 对于项目的配置其实和 GitLab 的代码是分离的， 两部分的， 用户（或者说我们的开发者）在使用的时候， 需要有两个平台， 并且，大多数时候， Jenkins 的权限是不放开的。 对用户来讲， 那相当于是个黑盒。 那可能的问题是什么呢？ 遇到构建失败了， 但是只有运维知道发生了什么，但是研发无能为力，因为没有权限。 使用GItLab的好处，这个时候就更加突出了， 配置就在代码仓库里面，并且使用 YAML 的配置，很简单。 有啥问题，直接查，直接改。
+
+> Q：关于 Runner 的清理的问题，在长时间使用后，Runner 机器上回产生很多的 Cache 容器，如何清理呢。能够在任务中自动清除吗？
+
+A：这个就相对简单了，首先， 如果你的 Cache 容器确认没用了， 每个 Cache 容器其实都有名字的， 直接按 Cache 的名字过略， 批量删掉。 如果你不确定它是否有用，那你直接删掉也是不影响的， 因为 Docker Excutor 的执行机制是创建完 Service 容器后， 创建 Cache 容器。 要是删掉了，它只是会再创建一次。 如果你想在任务中清除， 目前还没做相关的实践，待我实践后，看看有没有很优雅的方式。
+
+> Q：请问下Maven的settings.xml怎么处理？本地Maven仓库呢？
+
+A：我们构建了私有的 Maven 镜像， 私有镜像中是默认使用了我们的私有源。 对于项目中用户无需关注 settings.xml 中是否配置repo。
+
+> Q：在GitLab的CD方案中，在部署的时候，需要在变量中配置跳板机的私钥，如果这个项目是对公司整部门开发，那么如何保护这个私钥呢？
+
+A：可以使用 secret variable 将私钥写入其中， （但是项目的管理员，具备查看该 variable 的权限）开发一个 web server （其实只要暴露 IP 端口之类的就可以） 在 CI 执行的过程中去请求， server 对来源做判断 （比如 执行CI 的时候，会有一些特定的变量，以此来判断，是否真的是 CI 在请求）然后返回私钥。
+
+> Q：GitLab CI适合什么类型的项目呢？国内目前还比较小众吧？
+
+A：国内目前还较为小众（相比 Jenkins 来说）其实只要需要 CI 的项目，它都适合。
+
+## 2015-09-23：基于Docker和Java的持续集成实践
+
+> Q：CI过程中test需要连接数据库的代码时，您在写测试案例方面有哪些经验分享？
+
+A：单元测试不能依赖外部资源，用mock，或者用h2等内存数据库替代。集成测试的时候是从接口层直接调用测试的，测试用例对数据库无感知。
+
+> Q：请问部署到生产环境是自动触发还是需要手动审批？SQL执行或回滚是否自动化？
+
+A：当前是需要手动触发。SQL更新当前没做到自动化，这块正在改进，因为部署私有环境需要。SQL不支持回滚，代码做兼容。Docker镜像回滚没有自动化。
+
+> Q： 问一下你们的Redis内存版是用的什么？
+
+A：我们用的内存版的redis是 [spullara/redis-protocol](https://github.com/spullara/redis-protocol)中的server实现。不过这个实现部分功能没支持，比如lua脚本，我们自己做了改进。
+
+> Q：介绍下workflow带来的好处。
+
+A：workflow的好处我那篇文章中有说明，如果没有workflow，所有的步骤都在同一个配置的不同step实现，如果后面的失败，要重新从头开始。workflow可以中途开始，并且每一步骤完成都会触发通知。
+
+> Q：h2并不完全兼容MySQL脚本，你们如何处理的？
+
+A：我们通过一些hack的办法，会探测下数据库是什么类型的，替换掉一些不兼容的SQL，进行容错。
+
+> Q：请问你们在构建的时候，你说有些需要半个小时左右，那么构建过程的进度监控和健康监控你们怎么做的呢，如果有build失败了怎么处理呢？
+
+A：CI的每一步都有进度的，并且我们的团队通讯工具可以和CI集成，如果失败会发消息到群里通知大家。
+
+> Q：cleanup脚本做哪些？
+
+A：主要是清理旧的Docker镜像，以及清理自动化测试产生的垃圾数据。
+
+> Q：请问你们文件存储怎么解决的呢，使用自己的网络文件系统还是云服务？
+
+A：文件系统支持多种storage配置，可以是本地目录（便于测试），也可以使云服务（比如s3）。
+
+> Q：刚才说你们能通过一键部署，但是中间无法监控，测试环境可以这么玩，那生产环境你们是怎么做的呢？还有你们后续的改造方向是自己开发？还是采用集成第三方软件？
+
+A：生产环境shell当前只能是多加错误判断。这块我们在改进，比如通过ansible等工具，以及使用Kubernetes内置的rolling-update。自动化部署这块还没有好的开源工具。
+
+> Q：你们的测试用了很多代替方案、如h2代MySQL，要保证测试效果，除了你们用的hack方法之外，是不是从写代码的时候就开始做了方便测试的设计？
+
+A：对。这也是我文章中分享的观点之一。测试用例的编写人员要有业务代码的修改权限，最好是同一个人。要做自动化测试，业务代码必须要给测试留各种钩子以及后门。
+
+> Q：请问你们的集群应用编排怎么做的？
+
+A：上面说了，还没用到编排。一直等编排工具的成熟。正在测试k8s。
+
+> Q：你们做这个项目选型是出于什么考虑的，介绍里有提到使用一些脚本来管理容器解决开发和测试各种问题，感觉这种管理容器方式过于简单会带来管理问题，为何不用第三方开源项目来做二次开发，如：Kubernetes；另一个问题是，下一步有没有考虑如何让你的Docker和云服务平台结合，要解决运营成本问题（Docker最大吸引力在这里），而不只是解决开发测试问题？
+
+A：因为我们最早用的时候k8s 1.0 还没有，变化太大，创业团队没精力跟进，脚本是粗暴简单的办法。一直在等待各种基于Docker的云解决方案呀，肯定考虑结合。
+
+> Q：对于Docker storage分区用完问题，我想问一下，你们是使用Docker官方提供的Registry仓库吗，如何解决仓库单点问题，这机器要是故障了怎么办？
+
+A：Registry用的是官方的，后端存储是挂载到s3上的。没有s3,推荐使用京东田琪团队开源的[Speedy](https://github.com/jcloudpub/speedy)，实现了分布式存储。
+
+> Q：除了介绍的Java相关的CI方案，对于C/C++开发语言有没有推荐的CI方案？
+
+A：Teamcity/Jenkins等CI工具支持任何语言的。其实任何语言的CI都差不多，单元测试，集成测试。关键还在于依赖环境的准备以及集成测试用例的管理。
+
+> Q：我看到你们为了方便测试和调试会有独立的集合Docker环境，这种环境和上线环境其实是有差别的，这样测试的结果能够代表线上环境吗？这种问题怎么看待？
+
+A：所以我们有多个流程。清理数据的测试环境，以及不清理环境的沙箱环境。但这也不能避免一部分线上环境的数据导致的bug。另外就是配合灰度上线机制。当前我们的灰度是通过代码中的开关实现的，使用这种方案的也很多，比如facebook的Gatekeeper。
+
+> Q：请问Grouk有涉及前端（Node.js方面的）并结合Docker的CI/CD经历吗，可以分享下吗？
+
+A：这我们也在尝试。当前js的测试主要还是基于[ariya/phantomjs](https://github.com/ariya/phantomjs)，纯粹的js库比较方便测试，但如果牵扯到界面，就比较复杂些了。
+
+## 2015-12-22：基于Docker和Git的持续集成工作流
+
+> Q：开发每提交一个bugfix，都会触发jinkens去构建镜像，那么多的开发者，岂不是要构建很多镜像？
+
+A：没有错，我们是每次都触发构建 image，由于image是分层的，底层已经存在的父对象，是不用存储，只存储变化的部分所以再用的磁盘空间很低，在系统开始初，我做过统计，1000个 image 也不到 9G，这其中还有很多基础镜像。
+
+> Q：想问一个集群相关的，像Docker部署这部是直接调用Docker部署容器，还是通过Ansible或其他工具？
+
+A：有了 Kubernetes 管理集群后，发布的工作就比较简单了，用不上 Ansible。但是 Ansible 还是有它的用处的，比如清理集群中过时的 image，和已经退出的 Container等。
+
+> Q：你好，以前也做过类似的服务"第三步：Jenkins 会把相应的 image部署到服务器集群中，开发者就可以通过 iss001.kingdee这个域名访问刚刚对应分支的服务了"，单独一个分支解决了对应的bug，但实际生产中非常容易修改一个bug引起其他的bug，你们是怎么去把控整体的稳定性？如何提高这种单个bug分支单个测试环境的意义？
+
+A：这个 pull-request 的工作方式是应对功能开发的，如像长期开发某个 new feature，你刚刚说的一个 bug 产生另外一个bug，我们的做法是有回归测试，我们有一个 smoke 分支，持续不断的对其做功能回归测试，只有通过的才能 cherry pick 到release 上。
+
+> Q：测试环境依赖的redis/MQ之类的外部服务如何做的隔离?每次测试单独拉起来一套外部依赖的服务吗？
+
+A：我们通过多个手段来实现共享数据：master、smoke、release 分支测试都有自己独立的中间件，要是不用访问共享的数据，可以部署如 MQ image，代码层面的，如 MQ key 的名称加上机器的 IP。
+
+> Q：有没有用到Mesos？是否容易遇到问题？这方面的文档好像并不多。
+
+A：Mesos 是个二级调度，适用于像存在多套集群的情况，来均衡资源，如：部署了 Hadoop 和 storm ，一般会使用 storm 来处理实时的请求，Hadoop 做离线工作。晚上和白天就存在一种可能就是 Hadoop 闲置，但是 storm 可能很忙，这时 Mesos 这样的二级调度就可以平衡资源，节约成本，我们暂时没有这样的需求。至于文档方面我也没有深入研究，建议看官方文档。
+
+> Q：请问你们在构建的时候，你说有些需要半个小时左右，那么构建过程的进度监控和健康监控你们怎么做的呢，如果有build失败了怎么处理呢？
+
+A：CI的每一步都有进度的，并且我们的团队通讯工具可以和CI集成，如果失败会发消息到群里通知大家。
+
+## QA Gitlab
+
+> Q9：gitlab接收一个push event触发构建，这个是监控所有的分支吗，分支模型是怎么样的
+
+A：不是的，按需。我们内部分支模型大概有四种，dev——>test——>release——>master。master以外的为了效率都会做自动触发
+
+> Q11：为什么不直接用gitlab-runner 而接jenkins
+
+A：gitlab-runner 需要每个仓库都配置构建信息，当需要统一修改构建的时候很麻烦
+
+> Q：持续集成系统具体的细节可以透露下吗？基于gitlab ci，jekins？或者小公司可以直接用Spinnaker 这些吗？
+
+A：ci cd的话因为我们有自己现有的发布平台，背后的原理实际上还是调用jenkins去处理
+
+> Q：和gitlab ci相比有什么优势
+
+A： 和 gitlab ci 相比的优势可以参考下 jenkins 与 jenkins x的对比。在用户角度来说，以应用为视角使用起来会更加方便，也方便利用社区资源。从架构和可维护性来说，Jenkins X 的架构会相对更加先进（与诞生年代有直接关系)。
+
+> Q： 目前我们使用的gitlab-ci-runner 部署于k8s之外实现ci/cd。发现gitlab-ci在实际使用中，经常会遇到卡死报错。请问下，相比jenkins 做ci/cd 是会有什么优势，之前并没有使用过jenkins.
+
+A：gitlab-ci生产环境中，我们也没有使用，我们调研的结果是1、有侵入性 2、pipeline功能较弱，但是有一个好处是遇到错误好像还可以继续执行。jenkins遇到错误会中断流程。
+
+> Q：请问Jenkinswebhook那些构建参数如何传入GitLab触发？
+
+A：webhook的触发和界面参数会有一些区别，我们在脚本里面做了处理。
+
+> Q：离线部署，是不是通过打出镜像压缩包，然后带着镜像包到现场部署的容器云平台上，上传部署的方式？
+
+A：是在家里打出镜像压缩包，然后到现场解压出来，根据镜像类型进行处理，比如一些基础镜像，会直接上传到节点，业务的镜像会在部署完成后上传到Harbor，然后节点从Harbor去拉取。
+
+> Q：GitLab 自带的 CI 与Jenkins 和 GitLab 结合的 CI，该如何选择？想知道更深层次的理解。
+
+A：还是要结合自己团队的实际情况做选择。从成熟度来说，肯定是 Jenkins用户最多，成熟度最高，缺点是侧重 Java，配置相对繁琐。GitLab 自带的 CI相对简单，可以用 yaml，和 GitLab 结合的最好，但功能肯定没有 Jenkins全面。如果是小团队新项目，GitLab CI 又已经可以满足需求的话，并不需要上Jenkins，如果是较大的团队，又是偏 Java 的，个人更偏向 Jenkins。
+
+> Q：有了Gerrit，为什么还要GitLab，Gerrit也可以托管代码啊？
+
+A：这个是有历史背景的，我们是先选择使用GitLab做代码托管，后期才加入Gerrit做code review。Gerrit在代码review方面比GitLab的merge request要方便许多，更适合企业内部使用。关于这个，我的想法是，要么将GitLab迁移到Gerrit，要么不用Gerrit，可以使用GitLab的merge request来进行review，那GitLab其实是可以不要的。
+
+> Q：公司环境较复杂：包含Java项目、PHP项目，Java项目目前大多是SpringBoot框架，PHP是ThinkPHP框架，项目架构并不复杂，有少许Java项目需要用Redis到Memcached、缓存机制。最大问题的是多，项目应该如何较好的依托Kubernetes顺利架构，将项目可持续集成？
+
+A：我们的Redis这一类中间件还放在VM上，目前尚未打算搬移到Kubernetes上，Kubernetes+Docker天然是跨平台的，PHP也可以支持，并且对容器集群（既应用集群）管理非常出色，包含部分自动化运维，并不会因多种开发语言而增加负担，持续集成是另外一块，目前各大CI工具厂商也都支持Kubernetes，比较友好，我们采用的是GitLab-CI。
+
+> Q：SonarQube的权限控制及性能当面？
+
+A：权限控制使用SonarQube提供的API，将项目跟GitLab中相应项目权限匹配起来，GitLab中可以查看这个项目代码，那么SonarQube中就能看到这个项目结果和Code。
+
+> Q: 你们是直接将SonarQube、GitLab/Jenkins的权限控制到一起了？怎样做的统一？
+
+A：使用LDAP认证。
+
+> Q：Git Checkout的时候，你们的Git SCM没有考虑隐私安全的事情吗，比如代码权限受限？
+
+A：Jenkins使用了一个最小权限用户去GitLab上拉代码。安全方面，Jenkins所有节点都是可控的。
+
+> Q：Jenkins的持续集成是怎么实现的？比如不同的源码仓库的提交触发，如GitHub、GitLab版本号怎么控制的？
+
+A：Jenkins的CI流程触发可以有很多种，代码提交触发，定时触发，手动触发。版本号的控制也可以有很多方案，比如使用job的编号，使用Git的commit号，使用时间戳等等。
+
+> Q：请问，我们是java项目，在业务代码打成war包后，war包很大的情况下，在发布流程中，如何完成pod中的容器的代码更新，是采用挂载代码后重启容器方式，还是采用每次重新构建代码镜像，直接更新容器，或者有什么更好的建议吗
+
+A：配置分离（上配置中心)，参数通过启动鉴权下载配置文件启动，这样子环境的更新只需要基于通过一个包即可。
+
+> Q：一个Job生成所有的Docker镜像，如果构建遇到问题，怎么去追踪这些记录？
+
+A：在项目前期接入时，生成镜像的流程都作了宣传和推广。标准化的流程，会减少产生问题的机率。如果在构建中遇到问题，Prism4k的界面中，会直接有链接到本次建的次序号。点击链接，可直接定位到Console输出。
+
+> Q：Job和dind如何配合去实现打包镜像的呢？
+
+A：首先是dind技术，通过挂载宿主机的docker client和dockersock，可以实现在容器内调用宿主机的Docker来做一些事情，这里我们主要就用于build。Kubernetes的Job则是用于执行这个构建worker的方式，利用Kubernetes的Job来调度构建任务，充分利用测试集群的空闲资源。
+
+> Q：请问下Maven的settings.xml怎么处理？本地Maven仓库呢？
+
+A：我们构建了私有的 Maven 镜像， 私有镜像中是默认使用了我们的私有源。 对于项目中用户无需关注 settings.xml 中是否配置repo。
+
+> Q：生成新的镜像怎么自动打新的tag？
+
+A：我们镜像Tag使用本次构建选定的Git版本，如分支名称或者Tag。
+
+> Q： 如何动态生成Dockerfile，如何在Docker镜像里配置JVM参数？
+
+A：Dockerfile文件：我们是使用sh脚本生成的，将内容 >> Dockerfile中；JVM参数是在应用中配置的，发送构建消息时，作为消息内容送过去。
+
+> Q：Docker 的正确的使用姿势，在本地环境已经构建了企业私有 Registry Harbor，那么我要构建基于业务的应用时，是先从 Linux 系列的像 Ubuntu 或 CentOS 的 Base 的 Docker 镜像开始，然后通过 Dockerfile 定制业务需求，来使用吗？
+
+A：我们基础镜像统一采用 CentOS 6.8，不同的业务有不同的 Dockerfile 模板，生成镜像的过程业务对 Dockerfile 是透明的。
+
+> Q：使用Pipeline先构建编译环境镜像，再编译，是否会导致整个流程需要很长时间？是否有优化方案？
+
+A：编译镜像由于不会经常变动，因此这个镜像的构建通常使用cache就能直接完成，另外我们也把编译环境镜像打包这个步骤抽出来单独作为job执行了，这样在实际编译流程中就无需再进行编译环境构建。
+
+> Q：Docker存储考虑过Overlay当时吗？据说这种构建镜像比较快。
+
+A：考虑过，当时也做过各个方面的测试，这种增量式的构建，肯定最快，但是我们需要有专人从源码级别对其进行维护，成本对于我们还是有点高，我们后期打算采用环境和代码分离的方式，即环境部署一次，代码多次部署来提升效率。
+
+> Q：您提到不过分强调测试自动化，尽量不改变测试流程，那么对于自动构建和单元测试的自动化有没有考虑呢？毕竟这些是比较消耗人力的部分。
+
+A：自动构建我认为比较现实，单元测试有考虑。不过我们测试案例过于复杂，目前看短期实现不太现实。而且性能也是个问题，如果下一步要做我们会更多考虑一些特定场景。比如产品发布后的回归测试，这个有可能，但不会是普遍应用。
+
+> Q：自动化构建过程中，对应用的测试是怎么实现的？
+
+A：单元测试可以在编译的时候完成，功能测试需要启动部署。
+
+> Q：通过镜像的构建脚本是怎么生成镜像的？在基础镜像上执行相关脚本么？一些端口存储卷环境变量这些镜像中的信息是怎么解决的？
+
+A：我们对Dockerfile进行了封装，业务和开发人员不需要关心Dockerfile语法，直接写一个镜像构建脚本，最后根据一定的规则由Harbor生成Dockerfile，之后调用docker build去生成镜像。在这个过程中， 镜像的名称，版本都已经根据规则生成
+
+> Q：在构建时候，这些环境可以提前安装好？
+
+A：应用里都有自己的版本概念，每个应用版本里有：镜像版本，环境变量、 export、Volmue等信息，所以在回退或者升级时候，最终的表现形式就是杀掉旧容器，根据版本的参数创建新容器。
+
+> Q：请问构建一次平均要多长时间？
+
+A：现在Java、Dubbo、Python、go的多， 一般2分钟，而且有的镜像用户开启了自动构建后，在他们没意识的过程中，都已经构建完成。 到时候升级时候，选择对应的镜像版本即可。
+
+> Q：App的每一次提交都是一个version吗，是不是每次构建完测试完成，就可以发布了？
+
+A：App 没有提交的概念，您说的应该是镜像，我们设计的是一个镜像对应一个Git仓库以及分支。当有push或者tag操作后，会自动触发构建，构建的行为是根据用户写的镜像构建shell脚本来决定的。 一般我们建议业务部门做出的镜像跟测试环境和生成环境没关系。 镜像就是镜像，只有应用有测试环境和生产环境。
