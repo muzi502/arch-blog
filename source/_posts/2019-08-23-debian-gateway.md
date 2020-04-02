@@ -14,7 +14,7 @@ comment: true
 
 ## ESXi 透明代理虚拟机
 
-弃坑了，太鸡儿难用了😡，还是使用了 [LEDE软路由](https://blog.502.li/esxi-lede)
+弃坑了，太鸡儿难用了😡，还是使用了 [LEDE软路由](https://blog.k8s.li/esxi-lede)
 
 ## 0. 项目背景
 

@@ -43,7 +43,7 @@ webp server 顾名思义就是 webp 服务器啦，用于将网站里的图片�
 
 其实 webp server 有多种语言都实现了，并且这些仓库还都放在了 [webp-sh](https://github.com/webp-sh) 该 Organizations 下。不过咱比较喜欢 golang 所以就推荐 webp server go 啦😂，隔壁的 webp server rust 别打我啊（逃
 
-> 这个工具就是由 [Nova 童鞋](https://nova.moe/)、 [Benny](https://www.bennythink.com) 、[cocoa](https://blog.0xbbc.com/) 以及 [muzi](https://blog.502.li/) 小盆友一起鼓捣的 webp_server_go 啦！
+> 这个工具就是由 [Nova 童鞋](https://nova.moe/)、 [Benny](https://www.bennythink.com) 、[cocoa](https://blog.0xbbc.com/) 以及 [muzi](https://blog.k8s.li/) 小盆友一起鼓捣的 webp_server_go 啦！
 
 - [webp_server_go](https://github.com/webp-sh/webp_server_go)
 - [webp_server_rs](https://github.com/webp-sh/webp_server_rs)
@@ -435,8 +435,8 @@ src				dist		num
 
 选择两篇图片比较多的博客，测试链接为 ：
 
-- `https://blog.502.li/2020-Lunar-New-Year.html`
-- `https://blog.502.li/wd-hc310-dc-hdd.html`
+- `https://blog.k8s.li/2020-Lunar-New-Year.html`
+- `https://blog.k8s.li/wd-hc310-dc-hdd.html`
 - `https://hexo.502.li/2020-Lunar-New-Year.html`
 - `https://hexo.502.li/wd-hc310-dc-hdd.html`
 

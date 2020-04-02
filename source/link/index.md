@@ -22,7 +22,7 @@ comment: true
 
 国内的这些博客平台啊，一个比一个烂到家，其中 CSDN 这种狗屎抄来抄去垃圾玩意儿，甚至还和百度搜索联合起来给人家喂屎，真他奶奶的恶心人。所以就精选一些自己 Chrome 收藏夹里收藏的个人独立博客，不喜欢像 CSDN 、博客园、OSCHINA这些鱼龙混杂的抄袭博客平台。
 
-![1](https://blog.502.li/img/image-20200101150146261.png)
+![1](https://blog.k8s.li/img/image-20200101150146261.png)
 
 看到这类抄来抄去复制粘贴的博客，简直辣眼睛啊，为了保护自己的眼睛不被这种垃圾信息流污染，墙裂推荐使用开源软件 Chrome&FireFox 插件 [uBlock Origin](https://github.com/gorhill/uBlock) 来在 Google 搜索页屏蔽掉这些国产、垃圾、抄袭、狗屎博客平台的搜索结果，顺带着建议把像 .baidu.com 、360这种无耻坑爹公司的域名也被屏蔽掉。
 
@@ -34,7 +34,7 @@ comment: true
 
 ### 推荐个人独立博客列表
 
-放心吧，咱木子推荐的博客和文章绝对是质量相当高的，不像 CSDN 、博客园 、简书等等这些抄来抄去的 **国产** 博客平台。咱一向喜欢读的博客就是 `个人独立博客` 这也是咱在 [友链](https://blog.502.li/link/) 中所强调的，对于国产博客平台一向屑之，对微信公众号这种删帖封号、言论审查的平台也只有一个 `呸` 字屑之 ：）。
+放心吧，咱木子推荐的博客和文章绝对是质量相当高的，不像 CSDN 、博客园 、简书等等这些抄来抄去的 **国产** 博客平台。咱一向喜欢读的博客就是 `个人独立博客` 这也是咱在 [友链](https://blog.k8s.li/link/) 中所强调的，对于国产博客平台一向屑之，对微信公众号这种删帖封号、言论审查的平台也只有一个 `呸` 字屑之 ：）。
 
 咱无论是工作还是学习技术参考的来源一般是：
 
@@ -55,8 +55,8 @@ comment: true
 title: 木子的博客
 url: https://blog.502.li
 bio: 垃圾佬、搬砖社畜、运维工程师
-avatar: https://blog.502.li/favicon.ico
-rss: https://blog.502.li/atom.xml
+avatar: https://blog.k8s.li/favicon.ico
+rss: https://blog.k8s.li/atom.xml
 ```
 
 ### 好朋友

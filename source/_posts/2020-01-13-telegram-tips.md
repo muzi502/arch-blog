@@ -86,7 +86,7 @@ comment: true
 
 ## 监控服务器
 
-参照我元旦的时候写的那篇博客 [VPS 安全加固之用户登录后向 telegram 发送登录信息](https://blog.502.li/archives/linux-login-alarm-telegram.html)
+参照我元旦的时候写的那篇博客 [VPS 安全加固之用户登录后向 telegram 发送登录信息](https://blog.k8s.li/archives/linux-login-alarm-telegram.html)
 
 在此先说明一下，使用 telegram 的主要原因是 telegram bot 向自己发送信息，iOS 客户端在锁屏不挂梯子的情况下照样正常能收到消息通知，这还好归因于 iOS 有统一的消息推送机制，而不像 Android 阵营，国内的毒瘤 app 们我行我素，我就是不走 Google Cloud Messaging 简称 GCM，我就是自己搞一套，于是 Android 阵营里，有 xiaomi PUSH 、vivo PUSH 、huawei PUSH 等等，非常恶心人。而如果使用 GCM 的推送的话，必须要挂梯子，全天挂着梯子还是很费电的。
 

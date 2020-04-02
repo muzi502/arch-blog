@@ -252,7 +252,7 @@ Electronic Frontier Foundation 简称 EFF ，中文译名电子前哨基金会�
 
 - [steve-jackson-games-v-secret-service-case-archive](https://www.eff.org/zh-hans/cases/steve-jackson-games-v-secret-service-case-archive) 
 
-- [一段在法律与技术冲突的地方捍卫自由的历史](https://blog.502.li/archives/A-History-of-Protecting-Freedom-Where-Law-and-Technology-Collide)
+- [一段在法律与技术冲突的地方捍卫自由的历史](https://blog.k8s.li/archives/A-History-of-Protecting-Freedom-Where-Law-and-Technology-Collide)
 -  [A History of Protecting Freedom Where Law and Technology Collide](https://www.eff.org/about/history)
 
 ## 启示

@@ -86,7 +86,7 @@ comment: true
 |           理解媒介：论人的延申           |                         |       |          |          |
 |                 暗杀教室                 |      [日]松井优征       | 01-11 |    -     |    -     |
 
-### [2019读书笔记和思考](https://blog.502.li/archives/2019-reading-notes.html)
+### [2019读书笔记和思考](https://blog.k8s.li/archives/2019-reading-notes.html)
 
 ## 书单
 
@@ -95,7 +95,7 @@ comment: true
 | 如果没有今天，明天会不会有昨天？         | [伊夫·博萨尔特](https://book.douban.com/search/伊夫·博萨尔特) | 100% | 2018-11 |                                               |
 | 上帝笑了 99 次                           | [彼得·凯弗](https://book.douban.com/search/彼得·凯弗)        | 100% | 2019-10 |                                               |
 | 学会提问：批判性思维指南                 | [ 布朗](https://book.douban.com/author/169178/)              | 100% | 2018-10 |                                               |
-| 独裁者手册                               | [布鲁诺·德·梅斯奎塔](https://book.douban.com/search/布鲁诺·德·梅斯奎塔) <br> [阿拉斯泰尔·史密斯](https://book.douban.com/search/阿拉斯泰尔·史密斯) | 100% | 2019-09 | [note](https://blog.502.li/dictator-handbook) |
+| 独裁者手册                               | [布鲁诺·德·梅斯奎塔](https://book.douban.com/search/布鲁诺·德·梅斯奎塔) <br> [阿拉斯泰尔·史密斯](https://book.douban.com/search/阿拉斯泰尔·史密斯) | 100% | 2019-09 | [note](https://blog.k8s.li/dictator-handbook) |
 | Just for Fun                             | [Linus Torvalds](https://book.douban.com/search/LinusTorvalds) <br> [David Diamond](https://book.douban.com/search/DavidDiamond) | 100% | 2016-04 |                       -                       |
 | 通往奴役之路                             | [弗里德利希·哈耶克](https://book.douban.com/search/弗里德利希·奥古斯特·哈耶克) | 75%  | 2019-10 |                       -                       |
 | 沃兹传:与苹果一起疯狂                    |                                                              | 100% | 2016-04 |                                               |

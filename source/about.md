@@ -47,7 +47,7 @@ comment: true
 
 - WTFPL © Do What the Fuck You Want to Public License
 
-- 这是我收藏的个人独立博客 [友链](https://blog.502.li/link)  以及 [RSS](https://t.me/c/1134301275/1398)，做了简单的分类，在这儿或许能找到你想要的
+- 这是我收藏的个人独立博客 [友链](https://blog.k8s.li/link)  以及 [RSS](https://t.me/c/1134301275/1398)，做了简单的分类，在这儿或许能找到你想要的
 
 ## bio
 
@@ -69,9 +69,9 @@ EFF Member | 搬砖社畜 | 屁民一只 🤦‍♂️垃圾佬🛠️翻车王�
 
 ## hobby
 
-- 喜欢捡垃圾和折腾，这是我折腾过的 [垃圾](https://blog.502.li/phones-history.html) 和 [软件](https://blog.502.li/android-tools.html)
+- 喜欢捡垃圾和折腾，这是我折腾过的 [垃圾](https://blog.k8s.li/phones-history.html) 和 [软件](https://blog.k8s.li/android-tools.html)
 
-- 有阅读的习惯，基本上全年每天都有阅读的是时间，每晚都会捧着 Kindle（催眠神器） 看书到困，这是我的 [书单](https://blog.502.li/booklist.html) 以及我的 kindle 读书笔记 [kindle.502.li](https://kindle.502.li)
+- 有阅读的习惯，基本上全年每天都有阅读的是时间，每晚都会捧着 Kindle（催眠神器） 看书到困，这是我的 [书单](https://blog.k8s.li/booklist.html) 以及我的 kindle 读书笔记 [kindle.502.li](https://kindle.502.li)
 
 - 一般路过的二刺螈，喜欢看动漫和轻小说，这是我看过的 [动漫](https://bgm.tv/user/512178)，我只喜欢纸片人（死宅真恶心（小声
 
