@@ -3,7 +3,7 @@ title: 【翻译】给 VMware vSphere 用户的 Kubernetes 简介
 date: 2019-12-10
 updated:
 categories: 技术
-slug: 
+slug:
 tag:
   - kubernetes
   - 翻译

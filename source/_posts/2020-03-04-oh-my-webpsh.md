@@ -210,7 +210,6 @@ webp-server-go 有个预加载的功能，就是提前将全部的图片资源�
 ./webp-server -jobs 4 -config config.json -prefetch  831.38s user 7.62s system 495% cpu 2:49.46 total
 ./webp-server -jobs 8 -config config.json -prefetch  1092.50s user 7.98s system 881% cpu 2:04.81 total
 
-
 ### 1MB-4MB
 
 ./webp-server -jobs 1 -config config.json -prefetch  934.22s user 12.45s system 199% cpu 7:53.45 total

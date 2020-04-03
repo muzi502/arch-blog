@@ -3,7 +3,7 @@ title: Kindle Oasis 和 Kindle Paperwhite3 使用体验
 date: 2019-12-01
 updated: 2020-03-01
 categories: 阅读
-slug:  
+slug: 
 tag:
   - 阅读
   - Kindle

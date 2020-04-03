@@ -3,7 +3,7 @@ title: 分享 kindle 标注的几种方法
 date: 2020-01-09
 updated:
 categories: 工具
-slug:  
+slug: 
 tag:
   - kindle
 copyright: true

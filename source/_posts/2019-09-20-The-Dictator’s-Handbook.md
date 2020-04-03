@@ -3,7 +3,7 @@ title: 独裁者手册读书笔记
 date: 2019-09-18
 updated:
 categories: 阅读
-slug: 
+slug:
 tag:
   - 阅读
   - 读书笔记

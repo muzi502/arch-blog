@@ -2,7 +2,7 @@
 title: 清理毒瘤app在sdcard目录下拉屎产生的文件夹
 date: 2019-05-16
 categories: 搞机
-slug: 
+slug:
 tag:
   - android
   - 安卓刷机

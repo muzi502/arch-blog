@@ -2,7 +2,7 @@
 title: CentOS7 离线安装 Docker-ce
 date: 2019-09-03
 categories: 技术
-slug: 
+slug:
 tag:
   - Docker
 copyright: true
@@ -73,7 +73,7 @@ selinux-policy-targeted            3.13.1-229.el7_6.15    updates
 Transaction Summary
 ====================================================
 Install  3 Packages (+ 9 Dependent packages)
-Upgrade             ( 10 Dependent packages) 
+Upgrade             ( 10 Dependent packages)
 ```
 
 最终所需要的 rpm 包的如下，包含依赖机器需要升级的包，一共 29 个

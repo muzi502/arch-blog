@@ -2,7 +2,7 @@
 title: OpenWRT 软路由
 date: 2019-09-21
 categories: 技术
-slug: 
+slug:
 tag:
   - OpenWRT
   - 科学上网

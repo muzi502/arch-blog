@@ -2,7 +2,7 @@
 title: Linux 网络和 iptables 运行原理
 date: 2020-03-02
 updated: 2020-03-02
-slug: 
+slug:
 categories: 技术
 tag:
   - Linux 网络
@@ -855,22 +855,22 @@ iptables -A FORWARD -j REJECT
 
 ```bash
 # 允许机房内网机器可以访问
-iptables -A INPUT -p all -s 10.10.10.0/24 -j ACCEPT  
+iptables -A INPUT -p all -s 10.10.10.0/24 -j ACCEPT 
 # 允许 10.10.10.22 访问本机的 22 端口
-iptables -A INPUT -p tcp -s 10.10.10.22 --dport 22 -j ACCEPT 
+iptables -A INPUT -p tcp -s 10.10.10.22 --dport 22 -j ACCEPT
 ```
 
 #### 屏蔽某 IP
 
 ```bash
  # 屏蔽恶意主机（比如，114.114.114.114)
-iptables -A INPUT -p tcp -m tcp -s 114.114.114.114 -j DROP 
+iptables -A INPUT -p tcp -m tcp -s 114.114.114.114 -j DROP
 
 # 屏蔽单个IP的命令
 iptables -I INPUT -s 123.45.6.7 -j DROP
 
 #封整个段即从 10.10.10.1 到 10.10.10.254的命令
-iptables -I INPUT -s 10.10.10.0/24 -j DROP      
+iptables -I INPUT -s 10.10.10.0/24 -j DROP     
 ```
 
 #### 指定数据包出去的网络接口

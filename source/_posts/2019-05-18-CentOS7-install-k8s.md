@@ -2,10 +2,10 @@
 title: CentOS7 使用 kubeadm 部署 kubernetes
 date: 2019-05-16
 categories: 技术
-slug: 
+slug:
 tag:
-  - kubeadm 
-  - kubernetes 
+  - kubeadm
+  - kubernetes
   - k8s
 copyright: true
 comment: true

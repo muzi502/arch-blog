@@ -2,10 +2,10 @@
 title: ubuntu 1804 使用 kubeadm 部署 kubernetes
 date: 2019-05-16
 categories: 技术
-slug: 
+slug:
 tag:
-  - kubeadm 
-  - kubernetes 
+  - kubeadm
+  - kubernetes
   - k8s
 copyright: true
 comment: true
@@ -121,7 +121,6 @@ modprobe overlay
 modprobe br_netfilter
 
 # Setup required sysctl params, these persist across reboots.
-
 
 # Install prerequisites
 apt-get update

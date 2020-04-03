@@ -3,7 +3,7 @@ title: 博客从 typecho 迁移到 hexo
 date: 2019-11-21
 updated:
 categories: 技术
-slug:  
+slug: 
 tag:
   - typecho
   - blog
@@ -36,9 +36,9 @@ comment: true
 
 ### 安装
 
- 网上类似的教程一搜一大把，写得其实很详细 。由于 hexo 是使用 nodejs 开发，所以需要装 nodejs 以及 nodejs 的包管理器 yarn，不推荐用 npm。我的环境是 Debian 10。debian 10 上已经有 nodejs 的包了，所以直接 apt 一把梭就 ok 
+ 网上类似的教程一搜一大把，写得其实很详细 。由于 hexo 是使用 nodejs 开发，所以需要装 nodejs 以及 nodejs 的包管理器 yarn，不推荐用 npm。我的环境是 Debian 10。debian 10 上已经有 nodejs 的包了，所以直接 apt 一把梭就 ok
 
-> 官方是使用 npm 进行安装，个人推荐使用 [yarn](https://yarnpkg.com/zh-Hans/) 进行安装，关于 yarn 和 npm 优劣分析，可以参考这篇文章《[Yarn vs npm: 你需要知道的一切](http://web.jobbole.com/88459/)》 
+> 官方是使用 npm 进行安装，个人推荐使用 [yarn](https://yarnpkg.com/zh-Hans/) 进行安装，关于 yarn 和 npm 优劣分析，可以参考这篇文章《[Yarn vs npm: 你需要知道的一切](http://web.jobbole.com/88459/)》
 
 ```bash
 # 添加 nodejs 包管理器 yarn 的源

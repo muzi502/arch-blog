@@ -117,7 +117,7 @@ ubuntu@blog:~$ curl https://t.me/s/rss_kubernetes | grep "<script src="
     <script src="//telegram.org/js/telegram-web.js?8"></script>
 ```
 
-修改下处代码为，将`https://t.me/s/rss_kubernetes`页面里的  `telegram.org` 同样进行一次反代。这样访问到 `https://t.me/s/rss_kubernetes`页面时，把的 telegram.org 替换为另一个 Worker 的域名，比如我的 `telegram.k8srss.workers.dev`  。不过像频道里的图片、文件、视频等资源 telegram 是使用的 CDN ，而且有好几个域名……这点很僵硬，暂时找不到合适的办法。貌似一个 Worker 只能反代一个域名？如果汝有合适的办法，欢迎与咱交流，咱感激不尽😋 
+修改下处代码为，将`https://t.me/s/rss_kubernetes`页面里的  `telegram.org` 同样进行一次反代。这样访问到 `https://t.me/s/rss_kubernetes`页面时，把的 telegram.org 替换为另一个 Worker 的域名，比如我的 `telegram.k8srss.workers.dev`  。不过像频道里的图片、文件、视频等资源 telegram 是使用的 CDN ，而且有好几个域名……这点很僵硬，暂时找不到合适的办法。貌似一个 Worker 只能反代一个域名？如果汝有合适的办法，欢迎与咱交流，咱感激不尽😋
 
 ```javascript
 let modified = text.replace(/telegram.org/g, "telegram.k8srss.workers.dev")
@@ -132,7 +132,7 @@ let modified = text.replace(/telegram.org/g, "telegram.k8srss.workers.dev")
 
     <script src="//telegram.k8srss.workers.dev/js/widget-frame.js?29"></script>
     <script src="//telegram.k8srss.workers.dev/js/telegram-web.js?8"></script>
-    
+   
 <!-- page generated in 121.26ms -->
 ```
 
@@ -150,9 +150,9 @@ let modified = text.replace(/telegram.org/g, "telegram.k8srss.workers.dev")
 
 周四晚上睡觉前在推特上发了个推文，向大家请教了一下之前一个 Worker 里只能反代一个域名的问题。第二天 [@Echowxsy](https://twitter.com/Echowxsy) 就回复咱了，而且还特意注册了 CouldFare 账号使用 Workers 帮咱测试了一下。在此非常感谢 [@Echowxsy](https://twitter.com/Echowxsy)  帮咱。按照  [@Echowxsy](https://twitter.com/Echowxsy) 小伙伴所说的：
 
->   我没用过 CloudFlare，不过我看了一下你的blog，貌似可以用两个upstream实现这个功能。 在modified那里替换为当前worker的地址，然后在后面加上一个不会重复的路径，例如xxx。 然后在fetchAndApply里面判断，如果当前请求的pathname=/xxx，使用upstream2，否则使用upstream1。 理论上是可以实现的。
+> 我没用过 CloudFlare，不过我看了一下你的blog，貌似可以用两个upstream实现这个功能。 在modified那里替换为当前worker的地址，然后在后面加上一个不会重复的路径，例如xxx。 然后在fetchAndApply里面判断，如果当前请求的pathname=/xxx，使用upstream2，否则使用upstream1。 理论上是可以实现的。
 >
->   就是一个 Workers 可以做很多事情，他实际上就是 Node.js 代码。 然后这里是将 [http://telegram.org/xxxx](https://t.co/wTGzY4U6sD?amp=1) 映射到 [http://tg.k8s.li/static/xxxx](https://t.co/yQwEY2mzCP?amp=1) 。 然后在 Workers 里面判断，如果有 `/static` 则从 [http://telegram.org](https://t.co/VYm4zCfwPr?amp=1) 获取，否则从 [http://t.me](https://t.co/N4Ahg0VLN1?amp=1) 获取。
+> 就是一个 Workers 可以做很多事情，他实际上就是 Node.js 代码。 然后这里是将 [http://telegram.org/xxxx](https://t.co/wTGzY4U6sD?amp=1) 映射到 [http://tg.k8s.li/static/xxxx](https://t.co/yQwEY2mzCP?amp=1) 。 然后在 Workers 里面判断，如果有 `/static` 则从 [http://telegram.org](https://t.co/VYm4zCfwPr?amp=1) 获取，否则从 [http://t.me](https://t.co/N4Ahg0VLN1?amp=1) 获取。
 
 `此处引用` [@Echowxsy](https://twitter.com/Echowxsy) 的 [推文](https://twitter.com/Echowxsy/status/1243407321989967874)
 
@@ -260,7 +260,7 @@ async function fetchAndApply(request) {
 
 首先回到域名管理的页面，进入到自己域名顶部那一栏里的 `Workers` ，在那里添加相应的路由即可。
 
-![image-20200326191340166](./img/image-20200326191340166.png) 
+![image-20200326191340166](./img/image-20200326191340166.png)
 
 点击 `Add Route` ，在 Route 那一栏输入好自己的域名，注意最后的 `/*` 也要加上，然后 Worker 选择刚刚创建的那个即可。接着再添加 `CNAME` 记录到自己的 `WorkerName.yousetdomain.workers.dev` ，这样就能使用自己的域名访问啦😋
 

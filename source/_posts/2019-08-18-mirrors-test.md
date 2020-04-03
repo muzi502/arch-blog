@@ -2,7 +2,7 @@
 title: 国内镜像源伪评测
 date: 2019-09-18
 categories: 技术
-slug: 
+slug:
 tag:
   - Linux
 copyright: true
@@ -193,7 +193,7 @@ Fetched 1014 MB in 1min 25s (12.0 MB/s)
 Download complete and in download only mode
 ```
 
-测试结果 `Fetched 1014 MB in 1min 25s (12.0 MB/s)` 
+测试结果 `Fetched 1014 MB in 1min 25s (12.0 MB/s)`
 
 不得不说华为云镜像站真香啊。进度条上基本上都是 10MB/s 以上，从没出现低于 10MB/s 的，甚至峰值能达到 20MB/s
 

@@ -2,7 +2,7 @@
 title: 搓一个 Debian 透明代理/旁路网关 虚拟机
 date: 2019-06-30
 categories: 技术
-slug: 
+slug:
 tag:
   - Linux
   - Debian
@@ -167,7 +167,7 @@ EOF
 ```
 
 ```ini
-"server":"", 代理服务器的 IP 
+"server":"", 代理服务器的 IP
 "mode":"tcp_and_udp", 代理协议
 "server_port":, 代理服务器端口
 "local_port":, 本地端口，要和

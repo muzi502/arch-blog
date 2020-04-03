@@ -3,7 +3,7 @@ title: 一个简单的 python 爬虫
 date: 2018-07-20
 updated:
 categories: 技术
-slug:  
+slug: 
 tag:
 copyright: true
 comment: true

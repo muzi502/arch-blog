@@ -2,7 +2,7 @@
 title: 知名软件基金会概览
 date: 2020-02-28
 updated: 2020-03-01
-slug: 
+slug:
 categories: 互联网
 tag:
   - 非盈利组织
@@ -205,7 +205,7 @@ Electronic Frontier Foundation 简称 EFF ，中文译名电子前哨基金会�
 
 - 1990 年 7 月 6 日：EFF 电子前哨基金会成立并宣布帮助史蒂夫·杰克起诉美国特勤局
 
-- 1990年7月10日：电子前线基金会，由卡普尔、[约翰·吉尔摩](https://zh.wikipedia.org/w/index.php?title=约翰·吉尔摩&action=edit&redlink=1) 和巴洛，正式成立于。初始资金由卡普尔，[斯蒂夫·沃兹尼亚克](https://zh.wikipedia.org/wiki/斯蒂夫·沃兹尼亚克) （苹果创始人之一）和一个匿名人士提供。 
+- 1990年7月10日：电子前线基金会，由卡普尔、[约翰·吉尔摩](https://zh.wikipedia.org/w/index.php?title=约翰·吉尔摩&action=edit&redlink=1) 和巴洛，正式成立于。初始资金由卡普尔，[斯蒂夫·沃兹尼亚克](https://zh.wikipedia.org/wiki/斯蒂夫·沃兹尼亚克) （苹果创始人之一）和一个匿名人士提供。
 
 - 2002 年：为域名系统的开放，透明治理而斗争。
 
@@ -225,7 +225,7 @@ Electronic Frontier Foundation 简称 EFF ，中文译名电子前哨基金会�
 - PIPA （Preventing Real Online Threats to Economic Creativity and Theft of Intellectual Property Act ）保护知识产权法案。[维基百科](https://en.wikipedia.org/wiki/PROTECT_IP_Act)与[法案详情](https://www.govtrack.us/congress/bills/112/s968/text)
 - CISPA（Cyber Intelligence Sharing and Protection Act）网络情报共享与保护法案。[法案详情](https://www.congress.gov/bill/114th-congress/house-bill/234)与[维基百科](https://en.wikipedia.org/wiki/Cyber_Intelligence_Sharing_and_Protection_Act)
 
-大家有没有觉着这些法案听起来初衷很美好？但是，美国网民都很清楚，这些法案绝对会被滥用，用来限制互联网自由，所以反抗的人也特别多。其中最臭名昭著的莫过于 SOPA 法案和 PIPA 法案。在这些反对的声音中，最具影响力代表人物的当属于互联网之子 Aaron Swartz  ，亚伦·斯沃茨通过他的求进会网聚众反对SOPA 法案和政府做斗争，最终导致了整个社会都在反对SOPA，也导致了那些议员纷纷改变自己的想法，并导致了白宫最终放弃了这个法案。 
+大家有没有觉着这些法案听起来初衷很美好？但是，美国网民都很清楚，这些法案绝对会被滥用，用来限制互联网自由，所以反抗的人也特别多。其中最臭名昭著的莫过于 SOPA 法案和 PIPA 法案。在这些反对的声音中，最具影响力代表人物的当属于互联网之子 Aaron Swartz  ，亚伦·斯沃茨通过他的求进会网聚众反对SOPA 法案和政府做斗争，最终导致了整个社会都在反对SOPA，也导致了那些议员纷纷改变自己的想法，并导致了白宫最终放弃了这个法案。
 
 > 他在自杀前曾经领导过一场漂亮的胜利，那就是反对 [SOPA （禁止网络盗版法案）](https://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Stop_Online_Piracy_Act)的运动。这是亚伦短暂一生中的高光时刻，也是互联网力量在推动社会革新上的一次闪耀。SOPA 的初衷是保护版权，但实际的处理方式严重动摇了互联网信息开放的根基，并要求互联网平台进行自我审查，这是绝大部分互联网公司所不能容忍的。而支持  SOPA 的则是传统的版权方，包括出版公司，唱片公司，电影公司等，这背后蕴藏着巨大的利益。SOPA  提出时得到了很多国会议员的支持，信奉信息自由的亚伦自然不希望这个法案通过，为此他创办了「求进会」（Demand  Progress），通过组织群众游说号召普通民众一起给国会请愿反对 SOPA。
 
@@ -246,11 +246,11 @@ Electronic Frontier Foundation 简称 EFF ，中文译名电子前哨基金会�
 - [美国网络审查](https://zh.wikipedia.org/wiki/美国网络审查)
 - [EFF 受理案件列表](https://www.eff.org/zh-hans/cases)
 
-- [https://www.govtrack.us](https://www.govtrack.us/) 
+- [https://www.govtrack.us](https://www.govtrack.us/)
 
 - [Internet “Kill Switch” Legislation: Can Obama Turn Off the Internet?](http://btlj.org/2011/03/internet-kill-switch-legislation-can-obama-turn-off-the-internet/)
 
-- [steve-jackson-games-v-secret-service-case-archive](https://www.eff.org/zh-hans/cases/steve-jackson-games-v-secret-service-case-archive) 
+- [steve-jackson-games-v-secret-service-case-archive](https://www.eff.org/zh-hans/cases/steve-jackson-games-v-secret-service-case-archive)
 
 - [一段在法律与技术冲突的地方捍卫自由的历史](https://blog.k8s.li/archives/A-History-of-Protecting-Freedom-Where-Law-and-Technology-Collide)
 -  [A History of Protecting Freedom Where Law and Technology Collide](https://www.eff.org/about/history)
@@ -261,7 +261,7 @@ Electronic Frontier Foundation 简称 EFF ，中文译名电子前哨基金会�
 >
 > 这一幕，是当时中国民间组织与政府之间关系的写照。
 
-``此处引用`` [汶川地震十年系列—公民社会从爆发到沉寂的艰难之路](https://www.bbc.com/zhongwen/simp/chinese-news-43972586) 
+``此处引用`` [汶川地震十年系列—公民社会从爆发到沉寂的艰难之路](https://www.bbc.com/zhongwen/simp/chinese-news-43972586)
 
 事实上，越是自由民主的国家，越会存在很多监督问责政府、对抗商业公司、保护个人隐私、捍卫言论自由、独立于政府的非营利性组织。比如捍卫互联网自由的电子前哨基金会；对抗商业公司监控的自由软件基金会；捍卫言论自由的新闻自由基金会、出版自由基金会、保护记者委员会；保护 Web 信息安全传输的 OpenSSL 基金会；提供匿名访问的 Tor 项目；保护个人隐私的粉碎棱镜计划；反抗商业软件监控的自由软件运动等等。这些组织需要独立自主，自由开放，公开透明的生存环境。美国这种以基金会、社区运作的方式已经很成熟了，使用开源软件自由软件的公司和个人乐意捐赠，开发者有稳定的收入，从而使软件能够稳定地维护，形成了良性循环。
 

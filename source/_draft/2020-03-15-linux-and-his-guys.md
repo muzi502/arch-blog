@@ -21,18 +21,17 @@ lsa          lsb_release  lscpu        lsipc        lsmem        lsof
 lsattr       LSCOLORS     lshw         lslocks      lsmod        lspci
 ```
 
-#### ls 
+#### ls
 
->   ls - list directory contents 列出文件夹内容
+> ls - list directory contents 列出文件夹内容
 
 #### lsattr
 
->   lsattr - list file attributes on a Linux second extended file system
+> lsattr - list file attributes on a Linux second extended file system
 
-#### lsblk 
+#### lsblk
 
->   lsblk - list block devices 列出块设备
-
+> lsblk - list block devices 列出块设备
 
 
 ```bash
@@ -48,11 +47,11 @@ sda                         8:0    0  30G  0 disk
 
 #### lsb_release
 
->    lsb_release - print distribution-specific information 打印发行版详情
+>  lsb_release - print distribution-specific information 打印发行版详情
 
 #### lscpu
 
->   lscpu - display information about the CPU architecture
+> lscpu - display information about the CPU architecture
 
 `lscpu`
 
@@ -127,10 +126,9 @@ lshw is a small tool to extract detailed information on the hardware configurati
 
 #### lsinitramfs
 
->   lsinitramfs - list content of an initramfs image
+> lsinitramfs - list content of an initramfs image
 >
->   The  lsinitramfs  command  lists the content of given initramfs images. It allows one to quickly check the content of one (or multiple) specified initramfs files.
-
+> The  lsinitramfs  command  lists the content of given initramfs images. It allows one to quickly check the content of one (or multiple) specified initramfs files.
 
 
 ```bash
@@ -150,10 +148,9 @@ usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth.in
 
 #### lsipc
 
->   lsipc - show information on IPC facilities currently employed in the system
+> lsipc - show information on IPC facilities currently employed in the system
 >
->   lsipc  shows  information  on the inter-process communication facilities for which the calling process has read access.
-
+> lsipc  shows  information  on the inter-process communication facilities for which the calling process has read access.
 
 
 ```bash
@@ -176,10 +173,9 @@ SEMVMX   Semaphore max value                             32767    -     -
 
 ####  lslocks
 
->    lslocks - list local system locks
+>  lslocks - list local system locks
 >
->   lslocks lists information about all the currently held file locks in a Linux system
-
+> lslocks lists information about all the currently held file locks in a Linux system
 
 
 ```bash
@@ -194,10 +190,9 @@ runsv           54095 FLOCK   0B WRITE 0     0   0 /opt/gitlab/sv/sidekiq/log/su
 
 #### lslogins
 
->   lslogins - display information about known users in the system 
+> lslogins - display information about known users in the system
 >
->   Examine the wtmp and btmp logs, /etc/shadow (if necessary) and /etc/passwd and output the desired data. The default action is to list info about all the users in the system.
-
+> Examine the wtmp and btmp logs, /etc/shadow (if necessary) and /etc/passwd and output the desired data. The default action is to list info about all the users in the system.
 
 
 ```bash
@@ -243,9 +238,9 @@ runsv           54095 FLOCK   0B WRITE 0     0   0 /opt/gitlab/sv/sidekiq/log/su
 
 #### lsmem
 
->   lsmem - list the ranges of available memory with their online status
+> lsmem - list the ranges of available memory with their online status
 >
->    The  lsmem command lists the ranges of available memory with their online status. The listed memory blocks correspond to the memory block representation in sysfs. The command also shows the memory block  size  and the amount of memory in online and offline state.
+>  The  lsmem command lists the ranges of available memory with their online status. The listed memory blocks correspond to the memory block representation in sysfs. The command also shows the memory block  size  and the amount of memory in online and offline state.
 
 ```bash
 ╭─root@gitlab /opt
@@ -269,7 +264,7 @@ Total offline memory:      0B
 
 #### lsmod
 
->    lsmod - Show the status of modules in the Linux Kernel
+>  lsmod - Show the status of modules in the Linux Kernel
 
 ```bash
 ╭─root@gitlab /opt
@@ -347,7 +342,6 @@ pata_acpi              16384  0
 lsns  lists  information  about all the currently accessible namespaces or about the given namespace.  The namespace identifier is an inode number.
 
 
-
 ```bash
 ╭─root@gitlab /opt
 ╰─# lsns
@@ -369,10 +363,9 @@ lsns  lists  information  about all the currently accessible namespaces or about
 #### lsof - list open files
 
 
-
 ###  lspci - list all PCI devices
 
->   lspci is a utility for displaying information about PCI buses in the system and devices connected to them.
+> lspci is a utility for displaying information about PCI buses in the system and devices connected to them.
 
 ```bash
 ╭─root@gitlab /opt
@@ -390,5 +383,5 @@ lsns  lists  information  about all the currently accessible namespaces or about
 
 #### lspgpot
 
->   lspgpot - extracts the ownertrust values from PGP keyrings and list them in GnuPG ownertrust format.
+> lspgpot - extracts the ownertrust values from PGP keyrings and list them in GnuPG ownertrust format.
 

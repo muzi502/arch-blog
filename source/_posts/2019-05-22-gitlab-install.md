@@ -3,7 +3,7 @@ title: 部署 Gitlab 及 gitlab-runner
 date: 2019-05-22
 updated: 2019-05-22
 categories: 技术
-slug: 
+slug:
 tag:
   - gitlab
   - CI
@@ -42,7 +42,7 @@ Ece
 sudo yum makecache
 # 然后安装最新的版本
 yum install -y gitlab-ce
-# 安装指定版本 12.3.5 
+# 安装指定版本 12.3.5
 yum install gitlab-ce-12.3.5-ce.0.el7.x86_64.rpm
 
 # 也可以使用 wget 的方式把 rpm 包下载下来安装
@@ -92,7 +92,6 @@ gitlab-ctl restart
 ```
 
 ### reconfigure 失败
-
 
 
 ## 3.进行一些配置，gitlab的配置文件在/etc/gitlab/gitlab.rb
@@ -175,8 +174,8 @@ apt install gitlab-runner -y
 
 使用 root 用户从 web 端登录到 gitlab 管理中心。在 `概览` --> `Runner` 。在右上角会有以下，稍后会用到。
 
--   在 Runner 设置时指定以下 URL
--   在安装过程中使用以下注册令牌：
+- 在 Runner 设置时指定以下 URL
+- 在安装过程中使用以下注册令牌：
 
 ![image-20200310202057916](./img/image-20200310202057916.png)
 
@@ -204,8 +203,8 @@ PANIC: Failed to register this runner. Perhaps you are having network problems
 
 使用 root 用户从 web 端登录到 gitlab 管理中心 http://${ip}/admin 。管理中心 --> 设置 --> 网络 –> 外发请求 –> 允许来自钩子和服务的对本地网络的请求。以下选项全部允许，才能通过外部请求的方式注册 gitlab-runner。
 
--   Allow requests to the local network from web hooks and services
--   Allow requests to the local network from system hooks
+- Allow requests to the local network from web hooks and services
+- Allow requests to the local network from system hooks
 
 **为了安全起见**，也可以在 Whitelist to allow requests to the local network from hooks and services 下方的那个框框里添加上白名单，允许授权的 IP 。修改好之后不要忘记点击底部那个绿色按钮 `保存修改` 。
 
@@ -268,9 +267,9 @@ Completed 500 Internal Server Error in 40ms (ActiveRecord: 14.5ms | Elasticsearc
 OpenSSL::Cipher::CipherError ():
 ```
 
->   搜索了一下，发现网上说是由于迁移导入项目后，没有导入原来的加密信息`/etc/gitlab/gitlab-secrets.json`， 但是原来的加密信息文件我已经找不到了，后面发现可以直接重置就行了
+> 搜索了一下，发现网上说是由于迁移导入项目后，没有导入原来的加密信息`/etc/gitlab/gitlab-secrets.json`， 但是原来的加密信息文件我已经找不到了，后面发现可以直接重置就行了
 >
->   参考 [自搭gitlab报500错误](https://hihozhou.com/blog/2019/08/01/gitlab-500.html) 
+> 参考 [自搭gitlab报500错误](https://hihozhou.com/blog/2019/08/01/gitlab-500.html)
 
 命令行输入`gitlab-rails console`，然后输入
 

@@ -2,7 +2,7 @@
 title: deploy kubernets dashborad with https
 date: 2019-06-18
 categories: 技术
-slug: 
+slug:
 tag:
   - kubernetes
   - k8s

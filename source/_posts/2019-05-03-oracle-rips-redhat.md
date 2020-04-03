@@ -2,7 +2,7 @@
 title: Oracle rips RedHat and 'sort of' launches a new Linux
 date: 2019-05-03
 categories: 互联网
-slug: 
+slug:
 tag:
   - Linux
 copyright: true

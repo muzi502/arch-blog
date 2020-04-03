@@ -12,7 +12,6 @@
 [    0.000000] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
 [    0.000000] x86/fpu: Enabled xstate features 0x7, context size is 832 bytes, using 'standard' format.
 
-
 [    0.000000] e820: BIOS-provided physical RAM map:
 [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x00000000000917ff] usable
 [    0.000000] BIOS-e820: [mem 0x0000000000091800-0x000000000009ffff] reserved
@@ -71,8 +70,8 @@
 [    0.000000]  gran_size: 64K  chunk_size: 64M         num_reg: 9      lose cover RAM: 0G
 [    0.000000] e820: update [mem 0xdd000000-0xffffffff] usable ==> reserved
 [    0.000000] e820: last_pfn = 0xdbe12 max_arch_pfn = 0x400000000
-    
-    
+   
+   
 [    0.000000] found SMP MP-table at [mem 0x000fd940-0x000fd94f]
 [    0.000000] Scanning 1 areas for low memory corruption
 [    0.000000] Using GB pages for direct mapping
@@ -89,8 +88,8 @@
 [    0.000000] BRK [0x17f98000, 0x17f98fff] PGTABLE
 [    0.000000] BRK [0x17f99000, 0x17f99fff] PGTABLE
 [    0.000000] RAMDISK: [mem 0x3118d000-0x348bdfff]
-    
-    
+   
+   
 [    0.000000] ACPI: Early table checksum verification disabled
 [    0.000000] ACPI: RSDP 0x00000000000F0490 000024 (v02 DELL  )
 [    0.000000] ACPI: XSDT 0x00000000D8FEE088 000094 (v01 DELL   CBX3     01072009 AMI  00010013)
@@ -111,8 +110,8 @@
 [    0.000000] ACPI: ASF! 0x00000000D8FFE228 0000A5 (v32 INTEL   HCG     00000001 TFSM 000F4240)
 [    0.000000] ACPI: DMAR 0x00000000D8FFE2D0 0000B8 (v01 INTEL  HSW      00000001 INTL 00000001)
 [    0.000000] ACPI: Local APIC address 0xfee00000
-    
-    
+   
+   
 [    0.000000] No NUMA configuration found
 [    0.000000] Faking a node at [mem 0x0000000000000000-0x000000021edfffff]
 [    0.000000] NODE_DATA(0) allocated [mem 0x21edd3000-0x21edfdfff]
@@ -155,7 +154,7 @@
 [    0.000000] Using ACPI (MADT) for SMP configuration information
 [    0.000000] ACPI: HPET id: 0x8086a701 base: 0xfed00000
 [    0.000000] smpboot: Allowing 4 CPUs, 0 hotplug CPUs
-    
+   
 [    0.000000] PM: Registered nosave memory: [mem 0x00000000-0x00000fff]
 [    0.000000] PM: Registered nosave memory: [mem 0x00091000-0x00091fff]
 [    0.000000] PM: Registered nosave memory: [mem 0x00092000-0x0009ffff]
@@ -183,8 +182,8 @@
 [    0.000000] PM: Registered nosave memory: [mem 0xfee01000-0xfeffffff]
 [    0.000000] PM: Registered nosave memory: [mem 0xff000000-0xffffffff]
 [    0.000000] e820: [mem 0xdf200000-0xf7ffffff] available for PCI devices
-    
-    
+   
+   
 [    0.000000] Booting paravirtualized kernel on bare hardware
 [    0.000000] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645519600211568 ns
 [    0.000000] random: get_random_bytes called from start_kernel+0x99/0x4fd with crng_init=0

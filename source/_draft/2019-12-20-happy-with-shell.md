@@ -1,8 +1,8 @@
 ---
-title: happy with shell | 让命令行飞起来 
+title: happy with shell | 让命令行飞起来
 date: 2019-12-20
 update:
-slug: 
+slug:
 tag:
   - Linux
 copyright: true

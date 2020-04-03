@@ -5,7 +5,7 @@ categories: 技术
 slug:  use-twilio-send-messages
 tag:
   - monitor
-  - Linux 
+  - Linux
 copyright: true
 comment: true
 ---
@@ -42,7 +42,7 @@ comment: true
 
 ![1569744103630](./img/1569744103630.png)
 
-官方已经给出了各个语言的示例代码  [Sending Messages](https://www.twilio.com/docs/sms/send-messages) 
+官方已经给出了各个语言的示例代码  [Sending Messages](https://www.twilio.com/docs/sms/send-messages)
 
 ```bash
 EXCLAMATION_MARK='!'
@@ -108,7 +108,7 @@ then
         TZ=UTC-8 date +"%Y-%m-%d %H:%M:%S" >> /root/PC_STATUS
     exit 1
 else
-        curl 
+        curl
 ```
 
 ## 定时任务

@@ -2,7 +2,7 @@
 title: zabbix 监控服务
 date: 2019-05-13
 categories: 技术
-slug: 
+slug:
 tag:
   - zabbix
   - 运维
@@ -10,7 +10,6 @@ tag:
 copyright: true
 comment: true
 ---
-
 
 ## 0.运行环境
 

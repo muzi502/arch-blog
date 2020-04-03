@@ -2,7 +2,7 @@
 title: 手搓虚拟机模板
 date: 2019-08-28
 categories: 技术
-slug: 
+slug:
 tag:
   - 虚拟机
   - VMware
@@ -162,7 +162,7 @@ cd /usr/share/locale
 ls | grep -v zh | grep -v en | grep -v us | grep -v @ | grep -v local | xargs rm -rf
 
 root@ubuntu:/usr/share/locale# du -sh
-1.5M 
+1.5M
 ```
 
 **最后完毕**

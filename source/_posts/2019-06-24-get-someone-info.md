@@ -2,7 +2,7 @@
 title: 利用社交网络获取骗子的信息
 date: 2019-06-24
 categories: 互联网
-slug: 
+slug:
 tag:
   - 社会工程学实践
   - 隐私保护

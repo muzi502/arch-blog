@@ -3,7 +3,7 @@ title: Dockerfile 搓镜像的小技巧
 date: 2020-01-02
 updated:
 categories: 技术
-slug:  
+slug: 
 tag:
   - docker
 copyright: true
@@ -15,7 +15,7 @@ comment: true
 关于 Dockerfile 最佳实践的博客，网上已经有很多很多啦，咱在这里就不赘述啦。在这里分享几个搓镜像的小技巧，尤其是针对于咱大陆的用户😂。
 
 - [Best practices for writing Dockerfiles](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/) 推荐看一下官方博客上写的
-- [Dockerfile 最佳实践](https://yeasy.gitbooks.io/docker_practice/appendix/best_practices.html#dockerfile-最佳实践) 
+- [Dockerfile 最佳实践](https://yeasy.gitbooks.io/docker_practice/appendix/best_practices.html#dockerfile-最佳实践)
 - [docker-library](https://github.com/docker-library)/**[docs](https://github.com/docker-library/docs)** 官方示例
 
 ## 几个搓镜像的小技巧
@@ -227,7 +227,6 @@ RUN yum install git gcc gcc-c++ make automake autoconf libtool pcre pcre-devel z
   &&  chmod +x /home/fastdfs.sh
 # export config
 VOLUME /etc/fdfs
-
 
 EXPOSE 22122 23000 8888 80
 ENTRYPOINT ["/home/fastdfs.sh"]

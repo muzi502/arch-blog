@@ -74,7 +74,7 @@ cat $1 | while read line
 do
     key=$(echo $line | cut -d ' ' -f2)
     value=$(echo $line | cut -d ' ' -f1)
-    redis-cli set $key $value 
+    redis-cli set $key $value
 done
 ```
 
@@ -114,7 +114,7 @@ lazyfree_pending_objects:0
 
 ### 3. 编译 nginx 加入 lua 和 lua-Redis 模块
 
-**3.1.1 编译环境** 
+**3.1.1 编译环境**
 
 ```
 yum install -y gcc g++ gcc-c++  zlib zlib-devel openssl openssl--devel pcre pcre-devel
@@ -171,7 +171,7 @@ make -j4 & make install
 ```ngin
 server {
     listen 80;
-    
+   
     location ~/group[0-9]/ {
     autoindex on;
     root /home/dfs/data;
@@ -187,7 +187,7 @@ server {
     location  ~/[0-9].*\.(gif|jpg|jpeg|png)$ {
         set $target '';
         access_by_lua '
-# 使用 nginx 的内部参数 ngx.var.uri 来获取请求的 uri 地址，如 /000001.jpg 
+# 使用 nginx 的内部参数 ngx.var.uri 来获取请求的 uri 地址，如 /000001.jpg
             local key = ngx.var.uri
 # 根据正则匹配到 KEY ，从 redis 数据库里获取文件 ID (路径和文件名)
             local res = ngx.location.capture(

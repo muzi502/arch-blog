@@ -7,7 +7,7 @@ tag:
   - 翻译
   - 电子前哨基金会
 copyright: true
-comment: true 
+comment: true
 ---
 
 - 2019-10-14 初稿
@@ -18,7 +18,7 @@ comment: true
 
 ## 题记
 
-本篇文章翻译自 [eff.org](https://eff.org) 官网上的 [A History of Protecting Freedom Where Law and Technology Collide]( https://www.eff.org/about/history ) 
+本篇文章翻译自 [eff.org](https://eff.org) 官网上的 [A History of Protecting Freedom Where Law and Technology Collide]( https://www.eff.org/about/history )
 
 由于是第一次独立翻译整篇文章，肯请读者们能够指出翻译不当的部分，让这篇翻译文章更加完善
 
@@ -52,7 +52,7 @@ E911 文档的嫌疑接收者之一，是德克萨斯州奥斯汀市史蒂夫·�
 
 史蒂夫·杰克逊为发行游戏书籍最后期限的来临惊慌失措，因为他要发布他的最新的版本，但他的电脑仍未归还。
 
-> He was forced to lay off nearly half of his staff. 
+> He was forced to lay off nearly half of his staff.
 
 他被迫解雇了将近一半的员工。
 

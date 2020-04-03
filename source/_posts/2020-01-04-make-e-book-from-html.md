@@ -3,7 +3,7 @@ title: 网页小说制作 kindle 电子书
 date: 2020-01-04
 updated:
 categories: 工具
-slug:  
+slug: 
 tag:
   - kindle
   - 电子书
@@ -78,7 +78,7 @@ comment: true
 ```
 
 - 其中 `alt` 是过滤出每个章节 `URL` 行的关键字
-- 使用 `awk` 截取去掉 `html` 标签，只保留 `URL` 
+- 使用 `awk` 截取去掉 `html` 标签，只保留 `URL`
 - 其实应该用正则表达式来截取这些 URL ，哎咱太菜了，书到用时方恨少啊😥，正则不会 `awk` 来凑😂
 
 ```bash

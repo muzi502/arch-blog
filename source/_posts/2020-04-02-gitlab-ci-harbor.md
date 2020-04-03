@@ -2,7 +2,7 @@
 title: 基于 Gitlab-ci + Harobr 的 CI 流水线
 date: 2020-04-02
 updated: 2020-04-02
-slug: 
+slug:
 categories: 技术
 tag:
   - gitlab
@@ -769,8 +769,8 @@ SSH_PASSWORD: # 部署测试服务器 ssh 密码
 
 ## 参考/推荐
 
--   [GitLab Runner Docs](https://docs.gitlab.com/runner/)
--   [GitLab Docs](https://docs.gitlab.com/ee/README.html)
+- [GitLab Runner Docs](https://docs.gitlab.com/runner/)
+- [GitLab Docs](https://docs.gitlab.com/ee/README.html)
 
 - [kubernetes系列之《构建企业级CICD平台(一)》](https://nicksors.cc/2019/07/12/kubernetes系列之《构建企业级CICD平台-一-》.html)
 - [GitLab的CI/CD使用问题汇总](https://notes.mengxin.science/2018/09/02/gitlab-ci-cd-question-and-answer/)

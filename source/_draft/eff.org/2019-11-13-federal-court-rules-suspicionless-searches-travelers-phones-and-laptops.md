@@ -14,7 +14,7 @@ BOSTON—In a major victory for privacy rights at the border, a federal court in
 
 The ruling came in a lawsuit, [*Alasaad v. McAleenan*](https://www.eff.org/cases/alasaad-v-duke), filed by the American Civil Liberties Union (ACLU), Electronic Frontier Foundation (EFF), and ACLU of Massachusetts, on behalf of 11 travelers whose smartphones and laptops were searched without individualized suspicion at U.S. ports of entry.
 
- 该裁决是由美国公民自由联盟（ACLU），电子前沿基金会（EFF）以及马萨诸塞州 （ACLU） 提起的针对Alasaad v. McAleenan 的诉讼，该诉讼代表 11 位游客在以下地点进行了智能手机和笔记本电脑搜索，没有个人怀疑美国入境口岸。 
+ 该裁决是由美国公民自由联盟（ACLU），电子前沿基金会（EFF）以及马萨诸塞州 （ACLU） 提起的针对Alasaad v. McAleenan 的诉讼，该诉讼代表 11 位游客在以下地点进行了智能手机和笔记本电脑搜索，没有个人怀疑美国入境口岸。
 
 “This ruling significantly advances Fourth Amendment protections for millions of international travelers who enter the United States every year,” said Esha Bhandari, staff attorney with the ACLU’s Speech, Privacy, and Technology Project. “By putting an end to the government’s ability to conduct suspicionless fishing expeditions, the court reaffirms that the border is not a lawless place and that we don’t lose our privacy rights when we travel.”
 

@@ -2,7 +2,7 @@
 title: 《学会提问：批判性思维指南 》读书笔记
 date: 2019-06-28
 categories: 阅读
-slug: 
+slug:
 tag:
 copyright: true
 comment: true

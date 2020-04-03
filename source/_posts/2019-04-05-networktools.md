@@ -8,7 +8,7 @@ tags:
     - network
     - network tools
 categories: 技术
-slug: 
+slug:
 date: 2019-04-05
 ---
 
@@ -80,7 +80,7 @@ date: 2019-04-05
 
 32.`socat` proxy a tcp socket a unix domain socket + lost more
 
-33.`hping3` contect ang TCP packet that server 
+33.`hping3` contect ang TCP packet that server
 
 34.`traceroute/mtr` what server are on the way to what server?
 

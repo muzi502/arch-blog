@@ -2,7 +2,6 @@
 
 ```txt
 
-
 By Rory J. O'Connor
 Mercury News Staff Writer
 

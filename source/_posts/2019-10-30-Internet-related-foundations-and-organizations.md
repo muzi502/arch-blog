@@ -2,7 +2,7 @@
 title: 与互联网相关的基金会和组织
 date: 2019-11-02
 categories: 互联网
-slug: 
+slug:
 tag:
   - internet
   - 开源
