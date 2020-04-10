@@ -10,145 +10,112 @@ copyright: true
 comment: true
 ---
 
-## Why
-
-> 就计算机行业来说，知乎、CSDN 、博客园等三手信息批发站有一个很大的问题，就是上面很多共识可能只是因为数据巨大的复读机对同一份二手信息的复述，可惜共识的数量再大也无法提高信息的完备性与正确性。只依赖这样的信息来源会导致你的知识和现实脱钩严重，局限于狭隘的偏见而不自知。
-
->很多喜欢阅读知乎、csdn 或公众号的人，会觉得自己已经熟练掌握某些“高大上”的系统或概念，背了一堆表述。但只需问一些很简单的问题，只要实际长期维护过上述系统、或者阅读过原始论文或开源实现就一定知道，但是三手共识里没有提到过的知识，很容易看出信息的获取渠道以及有没有被仔细推敲消化吸收过。不是说这些信息来源不好，而是要认清信息来源的性质。
-
-> 三手批发站的优点是信息多、阅读快，可以短时间里建立起庞杂的信息体系概略，开阔眼界。但是切勿把这当成目的，这只是进一步深入探索和思索的路标，指明了真知的存在和方向，而不是真知本身。所以掌握英语看原始文档和多搜索个人独立博客文章是多么的重要。另外，这个理论不止于计算机行业，在信息来源受限的情况下，很多共识可能都只是因为单一来源的分散再聚合造成的伪共识。比如这两天推上的“我听我朋友说XX国家疫情已经…”的套娃游戏，一篇公众号反向解读，就有了“推上这些自干五”的共识
-
-### 国内博客平台现状
-
-国内的这些博客平台啊，一个比一个烂到家，其中 CSDN 这种狗屎抄来抄去垃圾玩意儿，甚至还和百度搜索联合起来给人家喂屎，真他奶奶的恶心人。所以就精选一些自己 Chrome 收藏夹里收藏的个人独立博客，不喜欢像 CSDN 、博客园、OSCHINA这些鱼龙混杂的抄袭博客平台。
-
-![1](./img/image-20200101150146261.png)
-
-看到这类抄来抄去复制粘贴的博客，简直辣眼睛啊，为了保护自己的眼睛不被这种垃圾信息流污染，墙裂推荐使用开源软件 Chrome&FireFox 插件 [uBlock Origin](https://github.com/gorhill/uBlock) 来在 Google 搜索页屏蔽掉这些国产、垃圾、抄袭、狗屎博客平台的搜索结果，顺带着建议把像 .baidu.com 、360这种无耻坑爹公司的域名也被屏蔽掉。
-
-### 为什么要强调独立二字？
-
-{% raw %}
-<blockquote class="twitter-tweet"><p lang="zh" dir="ltr">自己收藏的个人独立博客<a href="https://t.co/PI0tGM2qHN">https://t.co/PI0tGM2qHN</a><br><br>我为什么要强调独立二字？<br><br>首先中文博客我不喜欢国内像 CSDN、 博客园那样的抄袭博客平台；其次，拥有独立博客、能自己建站、有自己的域名、会生成静态博客等等这些能力就已经帮你过滤掉那些还在用百度的菜鸡了；最后独立博客内容大多都是个人原创 <a href="https://t.co/KHFiZHZnVh">pic.twitter.com/KHFiZHZnVh</a></p>&mdash; 502.li (@muzi_ii) <a href="https://twitter.com/muzi_ii/status/1183394988517838848?ref_src=twsrc%5Etfw">October 13, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-{% endraw %}
-
-### 推荐个人独立博客列表
-
-放心吧，咱木子推荐的博客和文章绝对是质量相当高的，不像 CSDN 、博客园 、简书等等这些抄来抄去的 **国产** 博客平台。咱一向喜欢读的博客就是 `个人独立博客` 这也是咱在 [友链](https://blog.k8s.li/link/) 中所强调的，对于国产博客平台一向屑之，对微信公众号这种删帖封号、言论审查的平台也只有一个 `呸` 字屑之 ：）。
-
-咱无论是工作还是学习技术参考的来源一般是：
-
-- 1.英文官方文档/社区翻译文档；
-- 2.StackOverflow/wiki/READDME；
-- 3.个人独立博客。
-- 只有这三种，别无其它，远离国产博客平台这些抄来抄去的垃圾玩意儿。
-
-- [tuna]( https://tuna.moe/ ) 收集的博客列表  [tuna/blogroll]( https://github.com/tuna/blogroll )
-- [chinese-independent-blogs](https://github.com/timqian/chinese-independent-blogs)目前为止收藏最多的个人独立博客列表，GitHub 上 3.5k 的 start
-- [ohmyrss.com](https://ohmyrss.com/)
-
 ## 小伙伴
 
-- 欢迎与咱交换友链或者 py 交易😂
+欢迎与咱交换友链或者 py 交易😂
 
 ```yaml
 title: 木子的博客
-url: https://blog.502.li
+url: https://blog.k8s.li
 bio: 垃圾佬、搬砖社畜、运维工程师
-avatar: https://blog.k8s.li/favicon.ico
+avatar: https://blog.k8s.li/avatar.png
 rss: https://blog.k8s.li/atom.xml
 ```
 
-### 好朋友
+### 永远の好朋友
 
 | 站点                                                   | 主要内容                           | 印象😋                                                        |
 | ------------------------------------------------------ | ---------------------------------- | ------------------------------------------------------------ |
-| [土豆不好吃](https://www.bennythink.com/)              | Linux、VPS、Python                 | 有脾气的小土豆                                               |
-| [蝉時雨](https://chanshiyu.com/)                       | 前端、Java、vue、博客              | [Aurora](https://github.com/chanshiyucx/aurora) 作者、诗意少年 |
+| [土豆不好吃](https://www.bennythink.com/)              | Linux、VPS、Python、Golang         | 有脾气的小土豆                                               |
+| [蝉時雨](https://chanshiyu.com/)                       | 前端、Java、Vue、博客、东方        | [Aurora](https://github.com/chanshiyucx/aurora) 作者、诗意少年 |
 | [Steven's Blog](https://blog.hly0928.com/)             | 技术、消费电子、评测               | 大学萌新的普通 Blog                                          |
 | [觉论](https://blog.ryouissei.com/)                    | 用户体验、交互设计                 | 多摩美术大学高材生😂                                          |
 | [Present Day, Present Time](https://gobomb.github.io/) | Go 、Shell、Docker、Kubernetes     | Server Reboot Engineer 😂                                     |
 | [小竹's blog](https://blog.justforlxz.com/)            | deepin linux、C++、Web前端         | 正在使用C++拯救世界                                          |
 | [瓠樽](https://blog.dylanwu.space/)                    | 前端、艺术、阅读                   | 目测是位硬核博主😂                                            |
-| [Himself65 Blog](https://www.himself65.com/)           | Rust、Node、前端                   | 扩散性百万甜面包                                             |
+| [Himself65 Blog](https://www.himself65.com/)           | Rust、Node、前端                   | 扩散性百万甜面包🍞                                            |
 | [Cocoa](https://blog.0xbbc.com/)                       | C/C++、Rust 、算法、iOS安全、Linux | 少女心满满😂                                                  |
 | [CrownDaisy](https://crowndaisy.com/)                  | Python、数据分析                   | 极简主义者                                                   |
 | [F4n9X's Blog](https://fanqxu.github.io/)              | InfoSec、PenTesting、CTF、Hacking  | 社工大佬                                                     |
-| [ChrAlpha](https://ichr.me)                            | hexo、Cloudflare、加密、博客       | Keep foolish and<br> write some stupid codes                 |
+| [ChrAlpha](https://ichr.me)                            | hexo、Cloudflare、加密、博客、写作 | Keep foolish and<br> write some stupid codes                 |
 | [Nova Kwok's Awesome Blog](https://nova.moe/)          | Linux、Python、network、摄影       | LUNA 创始人                                                  |
 
-### 个人收藏
+### 单~~恋~~链😂/有趣的人
 
-| 站点                                                         | 主要内容                                              | 印象                                     |
-| ------------------------------------------------------------ | ----------------------------------------------------- | ---------------------------------------- |
-| [软件那些事儿](https://liuyandong.com/)                      | 计算机历史、八卦、扯淡、电台、考古                    | 老刘、栋哥                               |
-| [绿帽子大学](https://lmzdx.com/)                             | Ruby、软件那些事儿电台的官方网站                      | 油腻大叔                                 |
-| [编程随想](https://program-think.blogspot.com/)              | 反洗脑、社会工程学、读书思考                          | 枪毙名单榜首                             |
-| [酷 壳 – CoolShell](https://coolshell.cn/)                   | 综合、Linux、开源                                     | 资深开发者                               |
-| [老钱文集](http://lao-qian.hxwk.org/)                        | 历史、美国                                            | 各种`考古`                               |
-| [Laisky](https://blog.laisky.com/)                           | Docker、后端、Python、读书笔记                        | 一只高语速大存储的复读机                 |
-| [yu小ba-CloudNative](http://www.yuxiaoba.xyz/)               | 智能运维 • 云计算研发                                 | 论文总结、学术                           |
-| [未知的世界](http://lulalap.com/)                            | PAT、算法、读书思考                                   | 奇思异想                                 |
-| [暗无天日](http://blog.lujun9972.win/)                       | Linux、Emacs、开源                                    | 有趣、喜欢 xjb 搞                        |
-| [运维之美](https://www.hi-linux.com/)                        | Linux 、运维                                          | 一年没更新了🤔                            |
-| [国光](https://www.sqlsec.com/)                              | 信息安全、CTF、黑苹果、Linux                          | 内容很丰富                               |
-| [ 约伊兹的萌狼乡手札](https://blog.yoitsu.moe/)              | Archlinux、安卓、开源                                 | 喜欢用😂                                  |
-| [HuoJu's BLOG](https://jhuo.ca/)                             | 开源、互联网历史                                      | 开源是自由的，永远                       |
-| [依云's Blog](https://blog.lilydjwg.me/)                     | Archinux、内核                                        | 百合仙子😂                                |
-| [結城浩](http://hyuki.com/)                                  | 数学、《数学女孩》                                    | 日本作家                                 |
-| [王子亭的博客](https://jysperm.me/)                          | 后端、Node.js                                         | 资深老博主                               |
-| [浮生若梦](https://fs.tn/)                                   | 测试、Linux                                           | 一个测试萌新                             |
-| [David DaiBackend Developer](https://blog.stdioa.com/)       | 信息安全、C / C++ / Python                            | 全栈                                     |
-| [GitDiG](https://www.gitdig.com/)                            | Golang、Kubernetes、Linux                             | 站点做的很棒、自己开发的                 |
-| [吴良超的学习笔记](http://wulc.me/)                          | 机器学习                                              |                                          |
-| [Felix's Blog](https://blog.felixc.at/)                      | Linux 内核、Archlinux                                 | 肥猫 😂                                   |
-| [Kiwenlau](https://kiwenlau.com/)                            | 后端的设计、开发运维                                  | [Fundebug](https://fundebug.com/) 创始人 |
-| [开源小站](http://www.litrin.net/)                           | Linux、开源                                           |                                          |
-| [ChenJian Blog](https://o-my-chenjian.com/)                  | Python、Docker、Linux                                 |                                          |
-| [柳婼 の blog](https://www.liuchuo.net/)                     | PAT、LeetCode                                         |                                          |
-| [EZLippi-浮生志](https://www.ezlippi.com/)                   | Web后台开发、Java开发者                               |                                          |
-| [Wenzi](https://www.xiabingbao.com/)                         | 前端开发工程师                                        |                                          |
-| [3NICE](https://3nice.cc/)                                   | GIS                                                   | 不务正业的GISer                          |
-| [Scateu Blog - S.B.](http://scateu.me/)                      | 无线电、Linux 、[TUNA](https://tuna.moe) 创始人       | 徒手摸核燃料棒😨                          |
-| [birdben](https://birdben.github.io/)                        | Docker                                                |                                          |
-| [iKoo's Dirty life](https://gythialy.github.io/)             | Docker、DevOps                                        |                                          |
-| [ManateeLazyCat](https://manateelazycat.github.io/index.html) | Emacs、Linux、Elisp、自驾探险                         |                                          |
-| [Timothy](https://xiaozhou.net/)                             | VPS、Linux、机械键盘                                  |                                          |
-| [宇宙的心弦](https://www.physixfan.com/)                     | Phd                                                   |                                          |
-| [帆尅恰](https://ferryyoungfan.github.io/)                   | 前端、Android                                         | 脑洞大开、各种瞎搞                       |
-| [南浦月](https://blog.nanpuyue.com/)                         | Linux、openwrt                                        | 乔老师、深度菊苣                         |
-| [JAMIN ZHANG](https://jaminzhang.github.io/)                 | Linux、运维                                           |                                          |
-| [毓彦](https://lolita.im/)                                   | 前端、无线电                                          | 首页最漂亮                               |
-| [SA-Logs](https://salogs.com/)                               | Linux                                                 | 专注云计算方向                           |
-| [nmask's Blog](https://thief.one/)                           | 信息安全                                              | 运动、摄影、文学                         |
-| [diygod](https://diygod.me/)                                 | RSSHUB、二次元                                        | B站菊苣                                  |
-| [Hi! 上天不?](https://a-wing.top/)                           | 无人机、Linux、嵌入式                                 |                                          |
-| [birdben](https://birdben.github.io/)                        | Linux 、Docker                                        |                                          |
-| [tinyfool](http://tinyfool.org/)                             | 算法                                                  | 资深开发者                               |
-| [Terry's Thoughts](https://terrywang.net/)                   | Linux 、kernel、DevOps                                |                                          |
-| [wangcong](http://wangcong.org/)                             | Linux kernel                                          | 在 Twitter 公司的 Linux 内核 maintainer  |
-| [Chris Chan's BLOG](https://rorschachchan.github.io/)        | Linux、运维开发                                       | 啥都研究啥都不会😂                        |
-| [龙爪槐守望者](http://www.ftium4.com/)                       | IOS、网站策划、交互设计                               |                                          |
-| [forecho 的独立博客](https://blog.forecho.com/)              | Linux、Web开发                                        | 资深全栈                                 |
-| [LinuxTOY](https://linuxtoy.org/)                            | 好用好玩的 Linux、资源                                | 资深老博客了                             |
-| [WRFLY'S BLOG](http://wrfly.kfd.me/)                         | Golang、Docker 、[内涵图的网站](http://10pic.kfd.me/) |                                          |
-| [ZGQ's Blog](https://blog.izgq.net/)                         | 算法、Linux                                           | 目前在 Tencent 搬水                      |
-| [Cheson Blog](http://chendongqi.me/)                         | Android 开发内容丰富                                  | 非典型程序员                             |
-| [VOID001'S WOWO](https://void-shana.moe/)                    | Linux kernel 、shell                                  | **萝莉控**😂                              |
-| [Alex Wu's blog](https://blog.yaodataking.com/)              | 机器学习、Kafka、OpenStack                            |                                          |
-| [CNCF Cloud Native Interactive Landscape](https://landscape.cncf.io/) | 云原生图谱                                            |                                          |
-| [佐仔志](www.jinbo123.com)                                   | 软路由、电子评测、Linux                               | 中年大叔😂                                |
-| [Rat's Blog](https://www.moerats.com/)                       | VPS、建站、工具、羊毛                                 | 工具箱😂                                  |
-| [Eliyar's Blog](https://eliyar.biz/)                         | IOS、Python、机器学习                                 |                                          |
-| [iTimothy](https://xiaozhou.net/)                            | VPS、Linux、机械键盘                                  | 四川人也、技术控                         |
-| [Smallpath的小站](https://smallpath.me/)                     | 前端、Node.js、测试                                   |                                          |
-| [HAROLD'S NOTES](https://www.haroldrandom.me/)               |                                                       |                                          |
-| [Wenzi](https://www.xiabingbao.com/)                         | 前端、算法                                            | 前端开发工程师                           |
-| [有趣的网站](http://123.kfd.me/)                             | 网站资源导航                                          |                                          |
-| [杜屹东的博客](https://www.duyidong.com/)                    | Java、CI/CD、Kubernetes 、微服务                      | 阿里高级工程师                           |
-| [ManateeLazyCat](https://manateelazycat.github.io/index.html) | Emacs、Business、Rails、开源                          | 自黑幽默😂                                |
-| [win-man](https://win-man.github.io/)                        | MySQL                                                 |                                          |
-| [CrownDaisy](https://crowndaisy.com/)                        | Python、数据分析                                      | INTP、极简主义者                         |
+| 站点                                                         | 主要内容                                              | 印象                                          |
+| ------------------------------------------------------------ | ----------------------------------------------------- | --------------------------------------------- |
+| [软件那些事儿](https://liuyandong.com/)                      | 计算机历史、八卦、扯淡、电台、考古                    | 老刘、栋哥                                    |
+| [绿帽子大学](https://lmzdx.com/)                             | Ruby、软件那些事儿电台的官方网站                      | 油腻大叔                                      |
+| [编程随想](https://program-think.blogspot.com/)              | 反洗脑、社会工程学、读书思考                          | 枪毙名单榜首                                  |
+| [酷 壳 – CoolShell](https://coolshell.cn/)                   | 综合、Linux、开源                                     | 资深开发者                                    |
+| [老钱文集](http://lao-qian.hxwk.org/)                        | 历史、美国                                            | 各种`考古`                                    |
+| [Laisky](https://blog.laisky.com/)                           | Docker、后端、Python、读书笔记                        | 一只高语速大存储的复读机                      |
+| [yu小ba-CloudNative](http://www.yuxiaoba.xyz/)               | 智能运维 • 云计算研发                                 | 论文总结、学术                                |
+| [未知的世界](http://lulalap.com/)                            | PAT、算法、读书思考                                   | 奇思异想                                      |
+| [暗无天日](http://blog.lujun9972.win/)                       | Linux、Emacs、开源                                    | 有趣、喜欢 xjb 搞                             |
+| [运维之美](https://www.hi-linux.com/)                        | Linux 、运维                                          | 一年没更新了🤔                                 |
+| [国光](https://www.sqlsec.com/)                              | 信息安全、CTF、黑苹果、Linux                          | 内容很丰富                                    |
+| [ 约伊兹的萌狼乡手札](https://blog.yoitsu.moe/)              | Archlinux、安卓、开源                                 | 喜欢用😂                                       |
+| [HuoJu's BLOG](https://jhuo.ca/)                             | 开源、互联网历史                                      | 开源是自由的，永远                            |
+| [依云's Blog](https://blog.lilydjwg.me/)                     | Archinux、内核                                        | 百合仙子😂                                     |
+| [結城浩](http://hyuki.com/)                                  | 数学、《数学女孩》                                    | 日本作家                                      |
+| [王子亭的博客](https://jysperm.me/)                          | 后端、Node.js                                         | 资深老博主                                    |
+| [浮生若梦](https://fs.tn/)                                   | 测试、Linux                                           | 一个测试萌新                                  |
+| [David DaiBackend Developer](https://blog.stdioa.com/)       | 信息安全、C / C++ / Python                            | 全栈                                          |
+| [GitDiG](https://www.gitdig.com/)                            | Golang、Kubernetes、Linux                             | 站点做的很棒、自己开发的                      |
+| [吴良超的学习笔记](http://wulc.me/)                          | 机器学习                                              |                                               |
+| [Felix's Blog](https://blog.felixc.at/)                      | Linux 内核、Archlinux                                 | 肥猫 😂                                        |
+| [Kiwenlau](https://kiwenlau.com/)                            | 后端的设计、开发运维                                  | [Fundebug](https://fundebug.com/) 创始人      |
+| [开源小站](http://www.litrin.net/)                           | Linux、开源                                           |                                               |
+| [ChenJian Blog](https://o-my-chenjian.com/)                  | Python、Docker、Linux                                 |                                               |
+| [柳婼 の blog](https://www.liuchuo.net/)                     | PAT、LeetCode                                         |                                               |
+| [EZLippi-浮生志](https://www.ezlippi.com/)                   | Web后台开发、Java开发者                               |                                               |
+| [Wenzi](https://www.xiabingbao.com/)                         | 前端开发工程师                                        |                                               |
+| [3NICE](https://3nice.cc/)                                   | GIS                                                   | 不务正业的GISer                               |
+| [Scateu Blog - S.B.](http://scateu.me/)                      | 无线电、Linux 、[TUNA](https://tuna.moe) 创始人       | 徒手摸核燃料棒😨                               |
+| [birdben](https://birdben.github.io/)                        | Docker                                                |                                               |
+| [iKoo's Dirty life](https://gythialy.github.io/)             | Docker、DevOps                                        |                                               |
+| [ManateeLazyCat](https://manateelazycat.github.io/index.html) | Emacs、Linux、Elisp、自驾探险                         |                                               |
+| [Timothy](https://xiaozhou.net/)                             | VPS、Linux、机械键盘                                  |                                               |
+| [宇宙的心弦](https://www.physixfan.com/)                     | Phd                                                   |                                               |
+| [帆尅恰](https://ferryyoungfan.github.io/)                   | 前端、Android                                         | 脑洞大开、各种瞎搞                            |
+| [南浦月](https://blog.nanpuyue.com/)                         | Linux、openwrt                                        | 乔老师、深度菊苣                              |
+| [JAMIN ZHANG](https://jaminzhang.github.io/)                 | Linux、运维                                           |                                               |
+| [毓彦](https://lolita.im/)                                   | 前端、无线电                                          | 首页最漂亮                                    |
+| [SA-Logs](https://salogs.com/)                               | Linux                                                 | 专注云计算方向                                |
+| [nmask's Blog](https://thief.one/)                           | 信息安全                                              | 运动、摄影、文学                              |
+| [diygod](https://diygod.me/)                                 | RSSHUB、二次元                                        | B站菊苣                                       |
+| [Hi! 上天不?](https://a-wing.top/)                           | 无人机、Linux、嵌入式                                 |                                               |
+| [birdben](https://birdben.github.io/)                        | Linux 、Docker                                        |                                               |
+| [tinyfool](http://tinyfool.org/)                             | 算法                                                  | 资深开发者                                    |
+| [Terry's Thoughts](https://terrywang.net/)                   | Linux 、kernel、DevOps                                |                                               |
+| [wangcong](http://wangcong.org/)                             | Linux kernel                                          | 在 Twitter 公司的 Linux 内核 maintainer       |
+| [Chris Chan's BLOG](https://rorschachchan.github.io/)        | Linux、运维开发                                       | 啥都研究啥都不会😂                             |
+| [龙爪槐守望者](http://www.ftium4.com/)                       | IOS、网站策划、交互设计                               |                                               |
+| [forecho 的独立博客](https://blog.forecho.com/)              | Linux、Web开发                                        | 资深全栈                                      |
+| [LinuxTOY](https://linuxtoy.org/)                            | 好用好玩的 Linux、资源                                | 资深老博客了                                  |
+| [WRFLY'S BLOG](http://wrfly.kfd.me/)                         | Golang、Docker 、[内涵图的网站](http://10pic.kfd.me/) |                                               |
+| [ZGQ's Blog](https://blog.izgq.net/)                         | 算法、Linux                                           | 目前在 Tencent 搬水                           |
+| [Cheson Blog](http://chendongqi.me/)                         | Android 开发内容丰富                                  | 非典型程序员                                  |
+| [VOID001'S WOWO](https://void-shana.moe/)                    | Linux kernel 、shell                                  | **萝莉控**😂                                   |
+| [Alex Wu's blog](https://blog.yaodataking.com/)              | 机器学习、Kafka、OpenStack                            |                                               |
+| [CNCF Cloud Native Interactive Landscape](https://landscape.cncf.io/) | 云原生图谱                                            |                                               |
+| [佐仔志](www.jinbo123.com)                                   | 软路由、电子评测、Linux                               | 中年大叔😂                                     |
+| [Rat's Blog](https://www.moerats.com/)                       | VPS、建站、工具、羊毛                                 | 工具箱😂                                       |
+| [Eliyar's Blog](https://eliyar.biz/)                         | IOS、Python、机器学习                                 |                                               |
+| [iTimothy](https://xiaozhou.net/)                            | VPS、Linux、机械键盘                                  | 四川人也、技术控                              |
+| [Smallpath的小站](https://smallpath.me/)                     | 前端、Node.js、测试                                   |                                               |
+| [HAROLD'S NOTES](https://www.haroldrandom.me/)               |                                                       |                                               |
+| [Wenzi](https://www.xiabingbao.com/)                         | 前端、算法                                            | 前端开发工程师                                |
+| [有趣的网站](http://123.kfd.me/)                             | 网站资源导航                                          |                                               |
+| [杜屹东的博客](https://www.duyidong.com/)                    | Java、CI/CD、Kubernetes 、微服务                      | 阿里高级工程师                                |
+| [黑果小兵的部落阁](https://blog.daliansky.net/)              | 黑苹果                                                |                                               |
+| [Poslua Blog](https://ms2008.github.io/)                     | Golang、Lua、Nginx、Kong                              | 十余年的 Lua 咸鱼，<br>抄起 OpenResty 就是干🤣 |
+| [forecho](https://blog.forecho.com/)                         |                                                       | ಥ_ಥ                                           |
+| [筑梦师](http://www.apgblogs.com/)                           | spring boot  、spring cloud                           |                                               |
+| [ManateeLazyCat](https://manateelazycat.github.io/index.html) | Emacs、Business、Rails、开源                          | 自黑幽默😂                                     |
+| [win-man](https://win-man.github.io/)                        | MySQL                                                 |                                               |
+| [CrownDaisy](https://crowndaisy.com/)                        | Python、数据分析                                      | INTP、极简主义者                              |
 
 ### 云原生相关
 
@@ -237,3 +204,40 @@ rss: https://blog.k8s.li/atom.xml
 | [Letitfly](https://bbs.letitfly.me/)                         | 安卓、刷机、搞基        | -              |
 | [fundebug 博客](https://blog.fundebug.com/)                  | 前端、测试              |                |
 
+
+## Why
+
+> 就计算机行业来说，知乎、CSDN 、博客园等三手信息批发站有一个很大的问题，就是上面很多共识可能只是因为数据巨大的复读机对同一份二手信息的复述，可惜共识的数量再大也无法提高信息的完备性与正确性。只依赖这样的信息来源会导致你的知识和现实脱钩严重，局限于狭隘的偏见而不自知。
+
+>很多喜欢阅读知乎、csdn 或公众号的人，会觉得自己已经熟练掌握某些“高大上”的系统或概念，背了一堆表述。但只需问一些很简单的问题，只要实际长期维护过上述系统、或者阅读过原始论文或开源实现就一定知道，但是三手共识里没有提到过的知识，很容易看出信息的获取渠道以及有没有被仔细推敲消化吸收过。不是说这些信息来源不好，而是要认清信息来源的性质。
+
+> 三手批发站的优点是信息多、阅读快，可以短时间里建立起庞杂的信息体系概略，开阔眼界。但是切勿把这当成目的，这只是进一步深入探索和思索的路标，指明了真知的存在和方向，而不是真知本身。所以掌握英语看原始文档和多搜索个人独立博客文章是多么的重要。另外，这个理论不止于计算机行业，在信息来源受限的情况下，很多共识可能都只是因为单一来源的分散再聚合造成的伪共识。比如这两天推上的“我听我朋友说XX国家疫情已经…”的套娃游戏，一篇公众号反向解读，就有了“推上这些自干五”的共识
+
+### 国内博客平台现状
+
+国内的这些博客平台啊，一个比一个烂到家，其中 CSDN 这种狗屎抄来抄去垃圾玩意儿，甚至还和百度搜索联合起来给人家喂屎，真他奶奶的恶心人。所以就精选一些自己 Chrome 收藏夹里收藏的个人独立博客，不喜欢像 CSDN 、博客园、OSCHINA这些鱼龙混杂的抄袭博客平台。
+
+![1](./img/image-20200101150146261.png)
+
+看到这类抄来抄去复制粘贴的博客，简直辣眼睛啊，为了保护自己的眼睛不被这种垃圾信息流污染，墙裂推荐使用开源软件 Chrome&FireFox 插件 [uBlock Origin](https://github.com/gorhill/uBlock) 来在 Google 搜索页屏蔽掉这些国产、垃圾、抄袭、狗屎博客平台的搜索结果，顺带着建议把像 .baidu.com 、360这种无耻坑爹公司的域名也被屏蔽掉。
+
+### 为什么要强调独立二字？
+
+{% raw %}
+<blockquote class="twitter-tweet"><p lang="zh" dir="ltr">自己收藏的个人独立博客<a href="https://t.co/PI0tGM2qHN">https://t.co/PI0tGM2qHN</a><br><br>我为什么要强调独立二字？<br><br>首先中文博客我不喜欢国内像 CSDN、 博客园那样的抄袭博客平台；其次，拥有独立博客、能自己建站、有自己的域名、会生成静态博客等等这些能力就已经帮你过滤掉那些还在用百度的菜鸡了；最后独立博客内容大多都是个人原创 <a href="https://t.co/KHFiZHZnVh">pic.twitter.com/KHFiZHZnVh</a></p>&mdash; 502.li (@muzi_ii) <a href="https://twitter.com/muzi_ii/status/1183394988517838848?ref_src=twsrc%5Etfw">October 13, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{% endraw %}
+
+### 推荐个人独立博客列表
+
+放心吧，咱木子推荐的博客和文章绝对是质量相当高的，不像 CSDN 、博客园 、简书等等这些抄来抄去的 **国产** 博客平台。咱一向喜欢读的博客就是 `个人独立博客` 这也是咱在 [友链](https://blog.k8s.li/link/) 中所强调的，对于国产博客平台一向屑之，对微信公众号这种删帖封号、言论审查的平台也只有一个 `呸` 字屑之 ：）。
+
+咱无论是工作还是学习技术参考的来源一般是：
+
+- 1.英文官方文档/社区翻译文档；
+- 2.StackOverflow/wiki/READDME；
+- 3.个人独立博客。
+- 只有这三种，别无其它，远离国产博客平台这些抄来抄去的垃圾玩意儿。
+
+- [tuna]( https://tuna.moe/ ) 收集的博客列表  [tuna/blogroll]( https://github.com/tuna/blogroll )
+- [chinese-independent-blogs](https://github.com/timqian/chinese-independent-blogs)目前为止收藏最多的个人独立博客列表，GitHub 上 3.5k 的 start
+- [ohmyrss.com](https://ohmyrss.com/)
