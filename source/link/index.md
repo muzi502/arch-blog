@@ -12,7 +12,7 @@ comment: true
 
 ## 小伙伴
 
-欢迎与咱交换友链或者 py 交易😂
+欢迎与咱交换友链或者 py 交易😂，抱歉只能用简陋的表格（
 
 ```yaml
 title: 木子的博客
@@ -39,6 +39,9 @@ rss: https://blog.k8s.li/atom.xml
 | [F4n9X's Blog](https://fanqxu.github.io/)              | InfoSec、PenTesting、CTF、Hacking  | 社工大佬                                                     |
 | [ChrAlpha](https://ichr.me)                            | hexo、Cloudflare、加密、博客、写作 | Keep foolish and<br> write some stupid codes                 |
 | [Nova Kwok's Awesome Blog](https://nova.moe/)          | Linux、Python、network、摄影       | LUNA 创始人                                                  |
+| [纯白](https://jpacg.me/)                              |                                    |                                                              |
+| [TOTORO625](https://totoro.ink/)                       | Ingress、Linux                     | 日常搬砖、画图、数钢筋（大雾                                 |
+| [idealclover](https://idealclover.top)                 | 技术、测评、随想、生活             | 是只可爱的男孩子😝                                            |
 
 ### 单~~恋~~链😂/有趣的人
 
