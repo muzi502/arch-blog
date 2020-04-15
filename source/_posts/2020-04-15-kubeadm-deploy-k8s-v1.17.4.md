@@ -1,30 +1,50 @@
 ---
-title: K8s 入门之使用 kubeadm 快速部署体验 K8s
-date: 2020-04-18
-updated: 2020-04-18
+title: 使用 kubeadm 快速部署体验 K8s
+date: 2020-04-15
+updated: 2020-04-15
 slug:
 categories: 技术
 tag:
   - kubeadm
   - kubernetes
+  - 从零开始学习 K8s
 copyright: true
 comment: true
 ---
 
 ## 炒冷饭
 
-大概是从去年 5 月开始才接触  kubernetes ，时至今日已经快一年，当初写的一篇博客翻出来重新修改一下，记录一下使用 kubeadm 部署 kubernetes v1.17.4 版的流程。
+大概是从去年 5 月开始才接触  kubernetes ，时至今日已经快一年，当初写的一篇博客 [ubuntu 1804 使用 kubeadm 部署 kubernetes](https://blog.k8s.li/install-k8s-ubuntu18-04.html) 翻出来重新修改一下，记录一下使用 kubeadm 部署 kubernetes v1.17.4 版的流程。适用于国内网络环境下。
 
-| 主机名        | 角色   | 功能                                                         | IP            |
-| ------------- | ------ | ------------------------------------------------------------ | ------------- |
-| ks8-master-01 | master | Kube-apiserver 、kube-scheduler <br>kube-controller-manager 、etcd <br>kube-proxy 、docker-ce 、flannel <br> | 10.20.172.211 |
-| ks8-node-01   | node   | Kubelet 、 kube-proxy 、 docker-ce<br>                       | 10.20.172.212 |
-| ks8-node-02   | node   | Kubelet 、 kube-proxy 、 docker-ce<br>                       | 10.20.172.213 |
-| ks8-node-03   | node   | Kubelet 、 kube-proxy 、 docker-ce<br>                       | 10.20.172.214 |
+### kubeadm
 
-## kubeadm
+Kubernetes 从 1.4 版本开始后就引入了 kubeadm 用于简化集群搭建的过程，在 Kubernetes 1.13 版本中，kubeadm 工具进入 GA 阶段，而当前的 kubernetes 最新版 stable 为 1.18.1 ，kubeadm 已经经历过多个版本的迭代，可用于生产环境 Kubernetes 集群搭建。对于刚刚接触 kubernetes  的初学者来讲，kubeadm 也是一个快速部署体验 kubernetes 的不二之选。
 
+## kubernetes 架构
 
+![Components of Kubernetes](img/components-of-kubernetes.png)
+
+架构图来自 kubernetes 官方文档 [Kubernetes 组件](https://kubernetes.io/zh/docs/concepts/overview/components/)
+
+### 控制平面
+
+控制平面的组件对集群做出全局决策(比如调度)，以及检测和响应集群事件主要的组件由 
+
+- kube-apiserver：主节点上负责提供 Kubernetes API 服务的组件；它是 Kubernetes 控制面的前端。
+- etcd：集群中唯一一个有状态的服务，用来存储集群中的所有资源信息数据。
+- kube-scheduler：负责调度 Pod 资源到某个 Node 节点上。
+- kube-controller-manager：控制器管理器。
+- kubelet：如果使用 kubeadm 部署的话需要在 master 节点安装 kubelet
+
+### 工作平面
+
+- kubelet：通过监听 kube-apiserver ，接收一组通过各类机制提供给它的 PodSpecs，确保这些 PodSpecs 中描述的容器处于运行状态且健康。
+- kube-proxy：实现 Kubernetes [Service](https://kubernetes.io/docs/concepts/services-networking/service/) 概念的一部分，通过 iptables 规则将 service 负载均衡到各个 Pod。
+- CRI容器运行时：根据统计目前 docker 依旧是排名第一的容器运行时
+
+### kubeadm init 流程
+
+在使用 kubeadm 部署时，除了 kubelet 组件需要使用二进制部署外，其他的组件都是用 [static Pod]() 的方式运行在相应的节点。
 
 ## 节点初始化
 
@@ -314,7 +334,7 @@ k8s.gcr.io/pause                     3.1                 2 years ago         742
 
 ### 初始化 master 节点
 
-使用 kubeadm init 命令初始化 master 节点
+使用 kubeadm init 命令初始化 master 节点，关于 kubeadm 的参数可以参考官方文档 [kubeadm init](https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/)
 
 ```shell
 kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.20.172.211
@@ -415,7 +435,7 @@ k8s-node-01     NotReady   <none>   58s   v1.17.4
 ╰─# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
 
-由于墙国网络原因，访问 `raw.githubusercontent.com` 这个域名会比较慢，在这里可以使用 jsdelivr 来进行加速，我还是从 []() 学来的骚操作😂。
+由于墙国网络原因，访问 `raw.githubusercontent.com` 这个域名会比较慢，在这里可以使用 jsdelivr 来进行加速。
 
 ```shell
 ╭─root@k8s-master-01 /opt/1.17.4
@@ -448,13 +468,19 @@ kube-flannel-ds-amd64-vpdfd             1/1     Running   0          23h
 kube-proxy-rmgwl                        1/1     Running   0          24h
 kube-proxy-xqcsq                        1/1     Running   0          24h
 kube-scheduler-k8s-master-01            1/1     Running   0          24h
+
+╭─root@k8s-master-01 /opt/1.17.4
+╰─# kubectl get node
+NAME            STATUS   ROLES    AGE   VERSION
+k8s-master-01   Ready    master   29h   v1.17.4
+k8s-node-01     Ready    <none>   28h   v1.17.4
 ```
 
-由此，一个简陋的 kubernetes 集群已经部署完了，文章有点水了~~。对于想要入门和学习 kubernetes 的同学来说 kubeadm 是个好工具。
+由此，一个简陋的 kubernetes 集群已经部署完了😂，文章有点水了~~。对于想要入门和学习 kubernetes 的同学来说 kubeadm 是个好工具。后续会更新一些 kubernetes 内容。
 
 ## 结束
 
-最后提一下，文中提到的对于下载 github 上文件，可以通过以下规则进行替换，就可以使用 jsdelivr 来 fuck 一下 GFW ，无痛下载 GitHub 上的文件😂。
+最后提一下，文中提到的对于下载 github 上文件，可以通过以下规则进行替换，就可以使用 jsdelivr 来 fuck 一下 GFW ，无痛下载 GitHub 上的文件。这还是从 [JsDelivr 全站托管](https://chanshiyu.com/#/post/94) 学来的骚操作😂。
 
 ```yaml
 GitHub rul: https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh
