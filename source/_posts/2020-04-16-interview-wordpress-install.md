@@ -300,7 +300,7 @@ services:
       - 8080:8080
 ```
 
-共有三个容器： wordpress、mysql、nginx，默认不需要修改既可以部署起来。
+共有 4 个容器： wordpress、mysql、nginx、adminer，默认不需要修改既可以部署起来。
 
 由于默认的系统不带 git ，所以需要安装一下 git `yum install git`，然后把 repo clone 下来。
 
