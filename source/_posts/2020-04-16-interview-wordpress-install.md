@@ -320,7 +320,7 @@ docker-compose up
 
 ```nginx
 location ^~ /wp-content/uploads/ {
-    proxy_pass http://127.0.0.1:3333;
+    proxy_pass http://webp-server:3333;
 }
 ```
 
