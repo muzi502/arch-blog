@@ -415,6 +415,34 @@ Saving to: ‘74898710_p21.jpg’
 2020-04-17 01:06:29 (130 MB/s) - ‘74898710_p21.jpg’ saved [102288/102288]
 ```
 
+## 参考
+
+- [wordpress.org](https://wordpress.org/)
+
+- [dockerhub WordPress](https://hub.docker.com/_/wordpress/)
+
+- [nginx.com](https://www.nginx.com/)
+
+- [wordpress-nginx-docker](https://github.com/mjstealey/wordpress-nginx-docker)
+
+- [Wwordpress](https://github.com/muzi502/Wwordpress)
+
+- [How To Install WordPress on CentOS 7](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-on-centos-7)
+
+- [How To Install Linux, Apache, MySQL, PHP (LAMP) stack On CentOS 7](https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-centos-7)
+
+- [Quickstart: Compose and WordPress](https://docs.docker.com/compose/wordpress/)
+
+- [How To Install WordPress With Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-docker-compose)
+
+- [Install Docker Engine on CentOS](https://docs.docker.com/engine/install/centos/)
+
+- [Install Docker Compose](https://docs.docker.com/compose/install/)
+
+- [How to Build NGINX from source on Ubuntu 18.04 LTS](https://www.howtoforge.com/tutorial/how-to-build-nginx-from-source-on-ubuntu-1804-lts/)
+
+- [让图片飞起来 oh-my-webp.sh ！](https://blog.k8s.li/oh-my-webpsh.html)
+
 ## end
 
 至此部署一个 WordPress 的流程就结束啦，为了追求速度就放弃了对一些细节的深究，得不偿失啊。
