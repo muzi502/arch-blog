@@ -300,7 +300,7 @@ services:
       - 8080:8080
 ```
 
-共有 4 个容器： wordpress、mysql、nginx、adminer，默认不需要修改既可以部署起来。
+共有 4 个容器： wordpress、mysql、nginx、adminer，默认不需要修改既可以部署起来。adminer 是个 web 端管理 MySQL 数据库的，可以删掉不需要。
 
 由于默认的系统不带 git ，所以需要安装一下 git `yum install git`，然后把 repo clone 下来。
 
@@ -314,9 +314,7 @@ docker-compose up
 
 ### Webp Server
 
-为了优化一下博客图片静态资源的加载速度，可以为 WordPress 加上一个 Webp Server 服务，将原图片压缩为 webp 格式。
-
-需要修改一下 nginx 的配置文件，
+为了优化一下博客图片静态资源的加载速度，可以为 WordPress 加上一个 Webp Server 服务，将原图片压缩为 webp 格式。需要修改一下 nginx 的配置文件，添加内容如下：
 
 ```nginx
 location ^~ /wp-content/uploads/ {
@@ -385,7 +383,7 @@ services:
       - 3333:3333
 ```
 
-修改好 docker-compose.yaml 文件之后，我们还需要为  webp-server 准备一个 config.json 问价，存放在 `./webp-server/config.json`  下，内容如下：
+修改好 docker-compose.yaml 文件之后，我们还需要为  webp-server 准备一个 config.json 文件，存放在 `./webp-server/config.json`  下，内容如下：
 
 ```json
 {
