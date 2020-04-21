@@ -1,7 +1,7 @@
 ---
 title: 使用 CloudFlare Workers 搭建 telegram 频道镜像站
 date: 2020-03-26
-updated: 2020-03-27
+updated: 2020-04-21
 slug: cloudflare-worker-build-mirror-website
 categories: 技术
 tag:
@@ -11,6 +11,10 @@ tag:
 copyright: true
 comment: true
 ---
+
+## 更新
+
+-   2020-04-21：推荐食用  [Telegram-Channel-Mirror](https://github.com/idealclover/Telegram-Channel-Mirror) 进行反代 telegram 频道
 
 ## 一次偶遇
 
@@ -399,10 +403,8 @@ async function fetchAndApply(request) {
 - [使用 Cloudflare Workers 提高 WordPress 速度和效能教學](https://free.com.tw/cloudflare-workers-wordpress/)
 - [使用Cloudflare Workers反带P站图片](https://yojigen.tech/archives/post19/)
 
-最后宣传一下咱的[@rss_kubernetes](https://t.me/rss_kubernetes) 频道，国内用户可以访问 [tg.k8s.li](https://tg.k8s.li)，如果你对 docker 、K8s、云原生等感兴趣，就到咱碗里来吧😂。不订阅咱的频道也可以通过咱的 [tg.k8s.li](https://tg.k8s.li) 镜像站来查看 RSS 推送信息。
+最后宣传一下咱的 [@rss_kubernetes](https://t.me/rss_kubernetes) 频道，国内用户可以访问 [tg.k8s.li](https://tg.k8s.li)，如果你对 docker 、K8s、云原生等感兴趣，就到咱碗里来吧😂。不订阅咱的频道也可以通过咱的 [tg.k8s.li](https://tg.k8s.li) 镜像站来查看 RSS 推送信息。
 
 ![image-20200327003346742](./img/image-20200327003346742.png)
 
 GitHub page 又被墙一波，rsshub.app 也被墙掉了。墙越来越高了，这个社会也来越可笑了……不知道未来的互联网会变成什么样子，但我们作为一只屁民能做的就是**不为墙添砖加瓦，不为极权专制独裁暴政唱赞歌**。最后一张自己制作 kindle 电子书时喜欢使用的封面图片送给大家。
-
-![image-20200326200247868](./img/image-20200326200247868.png)
