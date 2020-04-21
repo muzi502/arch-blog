@@ -13,7 +13,7 @@ comment: true
 - 之前使用的 502.li 域名，现在为 k8s.li
 - 502 是一种 HTTP 协议的服务器端错误状态代码 Bad Gateway
 - li 这个域名是我觉着最好听的域名，还有一个是 io ，这两个域名最萌😂
-- 目前在一家 955 企业从事运维方面的工作，主要负责 Kubernetes 平台落地
+- ~~目前在一家 955 企业从事运维方面的工作，主要负责 Kubernetes 平台落地~~ 
 
 ## connect
 
@@ -105,7 +105,7 @@ EFF Member | 搬砖社畜 | 屁民一只 🤦‍♂️垃圾佬🛠️翻车王�
 
 - 2020 年 01 月：魔改了一下 Next 的主题，加入透明背景色
 
-- 2020 年 12 月：GitHub page 同步镜像站点 muzi502.github.io
+- 2019 年 12 月：GitHub page 同步镜像站点 muzi502.github.io
 
 - 2019 年 11 月：从 typecho 迁移到 hexo 使用 Next 主题
 
