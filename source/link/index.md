@@ -42,6 +42,7 @@ rss: https://blog.k8s.li/atom.xml
 | [纯白](https://jpacg.me/)                              |                                    |                                                              |
 | [TOTORO625](https://totoro.ink/)                       | Ingress、Linux                     | 日常搬砖、画图、数钢筋（大雾                                 |
 | [idealclover](https://idealclover.top)                 | 技术、测评、随想、生活             | 是只可爱的男孩子😝                                            |
+| [阁子](https://newdee.cf/)                             | Linux 、hexo、                     | 诗意少年😂                                                    |
 
 ### 单~~恋~~链😂/有趣的人
 
