@@ -4,7 +4,7 @@ title: 使用 namecheap 域名邮箱转发功能拥有无限个邮箱
 date: 2018-11-20
 updated: 2019-03-14
 categories: 工具
-slug: 
+slug:
 tag:
   - 域名
 copyright: true

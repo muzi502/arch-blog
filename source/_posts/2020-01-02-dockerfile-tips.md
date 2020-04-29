@@ -3,7 +3,7 @@ title: Dockerfile 搓镜像的小技巧
 date: 2020-01-02
 updated:
 categories: 技术
-slug: 
+slug:
 tag:
   - docker
 copyright: true

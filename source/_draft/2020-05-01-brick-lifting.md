@@ -1,11 +1,10 @@
 ---
-title: 劳动节：我的搬砖工具
-date: 2020-04-28
+title: 搬砖日记
+date: 2020-05-01
 updated:
 slug:
-categories: 技术
+categories: 生活
 tag:
-  - Linux
   - 搬砖
   - 工具
 copyright: true

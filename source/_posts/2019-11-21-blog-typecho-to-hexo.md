@@ -3,7 +3,7 @@ title: 博客从 typecho 迁移到 hexo
 date: 2019-11-21
 updated:
 categories: 技术
-slug: 
+slug:
 tag:
   - typecho
   - blog

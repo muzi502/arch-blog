@@ -1,5 +1,5 @@
 ---
-title: kubelet 无法挂载 NFS 存储
+title: kubelet MountVolume.SetUp failed NFS
 date: 2020-01-01
 updated:
 slug:
@@ -61,7 +61,7 @@ Events:
   Type     Reason       Age        From                  Message
   ----     ------       ----       ----                  -------
   Normal   Scheduled    <unknown>  default-scheduler     Successfully assigned nfs-test/nfs-test-7748dbb477-sprxg to k8s-nod
-  Warning  FailedMount  41s        kubelet, k8s-node-02  MountVolume.SetUp failed for volume "nfs216" : mount failed: exit s
+  Warning  FailedMount  41s        kubelet, k8s-node-02  MountVolume.SetUp failed for volume "nfs216" : mount failed: exits
 Mounting command: systemd-run
 Mounting arguments: --description=Kubernetes transient mount for /var/lib/kubelet/pods/ef075eb7-df67-4b5d-8d01-87064f7cbb1c/volumes/kubernetes.io~nfs/nfs211--scope -- mount -t nfs 10.10.107.216:/nfs /var/lib/kubelet/pods/ef075eb7-df67-4b5d-8d01-87064f7cbb1c/volumes/kubernetes.io~nfs/nfs216
 Output: Running scope as unit run-55589.scope.
@@ -69,7 +69,7 @@ mount: wrong fs type, bad option, bad superblock on 10.10.107.216:/nfs,
        missing codepage or helper program, or other error
        (for several filesystems (e.g. nfs, cifs) you might
        need a /sbin/mount.<type> helper program)
-       
+      
        In some cases useful info is found in syslog - try
        dmesg | tail or so.
   Warning  FailedMount  40s  kubelet, k8s-node-02  MountVolume.SetUp failed for volume "nfs216" : mount failed: exit status

@@ -33,7 +33,6 @@ lsattr       LSCOLORS     lshw         lslocks      lsmod        lspci
 
 > lsblk - list block devices 列出块设备
 
-
 ```bash
 ╭─root@gitlab /opt
 ╰─# lsblk
@@ -130,7 +129,6 @@ lshw is a small tool to extract detailed information on the hardware configurati
 >
 > The  lsinitramfs  command  lists the content of given initramfs images. It allows one to quickly check the content of one (or multiple) specified initramfs files.
 
-
 ```bash
 ╭─root@gitlab /opt
 ╰─# lsinitramfs /boot/initrd.img-4.15.0-58-generic | head -n 10
@@ -151,7 +149,6 @@ usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth.in
 > lsipc - show information on IPC facilities currently employed in the system
 >
 > lsipc  shows  information  on the inter-process communication facilities for which the calling process has read access.
-
 
 ```bash
 ╭─root@gitlab /opt
@@ -177,7 +174,6 @@ SEMVMX   Semaphore max value                             32767    -     -
 >
 > lslocks lists information about all the currently held file locks in a Linux system
 
-
 ```bash
 ╭─root@gitlab /opt
 ╰─# lslocks
@@ -193,7 +189,6 @@ runsv           54095 FLOCK   0B WRITE 0     0   0 /opt/gitlab/sv/sidekiq/log/su
 > lslogins - display information about known users in the system
 >
 > Examine the wtmp and btmp logs, /etc/shadow (if necessary) and /etc/passwd and output the desired data. The default action is to list info about all the users in the system.
-
 
 ```bash
 ╭─root@gitlab /opt
@@ -341,7 +336,6 @@ pata_acpi              16384  0
 
 lsns  lists  information  about all the currently accessible namespaces or about the given namespace.  The namespace identifier is an inode number.
 
-
 ```bash
 ╭─root@gitlab /opt
 ╰─# lsns
@@ -361,7 +355,6 @@ lsns  lists  information  about all the currently accessible namespaces or about
 ```
 
 #### lsof - list open files
-
 
 ###  lspci - list all PCI devices
 

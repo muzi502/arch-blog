@@ -3,7 +3,7 @@ title: Code it is trivial 写代码是微不足道的
 date: 2019-03-03
 updated:
 categories: 互联网
-slug: 
+slug:
 tag:
 copyright: true
 comment: true

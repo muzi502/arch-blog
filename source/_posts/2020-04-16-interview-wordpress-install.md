@@ -1,7 +1,7 @@
 ---
 title: 一次有趣的面试：WordPress 部署
 date: 2020-04-16
-updated: 2020-04-17
+updated: 2020-04-28
 slug:
 categories: 技术
 tag:
@@ -71,13 +71,13 @@ Mem:           985M        150M        451M         12M        382M        680M
 Swap:            0B          0B          0B
 ```
 
--   `uanme -a` 查看一下系统的内核版本 ，`3.10.0-1062` 的内核看样子是 CentOS7.7
+-   `unanme -a` 查看一下系统的内核版本 ，`3.10.0-1062` 的内核看样子是 CentOS7.7
 -   `cat /proc/cpuinfo` 查看一下 CPU 的信息，E5-2670 的 CPU ，属于 Intel 第六代 CPU 系列。
 -   `free` 查看一下内存的情况，1GB 的小内存😂
 
 > Q2 以文件的方式创建并挂载2G的swap分区
 
-这个问题比较简单，之前自己的 GCE 小鸡 512M 内存上也是使用文件的方式创建 1GB 的交换分区😂。所以对这个步骤早就熟记于心，并不需要搜索就能搞定😋。使用 dd 命令即可生成一个 2GB 大小的文件。
+这个问题比较简单，之前自己的 GCE 小鸡 512M 内存上也是使用文件的方式创建 2GB 的交换分区😂。所以对这个步骤早就熟记于心，并不需要搜索就能搞定😋。使用 dd 命令即可生成一个 2GB 大小的文件。
 
 ```txt
 [root@interview ~]# dd if=/dev/zero of=/swapfile bs=4M count=500
@@ -393,7 +393,7 @@ services:
   "IMG_PATH": "/var/www/html",
   "EXHAUST_PATH": "",
   "ALLOWED_TYPES": ["jpg","png","jpeg","bmp","gif"]
-}              
+}             
 ```
 
 接下来我们使用 `docker-compose restart` 命令重启一下容器，之后再 WordPress 端上传一张图片测试一下。上传完成之后，拿到图片的 url ，然后使用 wget 命令测试一下，显示 `Length: 102288 (100K)  [image/webp]` 就说明我们的 webp server 已经成功运行啦😂。完整的 repo 在我的 GitHub 上 [Wwordpress](https://github.com/muzi502/Wwordpress) ，欢迎来食用呀😋

@@ -75,9 +75,9 @@ local_ip 设置为摄像头的 IP ，端口号就是 rtsp 协议监听的端口�
 ```ini
 root@OpenWrt:~# cat /etc/frpc.ini
 [common]
-server_addr = 
-server_port = 
-token = 
+server_addr =
+server_port =
+token =
 
 [monweb]
 type = tcp

@@ -93,7 +93,6 @@ gitlab-ctl restart
 
 ### reconfigure 失败
 
-
 ## 3.进行一些配置，gitlab的配置文件在/etc/gitlab/gitlab.rb
 
 ```json
@@ -313,4 +312,4 @@ Please enter the executor: shell, ssh, virtualbox, docker-ssh+machine, kubernete
 Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
 ```
 
-提示成功之后然后在 `管理中心`--> `概览` --> `Runner` 可以查看到相应的 runner 
+提示成功之后然后在 `管理中心`--> `概览` --> `Runner` 可以查看到相应的 runner
