@@ -45,7 +45,6 @@ rss: https://blog.k8s.li/atom.xml
 | [阁子](https://newdee.cf/)                             | Linux 、hexo、                     | 诗意少年😂                                                    |
 | [探索子](https://beyondstars.xyz/)                     | Linux、math、devops                | 数学大佬（逃                                                 |
 
-
 ### 单~~恋~~链😂/有趣的人
 
 | 站点                                                         | 主要内容                                              | 印象                                          |
@@ -139,9 +138,6 @@ rss: https://blog.k8s.li/atom.xml
 | [Kakashi's Blog](https://kkc.github.io/)                     | AWS、Kubernetes、Prometheus                                  | 台湾博主                                      |
 | [Aylei's Blog](https://aleiwu.com/)                          | Kubernetes、云原生、TiDB                                     | 在 [PingCAP](https://www.pingcap.com/) 的阿磊 |
 | [青木のJava小屋](https://qingmu.io/)                         | [SpringCloud on Kubernetes](https://qingmu.io/2019/09/03/Spring-cloud-on-Kubernetes-index/) | 打杂程序猿                                    |
-| [开元DevOps知识库](https://nicksors.cc/)                     |                                                              |                                               |
-| [起风了](https://xuchao918.github.io/)                       |                                                              |                                               |
-| [茶歇驿站 ](https://maiyang.me/)                             |                                                              |                                               |
 | [Polar Snow Documentation](https://docs.lvrui.io/)           |                                                              |                                               |
 | [DevOps – 成长之路](http://www.rhca.me/)                     |                                                              |                                               |
 | [梦旭随想](https://blog.ihypo.net/index.html)                | Kubernetes 、容器                                            | 无栈工程师😂                                   |
@@ -150,10 +146,7 @@ rss: https://blog.k8s.li/atom.xml
 | [国南之境](https://hansedong.github.io/)                     | CoreDNS 、Kubernetes、Golang                                 |                                               |
 | [博客高策](http://gaocegege.com/Blog/)                       | 机器学习、Kubernetes、kubebuilder                            | 江湖小虾米                                    |
 | [birdben](https://birdben.github.io/)                        |                                                              |                                               |
-| [浮生若梦](https://fs.tn/)                                   |                                                              |                                               |
 | [ictfox blog](http://www.yangguanjun.com/)                   |                                                              |                                               |
-| [杜屹东的博客学无止境](https://www.duyidong.com/)            |                                                              |                                               |
-| [CloudNative 架构](http://team.jiunile.com/)                 |                                                              |                                               |
 | [Doublemine](https://notes.doublemine.me/)                   |                                                              |                                               |
 | [Arthur Chunqi Li's Blog](http://chunqi.li/)                 |                                                              |                                               |
 | [Archive Arthur Chunqi Li's Blog](http://chunqi.li/archives/) |                                                              |                                               |
@@ -165,13 +158,201 @@ rss: https://blog.k8s.li/atom.xml
 | [Jamin Zhang](https://jaminzhang.github.io/)                 |                                                              |                                               |
 | [roc 的博客 - imroc.io](https://imroc.io/)                   | [《Kubernetes实践指南》](https://k8s.imroc.io/)、 算法       |                                               |
 | [Blog - Sysdig](https://sysdig.com/blog/)                    |                                                              |                                               |
-| [sleele的博客](https://sleele.com/)                          |                                                              |                                               |
 | [TauCeti blog · TauCeti blog](https://www.tauceti.blog/)     |                                                              |                                               |
 | [Solar](https://zhangchenchen.github.io/)                    |                                                              |                                               |
 | [Infvie's Blog运维SRE社区博客](https://www.infvie.com/)      |                                                              |                                               |
-| [水晶命匣](http://ghoulich.xninja.org/)                      |                                                              |                                               |
-| [苏洋博客](https://soulteary.com/)                           |                                                              |                                               |
-| [Zlatan Eevee](https://ieevee.com/)                          |                                                              |                                               |
+
+### 未分类
+
+- [水晶命匣](http://ghoulich.xninja.org/) 
+
+- [KaiRen's Blog](https://k2r2bai.com)
+
+- [Zlatan Eevee](https://ieevee.com)
+
+- [程序印象](https://www.cn18k.com)
+
+- [L's Blog-同步率400%](https://lupeier.com)
+
+- [xinkun的博客  Xinkun Blog](https://xuxinkun.github.io)
+
+- [王亚普的博客  Wyp Blog](http://www.wangyapu.com)
+
+- [xinkun的博客  Xinkun Blog](https://xuxinkun.github.io)
+
+- [BY DevOps  今晚打老虎](http://linuxops.xyz)
+
+- [小豆丁个人博客](http://www.mydlq.club)
+
+- [ljchen's Notes](http://ljchen.net)
+
+- [Kaku Li - 李鹤的博客](http://likakuli.com)
+
+- [Tide Status](https://prow.k8s.io/tide)
+
+- [国南之境](https://hansedong.github.io)
+
+- [博客  高策](http://gaocegege.com/Blog)
+
+- [Kakashi's Blog](https://kkc.github.io)
+
+- [起风了](https://xuchao918.github.io)
+
+- [茶歇驿站 - Gopher, OpenSource Fans,成长之路有我相伴。](https://maiyang.me)
+
+- [Jimmy Song - Cloud Native  Open Source Community](https://jimmysong.io)
+
+- [漠然的博客  mritd Blog](https://mritd.me)
+
+- [浮生若梦](https://fs.tn)
+
+- [杜屹东的博客  学无止境](https://www.duyidong.com)
+
+- [梦旭随想](https://blog.ihypo.net/index.html)
+
+- [ictfox blog](http://www.yangguanjun.com)
+
+- [CloudNative 架构](http://team.jiunile.com)
+
+- [我爱西红柿](https://www.bladewan.com)
+
+- [Bingo Huang](https://bingohuang.com)
+
+- [@小鸟技术笔记](https://www.lijiaocn.com)
+
+- [墨荷琼林官网-编程日志](http://moheqionglin.com/site/blogs/1/list.html)
+
+- [Tomoya's Blog](https://tomoyadeng.github.io/blog)
+
+- [https://youendless.com](https://youendless.com)
+
+- [roc - roc的博客Cloud NativeKubernetesGoGolangService Mesh](https://imroc.io)
+
+- [Blog  Sysdig](https://sysdig.com/blog)
+
+- [TauCeti blog · TauCeti blog](https://www.tauceti.blog)
+
+- [苏洋博客](https://soulteary.com)
+
+- [LinuxTOY](https://linuxtoy.org)
+
+- [- Hwchiu Learning Notekubernetes/SDN/DevOps](https://www.hwchiu.com)
+
+- [zhangguanzhang's Blog](https://zhangguanzhang.github.io)
+
+- [I'm Yunlong - DevOps, Agile, Learner](https://ylzheng.com)
+
+- [Doublemine](https://notes.doublemine.me)
+
+- [Stdio's Blog](https://blog.stdioa.com)
+
+- [yucs's Blog](https://yucs.github.io)
+
+- [Posts](https://aleiwu.com/post)
+
+- [风继续吹](https://www.zhang21.cn)
+
+- [rj-bai 's Blog](https://blog.rj-bai.com)
+
+- [jkzhao's blog](https://jkzhao.github.io)
+
+- [Happy Coding, Happy Life](http://wldandan.github.io)
+
+- [君莫笑的博客](https://berlinsaint.github.io/blog)
+
+- [xigang's home  Do it right or don't do it at all](https://xigang.github.io)
+
+- [jeremy的技术点滴](https://jeremyxu2010.github.io)
+
+- [int32bit.me](https://int32bit.me)
+
+- [Cizixs Write Here  Container, Microservice, Python, Go, Reading,Life, And Love.](https://cizixs.com)
+
+- [Xuanwo's Blog](https://xuanwo.io)
+
+- [阳明的博客-KubernetesDockerIstioPythonGolang云原生](https://www.qikqiak.com)
+
+- [敖小剑的博客](https://skyao.io)
+
+- [MrBird](https://mrbird.cc)
+
+- [回忆书签 -- a collection of my notes](http://www.jiangjiang.space)
+
+- [老弟，死哪儿去啦~！](https://blog.sctux.com)
+
+- [MoeLove](https://moelove.info)
+
+- [Tony Bai](https://tonybai.com)
+
+- [隐私设置错误](https://bk.poph163.com)
+
+- [Yiran's Blog](https://zdyxry.github.io)
+
+- [Yi Yang's Blog](https://yylin1.github.io)
+
+- [CJ Ting's Blog - CJ Ting's Blog](https://cjting.me)
+
+- [Wang'T博客 - _入网络深似海,从此节操是路人.](http://www.idcsec.com)
+
+- [Phil Workspace](https://blog.pichuang.com.tw)
+
+- [WaltonWang's Blog - OSCHINA](https://my.oschina.net/jxcdwangtao/rss)
+
+- [微架构师  weplay.me](https://weplay.me)
+
+- [石头记  Docker、Kubernetes、CI/CD 等技术分享](https://istone.dev)
+
+- [Jay Chang's Blog](http://jaychang.cn)
+
+- [Archives  lxkaka](https://www.lxkaka.wang/archives)
+
+- [Aeric Blog-吕啸腾的博客](https://aeric.io)
+
+- [Yeaheo's Blog](https://yeaheo.com)
+
+- [Bboysoul's Blog - 向知识投资](https://www.bboy.app)
+
+- [Kubernetes技术栈-K8sDockerIstioPythonGolang云原生](https://www.k8stech.net)
+
+- [Dozer的技术小站](https://www.dozer.cc)
+
+- [Joey's Tech Notes & Blogs](http://code2life.top)
+
+- [开元DevOps知识库 - 知识管理，时间管理，自我管理](https://nicksors.cc)
+
+- [GuoXD Blog·郭旭东的博客](https://blog.maoxianplay.com)
+
+- [Happiness"Blog](https://blog.k8s.fit)
+
+- [ipfans's Blog](https://www.4async.com)
+
+- [Casstiel](https://c.isme.pub)
+
+- [koala bear](http://wsfdl.com)
+
+- [胡伟煌  Blog](https://www.huweihuang.com)
+
+- [WilhelmGuo](https://wilhelmguo.cn/blog/william)
+
+- [归档  Just Do It](https://linuxgeeks.github.io/archives)
+
+- [Cloud Native应用交付 -云原生应用交付技术专业博客](https://www.cnadn.net)
+
+- [Blog E](https://www.evanlin.com)
+
+- [极术 · 极术](https://jishu.io)
+
+- [aliasmee blog (飞走不可)](https://aliasmee.github.io)
+
+- [Richard](https://blog.hlyue.com)
+
+- [陈少文的博客](https://www.chenshaowen.com/blog)
+
+- [Indagate](https://ustack.io)
+
+- [L's Blog-同步率400%](https://lupeier.com)
+
+- [Huabing Blog-赵化冰的博客  ZhaohuabingBlog](https://zhaohuabing.com)
 
 ----
 
