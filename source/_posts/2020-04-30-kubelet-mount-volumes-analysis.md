@@ -254,7 +254,7 @@ Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
                  node.kubernetes.io/unreachable:NoExecute for 300s
 Events:
   Type     Reason       Age    From            Message
-  ----  ------  ---- ----       -------
+  ----  ------  ---- ----     -------
   Warning  FailedMount  8m49s  kubelet, node1  MountVolume.SetUp failed for volume "nfs211" : mount failed: exit status 32
 Mounting command: systemd-run
 Mounting arguments: --description=Kubernetes transient mount for /var/lib/kubelet/pods/cddc94e7-8033-4150-bed5-d141e3b71e49/volumes/kubernetes.io~nfs/nfs211 --scope -- mount -t nfs 10.20.172.211:/nfs /var/lib/kubelet/pods/cddc94e7-8033-4150-bed5-d141e3b71e49/volumes/kubernetes.io~nfs/nfs211
@@ -399,7 +399,7 @@ rootfs on / type rootfs (rw)
 > - **Bind mounts** may be stored *anywhere* on the host system. They may even be important system files or directories. Non-Docker processes on the Docker host or a Docker container can modify them at any time.
 > - **`tmpfs` mounts** are stored in the host system’s memory only, and are never written to the host system’s filesystem.
 
-可以看到容器存储一种有三种：
+可以看到容器可以使用的存储有三种：
 
 - Volumes：使用 Docker 来管理的存储，默认存放在 ``/var/lib/docker/volumes/`` 下，我们可以使用 `docker volume` 子命令来管理这些 volume ，可以创建、查看、列出、清空、删除等操作。非 docker 进程不应该去修改该目录下的文件，**卷是 Docker 容器持久化数据的最好方式**。
 
@@ -506,8 +506,6 @@ local               opt
 ]
 ```
 
-
-
 使用`Bind mounts`可能会有安全问题：容器中运行的进程可以修改宿主机的文件系统，包括创建，修改，删除重要的系统文件或目录。不过可以加参数挂载为只读。
 
 > `--mount`：由多个`','`隔开的键值对<key>=<value>组成：
@@ -562,7 +560,13 @@ local               opt
 ```
 
 ```shell
-10.20.172.211:/nfs on /mnt/nfs type nfs (rw,relatime,vers=3,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=10.20.172.211,mountvers=3,mountport=20048,mountproto=udp,local_lock=none,addr=10.20.172.211)
+╭─root@k8s-node-3 ~
+╰─# mount | grep kubelet
+tmpfs on /var/lib/kubelet/pods/45c55c5e-ce96-47fd-94b3-60a334e5a44d/volumes/kubernetes.io~secret/kube-proxy-token-h4dfb type tmpfs (rw,relatime,seclabel)
+tmpfs on /var/lib/kubelet/pods/3fb63baa-27ec-4d76-8028-39a0a8f91749/volumes/kubernetes.io~secret/calico-node-token-4hks6 type tmpfs (rw,relatime,seclabel)
+tmpfs on /var/lib/kubelet/pods/05c75313-f932-4913-b09f-d7bccdfb6e62/volumes/kubernetes.io~secret/nginx-ingress-token-5569x type tmpfs (rw,relatime,seclabel)
+10.20.172.211:/nfs on /var/lib/kubelet/pods/c4b1998b-f5c1-440a-b9bc-7fbf87f3c267/volumes/kubernetes.io~nfs/nfs211 type nfs (rw,relatime,vers=3,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=10.20.172.211,mountvers=3,mountport=20048,mountproto=udp,local_lock=none,addr=10.20.172.211)
+tmpfs on /var/lib/kubelet/pods/73fed6f3-4cbe-46a7-af7b-6fd912e6ebd4/volumes/kubernetes.io~secret/default-token-wgfd9 type tmpfs (rw,relatime,seclabel)
 ```
 
 其中 kubernetes 目前支持的 Volume 的类型，可以使用 `kubectl explain pod.spec.volumes`  来查看。
@@ -571,37 +575,35 @@ local               opt
 ╭─root@k8s-master-01 ~
 ╰─# kubectl explain pod.spec.volumes | grep Object | cut -d "<" -f1
 RESOURCE: volumes
-   awsElasticBlockStore
-   azureDisk
-   azureFile
-   cephfs
-   cinder
-   configMap
-   csi
-   downwardAPI
-   emptyDir
-   fc
-   flexVolume
-   flocker
-   gcePersistentDisk
-   gitRepo
-   glusterfs
-   hostPath
-   iscsi
-   nfs
-   persistentVolumeClaim
-   photonPersistentDisk
-   portworxVolume
-   projected
-   quobyte
-   rbd
-   scaleIO
-   secret
-   storageos
-   vsphereVolume
+awsElasticBlockStore
+azureDisk
+azureFile
+cephfs
+cinder
+configMap
+csi
+downwardAPI
+emptyDir
+fc
+flexVolume
+flocker
+gcePersistentDisk
+gitRepo
+glusterfs
+hostPath
+iscsi
+nfs
+persistentVolumeClaim
+photonPersistentDisk
+portworxVolume
+projected
+quobyte
+rbd
+scaleIO
+secret
+storageos
+vsphereVolume
 ```
-
-
 
 ### 管 systemd 什么事儿？
 
@@ -610,7 +612,7 @@ RESOURCE: volumes
 ```verilog
 Events:
   Type     Reason       Age    From            Message
-  ----  ------  ---- ----       -------
+  ----  ------  ---- ----     -------
   Warning  FailedMount  8m49s  kubelet, node1  MountVolume.SetUp failed for volume "nfs211" : mount failed: exit status 32
 Mounting command: systemd-run
 Mounting arguments: --description=Kubernetes transient mount for /var/lib/kubelet/pods/cddc94e7-8033-4150-bed5-d141e3b71e49/volumes/kubernetes.io~nfs/nfs211 --scope -- mount -t nfs 10.20.172.211:/nfs /var/lib/kubelet/pods/cddc94e7-8033-4150-bed5-d141e3b71e49/volumes/kubernetes.io~nfs/nfs211
@@ -625,7 +627,7 @@ mount: wrong fs type, bad option, bad superblock on 10.20.172.211:/nfs,
   Warning  FailedMount  8m48s  kubelet, node1  MountVolume.SetUp failed for volume "nfs211" : mount failed: exit status 32
 ```
 
-咦，当时我还寻思着 kubelet 挂载和 systemd 什么关系？`systemd` 这个大妈怎么又来管这事儿了😂（之前我写过一篇[《Linux 的小伙伴 systemd 详解》](https://blog.k8s.li/systemd.html) ，戏称 systemd 是 Linux 的小伙伴，看来这个说法是不妥的，systemd 简直就是 Linux 里的物业大妈好嘛🤣。回到正题，于是顺着这条报错日志顺藤摸瓜找到了 [Run mount in its own systemd scope.](https://github.com/kubernetes/kubernetes/pull/49640) 这个 PR
+咦？当时我还寻思着 kubelet 挂载 volumes 和 systemd 什么关系？`systemd` 这个大妈怎么又来管这事儿了😂（之前我写过一篇[《Linux 的小伙伴 systemd 详解》](https://blog.k8s.li/systemd.html) ，戏称 systemd 是 Linux 的小伙伴，看来这个说法是不妥的。systemd 简直就是 Linux 里的物业大妈好嘛🤣，上管 service 下管 dev 、 mount 设备等。屑，简直就是个物业大妈管这管那的。回到正题，于是顺着这条报错日志顺藤摸瓜找到了 [Run mount in its own systemd scope.](https://github.com/kubernetes/kubernetes/pull/49640) 这个 PR。
 
 > Kubelet needs to run /bin/mount in its own cgroup.
 >
@@ -640,9 +642,31 @@ mount: wrong fs type, bad option, bad superblock on 10.20.172.211:/nfs,
 >
 > As a downside, each new fuse daemon will run in its own transient systemd service and systemctl output may be cluttered.
 
-正如提这个 PR 的大佬讲的，（之前）kubelet 需要在它自己的 `cgroup` 里运行宿主机上的 `/bin/mount` 来为 Pod 挂载 volumes ，而当 kubelet 进程重启或者挂掉的时候，这些在 kubelet 的  `cgroup` 里运行的进程也将会挂掉，比如（gluster，ceph）。然后大佬的这个 patch 通过 `systemd-run --scope /bin/mount` 来去启动一个临时的 systemd 单元来为 Pod 挂载 volumes，这样一来这些 `fuse daemons`  进程（gluster，ceph）就会 forked 到它自己的 systemd scope 里，这样即便 kubelet 重启或者挂掉也不会受影响。这一点像 [containerd](https://github.com/containerd/containerd) 之于 dockerd ，即便 dockerd 重启也不会影响到容器的运行。
+正如提这个 PR 的大佬讲的，（之前）kubelet 需要在它自己的 `cgroup` 里运行宿主机上的 `/bin/mount` 来为 Pod 挂载 volumes ，而当 kubelet 进程重启或者挂掉的时候，这些在 kubelet 的  `cgroup` 里运行的进程也将会挂掉，比如（gluster，ceph）。然后大佬的这个 patch 通过 `systemd-run --scope /bin/mount` 来去启动一个临时的 systemd 单元来为 Pod 挂载 volumes，这样一来这些 `fuse daemons`  进程（gluster，ceph）就会 forked 到它自己的 systemd scope 里，这样即便 kubelet 重启或者挂掉也不会影响正在运行的容器使用 volumes。
 
-接着顺藤摸瓜翻到相应的源码文件  [mount_linux.go](https://github.com/kubernetes/kubernetes/blob/master/vendor/k8s.io/utils/mount/mount_linux.go#L115) 
+这一点像 [containerd](https://github.com/containerd/containerd) 之于 dockerd ，即便 dockerd 重启也不会影响到容器的运行，因为，在运行时这一块，真正运行容器的是 containerd 下的各个 containerd-shim 子进程，可以使用 pstree 命令来看一下这种层级关系。
+
+```shell
+├─containerd─┬─5*[containerd-shim─┬─pause]
+│            │                    └─9*[{containerd-shim}]]
+│            ├─containerd-shim─┬─pause
+│            │                 └─10*[{containerd-shim}]
+│            ├─containerd-shim─┬─etcd───15*[{etcd}]
+│            │                 └─9*[{containerd-shim}]
+│            ├─containerd-shim─┬─kube-controller───12*[{kube-controller}]
+│            │                 └─9*[{containerd-shim}]
+│            ├─containerd-shim─┬─kube-apiserver───14*[{kube-apiserver}]
+│            │                 └─9*[{containerd-shim}]
+│            ├─containerd-shim─┬─kube-scheduler───13*[{kube-scheduler}]
+│            │                 └─9*[{containerd-shim}]
+│            ├─containerd-shim─┬─kube-proxy───11*[{kube-proxy}]
+│            │                 └─9*[{containerd-shim}]
+│            ├─containerd-shim─┬─flanneld───15*[{flanneld}]
+│            │                 └─9*[{containerd-shim}]
+│            └─26*[{containerd}]
+```
+
+接着顺藤摸瓜翻到这个 PR 对应的源码文件  [mount_linux.go](https://github.com/kubernetes/kubernetes/blob/master/vendor/k8s.io/utils/mount/mount_linux.go#L115)，关键内容如下：
 
 ```go
 // doMount runs the mount command. mounterPath is the path to mounter binary if containerized mounter is used.
@@ -704,7 +728,7 @@ func (mounter *Mounter) doMount(mounterPath string, mountCmd string, source stri
 
 就是我们宿主机上的挂载命令比如 `/sbin/mount.nfs` 、`/sbin/mount.glusterfs` 等。
 
-- mountCmd：挂载命令就是 `systemd-run` 
+- mountCmd：挂载命令就是 `systemd-run`
 
 - source：挂载存储的源路径，比如 NFS 里的 `10.10.107.211:/nfs`
 
@@ -722,20 +746,10 @@ func (mounter *Mounter) doMount(mounterPath string, mountCmd string, source stri
 
 - sensitiveOptions []string，这个参数没去仔细看，就略过吧（
 
-```shell
-╭─root@k8s-node-3 ~
-╰─# mount | grep kubelet
-tmpfs on /var/lib/kubelet/pods/45c55c5e-ce96-47fd-94b3-60a334e5a44d/volumes/kubernetes.io~secret/kube-proxy-token-h4dfb type tmpfs (rw,relatime,seclabel)
-tmpfs on /var/lib/kubelet/pods/3fb63baa-27ec-4d76-8028-39a0a8f91749/volumes/kubernetes.io~secret/calico-node-token-4hks6 type tmpfs (rw,relatime,seclabel)
-tmpfs on /var/lib/kubelet/pods/05c75313-f932-4913-b09f-d7bccdfb6e62/volumes/kubernetes.io~secret/nginx-ingress-token-5569x type tmpfs (rw,relatime,seclabel)
-10.20.172.211:/nfs on /var/lib/kubelet/pods/c4b1998b-f5c1-440a-b9bc-7fbf87f3c267/volumes/kubernetes.io~nfs/nfs211 type nfs (rw,relatime,vers=3,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=10.20.172.211,mountvers=3,mountport=20048,mountproto=udp,local_lock=none,addr=10.20.172.211)
-tmpfs on /var/lib/kubelet/pods/73fed6f3-4cbe-46a7-af7b-6fd912e6ebd4/volumes/kubernetes.io~secret/default-token-wgfd9 type tmpfs (rw,relatime,seclabel)
-```
-
 至此 kubelet 为 Pod 挂载的原理和流程也一目了然，其实很简单的逻辑，大致可以氛围
 
--   Attach 阶段：kubelet 使用 systemd-run 单独起一个临时的 systemd scope 来运行后端存储的客户端比如（ nfs 、gluster、ceph），将这些存储挂载到 `/var/lib/kubelet/pods/<Pod的ID>/volumes/kubernetes.io~<Volume类型>/<Volume名字>` 
--   Mount 阶段：容器启动的时候通过 bind mount 的方式将  `/var/lib/kubelet/pods/<Pod的ID>/volumes/kubernetes.io~<Volume类型>/<Volume名字>` 这个目录挂载到容器内。这一步相当于使用`docker run -v /var/lib/kubelet/pods/<Pod的ID>/volumes/kubernetes.io~<Volume类型>/<Volume名字>:/<容器内的目标目录> 我的镜像` 启动一个容器。
+- Attach 阶段：kubelet 使用 systemd-run 单独起一个临时的 systemd scope 来运行后端存储的客户端比如（ nfs 、gluster、ceph），将这些存储挂载到 `/var/lib/kubelet/pods/<Pod的ID>/volumes/kubernetes.io~<Volume类型>/<Volume名字>`
+- Mount 阶段：容器启动的时候通过 bind mount 的方式将  `/var/lib/kubelet/pods/<Pod的ID>/volumes/kubernetes.io~<Volume类型>/<Volume名字>` 这个目录挂载到容器内。这一步相当于使用`docker run -v /var/lib/kubelet/pods/<Pod的ID>/volumes/kubernetes.io~<Volume类型>/<Volume名字>:/<容器内的目标目录> 我的镜像` 启动一个容器。
 
 关于更详细的 CSI 存储可以参考下面提到的文章
 
@@ -745,58 +759,62 @@ tmpfs on /var/lib/kubelet/pods/73fed6f3-4cbe-46a7-af7b-6fd912e6ebd4/volumes/kube
 
 ### 源码
 
-[kubernetes/mount_linux.go at master · kubernetes/kubernetes](https://github.com/kubernetes/kubernetes/blob/master/vendor/k8s.io/utils/mount/mount_linux.go#L115)
+- [kubernetes/mount_linux.go at master · kubernetes/kubernetes](https://github.com/kubernetes/kubernetes/blob/master/vendor/k8s.io/utils/mount/mount_linux.go#L115)
 
-[Run mount in its own systemd scope. by jsafrane · Pull Request #49640 · kubernetes/kubernetes](https://github.com/kubernetes/kubernetes/pull/49640)
+- [Run mount in its own systemd scope. by jsafrane · Pull Request #49640 · kubernetes/kubernetes](https://github.com/kubernetes/kubernetes/pull/49640)
 
 ### 源码分析
 
-[kubelet源码分析（四）之 Pod的创建 - 胡伟煌 | Blog](https://www.huweihuang.com/article/source-analysis/kubelet/create-pod-by-kubelet/#66-mount-volumes)
+- [kubelet源码分析（四）之 Pod的创建 - 胡伟煌 | Blog](https://www.huweihuang.com/article/source-analysis/kubelet/create-pod-by-kubelet/#66-mount-volumes)
 
-[Kubelet源码架构简介 | ljchen's Notes](http://ljchen.net/2018/10/28/kubelet%E6%BA%90%E7%A0%81%E6%9E%B6%E6%9E%84%E7%AE%80%E4%BB%8B/)
+- [Kubelet源码架构简介 | ljchen's Notes](http://ljchen.net/2018/10/28/kubelet%E6%BA%90%E7%A0%81%E6%9E%B6%E6%9E%84%E7%AE%80%E4%BB%8B/)
 
-[kubelet 源码分析 - Beantech | Newgoo | kubernates](http://newgoo.org/2019/09/03/k8s/kubelet-%E6%BA%90%E7%A0%81/)
+- [kubelet 源码分析 - Beantech | Newgoo | kubernates](http://newgoo.org/2019/09/03/k8s/kubelet-%E6%BA%90%E7%A0%81/)
 
-["Kubelet启动源码分析" - 徐波的博客 | Xu Blog](http://blog.xbblfz.site/2018/10/12/Kubelet%E5%90%AF%E5%8A%A8%E5%8F%8A%E5%AF%B9Docker%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/)
+- ["Kubelet启动源码分析" - 徐波的博客 | Xu Blog](http://blog.xbblfz.site/2018/10/12/Kubelet%E5%90%AF%E5%8A%A8%E5%8F%8A%E5%AF%B9Docker%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/)
 
-[kubelet 源码分析：启动流程 | Cizixs Write Here](https://cizixs.com/2017/06/06/kubelet-source-code-analysis-part-1/)
+- [kubelet 源码分析：启动流程 | Cizixs Write Here](https://cizixs.com/2017/06/06/kubelet-source-code-analysis-part-1/)
 
-[kubelet分析(三)-volumeManager-v1.5.2 | fankangbest](https://fankangbest.github.io/2017/12/17/kubelet%E5%88%86%E6%9E%90(%E4%B8%89)-volumeManager-v1-5-2/)
+- [kubelet分析(三)-volumeManager-v1.5.2 | fankangbest](https://fankangbest.github.io/2017/12/17/kubelet%E5%88%86%E6%9E%90(%E4%B8%89)-volumeManager-v1-5-2/)
 
-[Kubernetes源码分析之VolumeManager - Je pense donc je suis](https://wenfeng-gao.github.io/post/k8s-volume-manager-source-code-analysis/)
+- [Kubernetes源码分析之VolumeManager - Je pense donc je suis](https://wenfeng-gao.github.io/post/k8s-volume-manager-source-code-analysis/)
 
-[startKubelet · Kubernetes 学习笔记](https://www.huweihuang.com/kubernetes-notes/code-analysis/kubelet/startKubelet.html)
+- [startKubelet · Kubernetes 学习笔记](https://www.huweihuang.com/kubernetes-notes/code-analysis/kubelet/startKubelet.html)
 
 ### 官方文档
 
-[Manage data in Docker | Docker Documentation](https://docs.docker.com/storage/)
+- [Manage data in Docker | Docker Documentation](https://docs.docker.com/storage/)
 
-[Use bind mounts | Docker Documentation](https://docs.docker.com/storage/bind-mounts/)
+- [Use bind mounts | Docker Documentation](https://docs.docker.com/storage/bind-mounts/)
 
-[Use bind mounts | Docker Documentation](https://docs.docker.com/storage/bind-mounts/)
+- [Use bind mounts | Docker Documentation](https://docs.docker.com/storage/bind-mounts/)
 
-[mount 中文手册](http://www.jinbuguo.com/man/mount.html)
+- [mount 中文手册](http://www.jinbuguo.com/man/mount.html)
 
-[Use the OverlayFS storage driver](https://docs.docker.com/storage/storagedriver/overlayfs-driver/)
+- [Use the OverlayFS storage driver](https://docs.docker.com/storage/storagedriver/overlayfs-driver/)
 
 ### 相关博客
 
-[kubernetes 简介： kubelet 和 pod | Cizixs Write Here](https://cizixs.com/2016/10/25/kubernetes-intro-kubelet/)
+- [kubernetes 简介： kubelet 和 pod | Cizixs Write Here](https://cizixs.com/2016/10/25/kubernetes-intro-kubelet/)
 
-[Docker数据管理-Volume， bind mount和tmpfs mount | Youmai の Blog](https://michaelyou.github.io/2017/09/17/Docker%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86-Volume%EF%BC%8C-bind-mount%E5%92%8Ctmpfs-mount/)
+- [Docker数据管理-Volume， bind mount和tmpfs mount | Youmai の Blog](https://michaelyou.github.io/2017/09/17/Docker%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86-Volume%EF%BC%8C-bind-mount%E5%92%8Ctmpfs-mount/)
 
-[存储原理 \- K8S训练营](https://www.qikqiak.com/k8strain/storage/csi/)
+- [存储原理 \- K8S训练营](https://www.qikqiak.com/k8strain/storage/csi/)
 
-[Kubernetes 挂载 subpath 的容器在 configmap 变更后重启时挂载失败](https://blog.fatedier.com/2020/04/17/pod-loopcrash-of-k8s-subpath/)
+- [Kubernetes 挂载 subpath 的容器在 configmap 变更后重启时挂载失败](https://blog.fatedier.com/2020/04/17/pod-loopcrash-of-k8s-subpath/)
 
-[理解kubernetes中的Storage | Infvie's Blog](https://www.infvie.com/ops-notes/kubernetes-storage.html)
+- [理解kubernetes中的Storage | Infvie's Blog](https://www.infvie.com/ops-notes/kubernetes-storage.html)
 
-[Docker容器数据持久化](https://arkingc.github.io/2018/12/11/2018-12-11-docker-storage-persist/)
+- [Docker容器数据持久化](https://arkingc.github.io/2018/12/11/2018-12-11-docker-storage-persist/)
 
-[Docker源码分析—镜像存储](https://arkingc.github.io/2018/01/19/2018-01-19-docker-imagestore/)
+- [Docker源码分析—镜像存储](https://arkingc.github.io/2018/01/19/2018-01-19-docker-imagestore/)
 
-[Docker源码分析—存储驱动](https://arkingc.github.io/2018/01/15/2018-01-15-docker-storage-overlay2/)
+- [Docker源码分析—存储驱动](https://arkingc.github.io/2018/01/15/2018-01-15-docker-storage-overlay2/)
 
-[Docker存储驱动—Overlay/Overlay2「译」](https://arkingc.github.io/2017/05/05/2017-05-05-docker-filesystem-overlay/)
+- [Docker存储驱动—Overlay/Overlay2「译」](https://arkingc.github.io/2017/05/05/2017-05-05-docker-filesystem-overlay/)
 
-[Linux 的小伙伴 systemd 详解](https://blog.k8s.li/systemd.html)
+- [Linux 的小伙伴 systemd 详解](https://blog.k8s.li/systemd.html)
+
+## 结束
+
+最后祝各位还在`搬砖`的工人们节日快乐！
