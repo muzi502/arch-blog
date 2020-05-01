@@ -337,17 +337,18 @@ k8s.gcr.io/pause                     3.1                 2 years ago         742
 使用 kubeadm init 命令初始化 master 节点，关于 kubeadm 的参数可以参考官方文档 [kubeadm init](https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/)
 
 ```shell
-kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.20.172.211
+kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.20.172.211 --kubernetes-version=1.17.4
 ```
 
 - --pod-network-cidr= 指定 Pod 网段的 IP 地址块
 - --apiserver-advertise-address= 指定 api-server 监听的地址
+- --kubernetes-version= 指定 kubernetes 的版本，最好和 kubeadm 版本保持一致
 
 正常完成之后的日志输出如下
 
 ```shell
 ╭─root@k8s-master-01 /opt/1.17.4
-╰─# kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.20.172.211
+╰─# kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.20.172.211 --kubernetes-version=1.17.4
 
 Your Kubernetes control-plane has initialized successfully!
 
