@@ -1,5 +1,5 @@
 ---
-title: 劳动节：我的搬砖工具
+title: 搬砖工具😂
 date: 2020-04-28
 updated:
 slug:
@@ -18,20 +18,23 @@ comment: true
 
 作为一名合格的搬砖
 
-### ffmpeg
 
-### pandoc
 
-### jq
+### 命令行
 
-### tr
+#### ffmpeg
 
-### curl
+#### pandoc
 
-### wget
+#### jq
 
-### jsdrlivr
+#### tr
 
-### kubeadm
+#### curl
 
-###
+#### wget
+
+#### jsdelivr
+
+#### kubeadm
+
