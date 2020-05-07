@@ -7,6 +7,7 @@ categories: 阅读
 tag:
   - 读书笔记
   - 书单
+  - life
 copyright: true
 comment: true
 ---

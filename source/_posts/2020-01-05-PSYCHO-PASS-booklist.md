@@ -5,6 +5,7 @@ updated: 2020-03-09
 categories: 阅读
 tag:
   - 小说
+  - life
 copyright: true
 comment: true
 ---

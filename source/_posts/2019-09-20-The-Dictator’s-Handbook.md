@@ -7,6 +7,7 @@ slug:
 tag:
   - 阅读
   - 读书笔记
+  - life
 copyright: true
 comment: true
 ---

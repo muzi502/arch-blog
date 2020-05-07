@@ -4,6 +4,7 @@ date: 2019-06-28
 categories: 阅读
 slug:
 tag:
+  - life
 copyright: true
 comment: true
 ---

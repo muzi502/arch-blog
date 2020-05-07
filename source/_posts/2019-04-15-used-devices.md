@@ -7,6 +7,7 @@ slug:
 tag:
   - 手机
   - phone
+  - life
 copyright: true
 comment: true
 ---

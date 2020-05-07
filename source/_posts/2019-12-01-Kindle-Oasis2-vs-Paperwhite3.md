@@ -7,6 +7,7 @@ slug:
 tag:
   - 阅读
   - Kindle
+  - life
 copyright: true
 comment: true
 ---

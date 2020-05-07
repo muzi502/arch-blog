@@ -6,6 +6,7 @@ slug:
 tag:
   - 社会工程学实践
   - 隐私保护
+  - life
 copyright: true
 comment: true
 ---

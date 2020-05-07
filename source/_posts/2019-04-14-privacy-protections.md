@@ -7,6 +7,7 @@ slug:
 tag:
   - 隐私保护
   - privacy project
+  - life
 copyright: true
 comment: true
 ---

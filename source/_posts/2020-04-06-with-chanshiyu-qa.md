@@ -6,6 +6,7 @@ slug: with-chanshiyu-qa
 categories: 生活
 tag:
   - 笔谈
+  - life
 copyright: true
 comment: true
 ---

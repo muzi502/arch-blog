@@ -5,6 +5,7 @@ categories: 阅读
 slug:  life-sciences
 tag:
   - 思考
+  - life
 copyright: true
 comment: true
 ---
