@@ -1,6 +1,6 @@
 ---
-title: 搬砖工具😂
-date: 2020-04-28
+title: 木子的搬砖工具😂
+date: 2020-05-11
 updated:
 slug:
 categories: 技术
@@ -11,14 +11,9 @@ tag:
   - 命令行
 copyright: true
 comment: true
-
 ---
 
-五一劳动节到了，作为社会底层的低端人口依靠搬砖来捞钱养活自己，搬砖工具能让咱搬砖的效率高一些，这些搬砖工具无论在工作上还是在生活上，都给咱带来了些便利，于是今天抽空来总结分享一下咱的搬砖工具吧。
-
-作为一名运维工程师，常年出没于机房楼层之间，扛 2U 服务器十层楼不换🙋‍♂️是基本功，
-
-其中面试的时候有个问题任然记忆犹新：`你为什么要选择运维这个岗位`。当时回答的也很简单流利：`因为喜欢玩 Linux `。
+俗话说**好人修电脑，坏人床上搞；电脑修得好，好人当到老。** 作为一名`面向文档编程`的运维工程师，日常工作也无非就是搓集群搓虚拟机搓镜像，线上环境遇到故障就在 StackOverflow 搬一些 ~~Code~~ 砖来解决问题，帮同事配置一下 CI/CD 流水线，除此之外还要 7*24 小时 on-call。如果进入 IDC 机房的话还要有一身扛 2U 服务器十层楼不换🙋‍♂️本领。
 
 ## Linux
 
@@ -26,52 +21,72 @@ comment: true
 
 ### 入门
 
+咱一直觉着学习技术吧，并不是看书看视频能学会的。对于一些底层的只是确实需要仔细研读书籍来吃透他，这趟会让我们对操作系统这个体系结构有更下透彻的认识。但是呢，光看不练还是不行滴，咱学习 Linux 纯靠瞎玩，瞎折腾。咱大学时学校没有开设 Linux 课程，只能靠自己自学。于是乎，和大家一样，搭建 WordPress ，一步步安装 LAMP 环境，配置 iptables，写 shell 脚本备份网站，搭建梯子等等。可谓是玩得不亦乐乎😂。
+
+所以说学习和入门 Linux 咱还是推荐鸟哥的《鸟哥 Linux 私房菜》这本书，结合着自己搭建网站一步步来就可以。
+
 ### 放弃
+
+入门完 Linux 之后就开始挑战高难度的啦，比如：
+
+-   OpenStack
+-   Docker
+-   Kubernetes
+-   CI/CD
+
+目前来讲在运维这个搬砖行业，kubernetes 云原生无疑是最具有挑战性和前景的，所以如果哈想更近一层楼就不妨学习一下 Docker 和 Kuberneets 这一块。
+
+### 发行版
+
+从运维这个搬砖行业来讲，企业内部使用的 Linux 发行版当属 RedHat 和 Debian 家族的最多，像其他的什么 archlinux 咱还真没见过有在生产环境使用的，毕竟滚动更新不小心就滚挂了不好说😂。国内企业和云计算厂商使用最多的当然是 CentOS 啦，我记得是在 2018 年年末的时候阿里云/腾讯云还没有 Ubuntu 1804 的云主机可用😑。国外使用 Ubuntu 的较多一些，咱是倾向于使用 Ubuntu 😝
+
+从 [datanyze](https://www.datanyze.com) 家偷来一张企业 Linux 市场占有率的统计表格 [Operating Systems](https://www.datanyze.com/market-share/operating-systems--443)😂
+
+| Ranking | Technology                                                   | Domains | Market Share |
+| :-----: | :----------------------------------------------------------- | ------: | -----------: |
+|    1    | [Ubuntu](https://www.datanyze.com/market-share/operating-systems--443/ubuntu-market-share) | 278,611 |       29.30% |
+|    2    | [Unix](https://www.datanyze.com/market-share/operating-systems--443/unix-market-share) | 192,215 |       20.21% |
+|    3    | [CentOS](https://www.datanyze.com/market-share/operating-systems--443/centos-market-share) | 165,640 |       17.42% |
+|    4    | [Debian](https://www.datanyze.com/market-share/operating-systems--443/debian-market-share) | 108,373 |       11.40% |
+|    5    | [Linux](https://www.datanyze.com/market-share/operating-systems--443/linux-market-share) |  24,563 |        2.58% |
+|    6    | [Windows Server](https://www.datanyze.com/market-share/operating-systems--443/windows-server-market-share) |  23,872 |        2.51% |
+|    7    | [Gentoo](https://www.datanyze.com/market-share/operating-systems--443/gentoo-market-share) |  16,756 |        1.76% |
+|    8    | [Red Hat Enterprise Linux](https://www.datanyze.com/market-share/operating-systems--443/red-hat-enterprise-linux-market-share) |  13,659 |        1.44% |
+|    9    | [Windows 7](https://www.datanyze.com/market-share/operating-systems--443/windows-7-market-share) |  11,843 |        1.25% |
+|   10    | [Microsoft Windows OS](https://www.datanyze.com/market-share/operating-systems--443/microsoft-windows-os-market-share) |  10,986 |        1.16% |
+
+| op Competitors                                               | Websites | Market Share |                                                  Versus Page |
+| :----------------------------------------------------------- | -------: | -----------: | -----------------------------------------------------------: |
+| [Ubuntu](https://www.datanyze.com/market-share/operating-systems--443/ubuntu-market-share) |  278,611 |       29.30% | [Linux vs. Ubuntu](https://www.datanyze.com/market-share/operating-systems--443/linux-vs-ubuntu) |
+| [Unix](https://www.datanyze.com/market-share/operating-systems--443/unix-market-share) |  192,215 |       20.21% | [Linux vs. Unix](https://www.datanyze.com/market-share/operating-systems--443/linux-vs-unix) |
+| [CentOS](https://www.datanyze.com/market-share/operating-systems--443/centos-market-share) |  165,640 |       17.42% | [Linux vs. CentOS](https://www.datanyze.com/market-share/operating-systems--443/linux-vs-centos) |
+| [Debian](https://www.datanyze.com/market-share/operating-systems--443/debian-market-share) |  108,373 |       11.40% | [Linux vs. Debian](https://www.datanyze.com/market-share/operating-systems--443/linux-vs-debian) |
+| [Windows Server](https://www.datanyze.com/market-share/operating-systems--443/windows-server-market-share) |   23,872 |        2.51% | [Linux vs. Windows Server](https://www.datanyze.com/market-share/operating-systems--443/linux-vs-windows-server) |
+| [Gentoo](https://www.datanyze.com/market-share/operating-systems--443/gentoo-market-share) |   16,756 |        1.76% | [Linux vs. Gentoo](https://www.datanyze.com/market-share/operating-systems--443/linux-vs-gentoo) |
+| [Red Hat Enterprise Linux](https://www.datanyze.com/market-share/operating-systems--443/red-hat-enterprise-linux-market-share) |   13,659 |        1.44% | [Linux vs. Red Hat Enterprise Linux](https://www.datanyze.com/market-share/operating-systems--443/linux-vs-red-hat-enterprise-linux) |
+| [Windows 7](https://www.datanyze.com/market-share/operating-systems--443/windows-7-market-share) |   11,843 |        1.25% | [Linux vs. Windows 7](https://www.datanyze.com/market-share/operating-systems--443/linux-vs-windows-7) |
+| [Microsoft Windows OS](https://www.datanyze.com/market-share/operating-systems--443/microsoft-windows-os-market-share) |   10,986 |        1.16% | [Linux vs. Microsoft Windows OS](https://www.datanyze.com/market-share/operating-systems--443/linux-vs-microsoft-windows-os) |
+| [FreeBSD](https://www.datanyze.com/market-share/operating-systems--443/freebsd-market-share) |    9,633 |        1.01% | [Linux vs. FreeBSD](https://www.datanyze.com/market-share/operating-systems--443/linux-vs-freebsd) |
+
+#### RedHat/CentOS
+
+#### Debian/Ubuntu
+
+咱的 VPS 清一色 Ubuntu 1804 ，主要是省事儿。
 
 ## 命令行
 
 ### 文本处理
 
-提到 Linux 上的文本处理工具当然是离不开三剑客（awk、grep、sed），这也是咱当初跟着《鸟哥 Linux 私房菜》学来的😂
-
-
+提到 Linux 上的文本处理工具当然是离不开三剑客（awk、grep、sed），这也是咱当初跟着《鸟哥 Linux 私房菜》学来的😂。
 
 ### 系统信息
 
-### 网络
-
-### 测试
-
-### 小工具
-
-### 镜像源
-
-
-
-## 发行版
-
-### pxder
-
-下班之后回到小窝之后就开始一天中最最愉悦的时刻，在 pixiv.net 上刷图。收藏喜欢的~~老婆~~插画。为了管理和下载自己收藏的插画作品，当然还是选择食用工具来下载啦😂。
-
-在二月份的时候帮小土豆和 nova 同学测试 webp server go 的 benchmark ，这个 pxder 帮了咱很大的忙，下载了 3W 多张图片做测试样本，最终使用脚本筛选出合适的文件大小来进行 prefetc 测试。
-
-```shell
-╭─debian@debian /mnt/f/illustrations
-╰─$ du -sh
-50G     .
-╭─debian@debian /mnt/f/illustrations
-╰─$ tree
-203 directories, 31831 files
-```
-
-
-
-### htop
+#### htop
 
 top 黑乎乎的颜值太低了，咱还是喜欢花花绿绿的 htop （大雾
 
-#### install
+install
 
 ```shell
 # RHEL/CentOS
@@ -82,6 +97,25 @@ apt install htop
 ```
 
 ![image-20200506142544440](img/image-20200506142544440.png)
+
+
+### [bashtop](https://github.com/aristocratos/bashtop)
+
+#### install
+
+安装起来很简单，其实这是一个 shell 可执行文件，直接使用 curl 或者 wget 命令下载到本地并赋予 +x 权限即可。
+
+```shell
+curl -fsSL https://raw.githubusercontent.com/aristocratos/bashtop/master/bashtop -o /usr/bin/bashtop && chmod +x /usr/bin/bashtop
+```
+
+国内用户推荐使用 jsdelivr.net 的 CDN 来下载该脚本😑，（fuck GFW by jsdelivr😡
+
+```shell
+curl -fsSL https://cdn.jsdelivr.net/gh/aristocratos/bashtop/bashtop  -o /usr/bin/bashtop ;chmod +x /usr/bin/bashtop
+```
+
+![image-20200506151706148](img/image-20200506151706148.png)
 
 ### pstree
 
@@ -238,35 +272,6 @@ apt install nload
 
 ![image-20200506143310955](img/image-20200506143310955.png)
 
-### ffmpeg
-
-ffmpeg 能干的事情太多了，咱使用最多的还是合并视频转码视频，比如咱的 [mbcf]() ，全称 Merge bilibili cilent file
-
-### [pandoc](https://github.com/jgm/pandoc)
-
-### rsync
-
-### resilio sync
-
-### [bashtop](https://github.com/aristocratos/bashtop)
-
-#### install
-
-安装起来很简单，其实这是一个 shell 可执行文件，直接使用 curl 或者 wget 命令下载到本地并赋予 +x 权限即可。
-
-```shell
-curl -fsSL https://raw.githubusercontent.com/aristocratos/bashtop/master/bashtop -o /usr/bin/bashtop && chmod +x /usr/bin/bashtop
-```
-
-国内用户推荐使用 jsdelivr.net 的 CDN 来下载该脚本😑，（fuck GFW by jsdelivr😡
-
-```shell
-curl -fsSL https://cdn.jsdelivr.net/gh/aristocratos/bashtop/bashtop  -o /usr/bin/bashtop ;chmod +x /usr/bin/bashtop
-```
-
-![image-20200506151706148](img/image-20200506151706148.png)
-
-### jq
 
 ### ls 兄弟们
 
@@ -767,11 +772,6 @@ sg-02
 ╰─#
 ```
 
-### tr
-
-### curl
-
-### wget
 
 ### proc
 
@@ -994,6 +994,16 @@ Linux k8s-master-01 3.10.0-862.el7.x86_64 #1 SMP Fri Apr 20 16:44:24 UTC 2018 x8
 Linux version 3.10.0-862.el7.x86_64 (builder@kbuilder.dev.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-28) (GCC) ) #1 SMP Fri Apr 20 16:44:24 UTC 2018
 ```
 
+### 网络
+
+
+### nc
+
+### nmap
+
+### 测试
+
+
 ### [fio](https://github.com/axboe/fio)
 
 #### install
@@ -1082,42 +1092,6 @@ Disk stats (read/write):
   sda: ios=7765/3135, merge=0/192, ticks=201237/111717, in_queue=312951, util=99.81%
 ```
 
-### oh-my-zsh
-
-### zsh
-
-## shell
-
-### [rawg]()
-
-```shell
-#!/bin/bash
-# data: 2020-03-31
-# author: muzi502
-# for: Fuck GFW and download some raw file form github without proxy using jsDelivr CDN
-# usage: save the .she to your local such as /usr/bin/rawg, and chmod +x /usr/bin/rawg
-# use rawg https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh to download
-
-set -xue
-# GitHub rul: https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh
-# jsDelivr url: https://cdn.jsdelivr.net/gh/ohmyzsh/ohmyzsh/tools/install.sh
-
-wget $(echo $1 | sed 's/raw.githubusercontent.com/cdn.jsdelivr.net\/gh/' \
-               | sed 's/github.com/cdn.jsdelivr.net\/gh/' \
-               | sed 's/\/master//' | sed 's/\/blob//' )
-
-# curl $(echo $1 | sed 's/raw.githubusercontent.com/cdn.jsdelivr.net\/gh/' \
-#                | sed 's/github.com/cdn.jsdelivr.net\/gh/' \
-#                | sed 's/\/master//' | sed 's/\/blob//' )
-```
-
-### 网络
-
-### nc
-
-### nmap
-
-## test
 
 ### qperf
 
@@ -1347,11 +1321,6 @@ Percentage of the requests served within a certain time (ms)
  100%     87 (longest request)
 ```
 
-### frp
-
-### openwrt
-
-### Trojan
 
 ### stress
 
@@ -1408,3 +1377,281 @@ stress: info: [18174] successful run completed in 3s
 ## 参考
 
 - [[DevOps] Linux操作系统层的故障注入](http://code2life.top/2019/05/02/0035-fault-injection/)
+
+### 小工具
+
+### 镜像源
+
+## 发行版
+
+
+
+### pxder
+
+下班之后回到小窝之后就开始一天中最最愉悦的时刻，在 pixiv.net 上刷图。收藏喜欢的~~老婆~~插画。为了管理和下载自己收藏的插画作品，当然还是选择食用工具来下载啦😂。
+
+在二月份的时候帮小土豆和 nova 同学测试 webp server go 的 benchmark ，这个 pxder 帮了咱很大的忙，下载了 3W 多张图片做测试样本，最终使用脚本筛选出合适的文件大小来进行 prefetc 测试。
+
+```shell
+╭─debian@debian /mnt/f/illustrations
+╰─$ du -sh
+50G     .
+╭─debian@debian /mnt/f/illustrations
+╰─$ tree
+203 directories, 31831 files
+```
+
+## 杂七杂八的
+
+### ffmpeg
+
+ffmpeg 能干的事情太多了，咱使用最多的还是合并视频转码视频，比如咱的 [mbcf]() ，全称 Merge bilibili cilent file
+
+### [pandoc](https://github.com/jgm/pandoc)
+
+### rsync
+
+### resilio sync
+
+
+### jq
+
+
+### tr
+
+### curl
+
+### wget
+
+
+
+### oh-my-zsh
+
+### zsh
+
+## shell
+
+### [rawg]()
+
+```shell
+#!/bin/bash
+# data: 2020-03-31
+# author: muzi502
+# for: Fuck GFW and download some raw file form github without proxy using jsDelivr CDN
+# usage: save the .she to your local such as /usr/bin/rawg, and chmod +x /usr/bin/rawg
+# use rawg https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh to download
+
+set -xue
+# GitHub rul: https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh
+# jsDelivr url: https://cdn.jsdelivr.net/gh/ohmyzsh/ohmyzsh/tools/install.sh
+
+wget $(echo $1 | sed 's/raw.githubusercontent.com/cdn.jsdelivr.net\/gh/' \
+               | sed 's/github.com/cdn.jsdelivr.net\/gh/' \
+               | sed 's/\/master//' | sed 's/\/blob//' )
+
+# curl $(echo $1 | sed 's/raw.githubusercontent.com/cdn.jsdelivr.net\/gh/' \
+#                | sed 's/github.com/cdn.jsdelivr.net\/gh/' \
+#                | sed 's/\/master//' | sed 's/\/blob//' )
+```
+
+### frp
+
+### openwrt
+
+### Trojan
+
+### 常用脚本
+
+#### VPS init
+
+```shell
+apt update
+apt install nload ncdu zsh git wget curl htop sysstat psmisc nginx-full fail2ban
+curl  https://get.acme.sh | sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/g' ~/.zshrc
+```
+
+#### rawg
+
+raw wget 的缩写
+
+```shell
+#!/bin/bash
+# data: 2020-03-31
+# author: muzi502
+# for: Fuck GFW and download some raw file form github without proxy using jsDelivr CDN 
+# usage: save the .she to your local such as /usr/bin/rawg, and chmod +x /usr/bin/rawg
+# use rawg https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh to download
+
+set -xue
+# GitHub rul: https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh
+# jsDelivr url: https://cdn.jsdelivr.net/gh/ohmyzsh/ohmyzsh/tools/install.sh
+
+wget $(echo $1 | sed 's/raw.githubusercontent.com/cdn.jsdelivr.net\/gh/' \
+               | sed 's/github.com/cdn.jsdelivr.net\/gh/' \
+               | sed 's/\/master//' | sed 's/\/blob//' )
+
+# curl $(echo $1 | sed 's/raw.githubusercontent.com/cdn.jsdelivr.net\/gh/' \
+#                | sed 's/github.com/cdn.jsdelivr.net\/gh/' \
+#                | sed 's/\/master//' | sed 's/\/blob//' )
+```
+
+#### kubeadm pull images
+
+```shell
+#!/bin/bash
+# for: pull kubeamd images and get kubeadm kubectl kubelet binary
+# date: 2020-04-29
+# author: muzi502
+
+set -xue
+apt-get update && apt-get install -y apt-transport-https curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+apt-get update
+
+for version in 1.17.5
+do
+    apt purge -y kubeadm kubelet kubectl
+    apt install -y kubeadm=${version}-00 kubelet=${version}-00 kubectl=${version}-00
+    mkdir -p ${version}/bin
+    rm -rf ${version}/bin/*
+    cp -a $(whereis kubelet | awk -F ":" '{print $2}') ${version}/bin/
+    cp -a $(whereis kubeadm | awk -F ":" '{print $2}') ${version}/bin/
+    cp -a $(whereis kubectl | awk -F ":" '{print $2}') ${version}/bin/
+    kubeadm config images pull --kubernetes-version=${version}
+    docker save -o kubeadm_v${version}.tar `kubeadm config images list --kubernetes-version=${version}`
+    mv kubeadm_v${version}.tar ${version}
+    tar -czvf ${version}{.tar.gz,}
+done
+```
+
+#### ss-obfs
+
+```shell
+
+#/bin/bash
+# for: install shadowsocks-libev and obfs
+# date: 2019-03-11
+# by: muzi502
+apt-get update
+apt-get -y  install shadowsocks-libev simple-obfs rng-tools
+rngd -r /dev/urandom
+mkdir -p /etc/shadowsocks-libev/
+
+cat > /etc/shadowsocks-libev/config.json <<EOF
+{
+    "server":"0.0.0.0",
+    "server_port":8964,
+    "local_port":1080,
+    "password":"1984fuckGFW",
+    "timeout":60,
+    "method":"chacha20",
+    "plugin":"obfs-server",
+    "plugin_opts":"obfs=http"
+}
+EOF
+systemctl restart shadowsocks-libev.service
+modprobe tcp_bbr
+echo "tcp_bbr" >> /etc/modules-load.d/modules.conf
+echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+sysctl -p
+sysctl net.ipv4.tcp_available_congestion_control
+sysctl net.ipv4.tcp_congestion_control
+touch /etc/sysctl.d/local.conf
+echo "net.core.wmem_max = 67108864" >>/etc/sysctl.d/local.conf
+echo "net.core.rmem_default = 65536" >>/etc/sysctl.d/local.conf
+echo "net.core.wmem_default = 65536" >>/etc/sysctl.d/local.conf
+echo "net.core.netdev_max_backlog = 4096" >>/etc/sysctl.d/local.conf
+echo "net.core.somaxconn = 4096" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.tcp_syncookies = 1" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.tcp_tw_reuse = 1" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.tcp_tw_recycle = 0" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.tcp_fin_timeout = 30" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.tcp_keepalive_time = 1200" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.ip_local_port_range = 10000 65000" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.tcp_max_syn_backlog = 4096" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.tcp_max_tw_buckets = 5000" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.tcp_fastopen = 3" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.tcp_rmem = 4096 87380 67108864" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.tcp_wmem = 4096 65536 67108864" >>/etc/sysctl.d/local.conf
+echo "net.ipv4.tcp_mtu_probing = 1" >>/etc/sysctl.d/local.conf
+sysctl --system
+lsmod | grep bbr
+```
+
+#### mcbf
+
+```shell
+#!/bin/bash
+# for: bulk merge bilibili UWP download file *.flv
+# by: blog.502.li
+# date: 2019-01-12
+# 将该脚放到 UWP 客户端下载缓存主目录下执行，安装 ffmpeg、jq
+
+set -xu
+download_dir=$(pwd)
+mp4_dir=${download_dir}/mp4
+mkdir -p ${mp4_dir}
+
+for video_dir in $(ls | sort -n | grep -E -v "\.|mp4")
+do
+  cd ${download_dir}/${video_dir}
+  up_name=$(jq ".Uploader" *.dvi | tr -d "[:punct:]\040\011\012\015")
+  mkdir -p ${mp4_dir}/${up_name}
+  for p_dir in $(ls | sort -n | grep -v "\.")
+  do
+    cd ${download_dir}/${video_dir}/${p_dir}
+    video_name=$(jq ".Title" *.info | tr -d "[:punct:]\040\011\012\015")
+    part_name=$(jq ".PartName" *.info | tr -d "[:punct:]\040\011\012\015")
+    upload_time=$(grep -Eo "20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]" *.info)
+    Uploader=$(jq ".Uploader" *.info | tr -d "[:punct:]\040\011\012\015")
+    mp4_audio=$(jq ".VideoDashInfo" *.info | tr -d "[:punct:]\040\011\012\015")
+    
+    if [ "null" = "${part_name}" ];then
+      mp4_file_name=${video_name}.mp4
+    else
+      mp4_file_name=${video_name}_${p_dir}_${part_name}.mp4
+    fi
+
+    if [ "null" = "${mp4_audio}" ];then
+      ls *.flv | sort -n > ff.txt
+      sed -i 's/^/file /g' ff.txt
+      ffmpeg -f concat -i ff.txt -c copy ${mp4_dir}/${up_name}/"${mp4_file_name}";rm -rf ff.txt
+    else
+      ffmpeg  -i video.mp4 -i audio1.mp4 -c:v copy -c:a copy ${mp4_dir}/${up_name}/"${mp4_file_name}"
+    fi
+    cd ${download_dir}/${video_dir}
+  cd ${download_dir}
+  done
+# 如果需要保留原视频请注释掉下面这一行
+#rm -rf ${download_dir}/${video_dir}
+done
+```
+
+#### conoha wallpaper download
+
+```shell
+#!/bin/bash
+# for: download conoha wallpaper
+# by: muzi502
+# date: 2020-02-11
+set -xue
+
+p=$(curl https://conoha.mikumo.com/wallpaper/ \
+| grep li | grep data-wallpaper-design= \
+| sed -e 's/<li//g' | sed -e 's/">//g' | sed -e 's/^[ \t]*//g' \
+| sed -e 's/data-wallpaper-design="//g' \
+| sed 's/^/https:\/\/conoha.mikumo.com\/wp-content\/themes\/conohamikumo\/images\/wallpaper\//')
+
+for pic in ${p}
+do  
+    file_name=$(echo ${pic} | awk -F "/" '{print $9}')
+    wget ${pic}/1080_1920.jpg -O ${file_name}_1080.jpg
+    wget ${pic}/2560_1440.jpg -O ${file_name}_1440.jpg
+done
+```
