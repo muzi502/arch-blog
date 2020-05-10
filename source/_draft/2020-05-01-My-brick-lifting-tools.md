@@ -13,7 +13,7 @@ copyright: true
 comment: true
 ---
 
-俗话说**好人修电脑，坏人床上搞；电脑修得好，好人当到老。** 作为一名`面向文档编程`的运维工程师，日常工作也无非就是搓集群搓虚拟机搓镜像，线上环境遇到故障就在 StackOverflow 搬一些 ~~Code~~ 砖来解决问题，帮同事配置一下 CI/CD 流水线，除此之外还要 7*24 小时 on-call。如果进入 IDC 机房的话还要有一身扛 2U 服务器十层楼不换🙋‍♂️本领。
+俗话说**好人修电脑，坏人床上搞；电脑修得好，好人当到老。** 作为一名`面向文档编程`的运维工程师，主业也无非就是搓集群搓虚拟机搓镜像，线上环境遇到故障就在 StackOverflow 搬一些 ~~Code~~ 砖来解决问题，帮同事配置一下 CI/CD 流水线，除此之外还要 7*24 小时 on-call。如果进入 IDC 机房的话还要有一身扛 2U 服务器十层楼不换🙋‍♂️本领。
 
 ## Linux
 
@@ -29,10 +29,10 @@ comment: true
 
 入门完 Linux 之后就开始挑战高难度的啦，比如：
 
--   OpenStack
--   Docker
--   Kubernetes
--   CI/CD
+- OpenStack
+- Docker
+- Kubernetes
+- CI/CD
 
 目前来讲在运维这个搬砖行业，kubernetes 云原生无疑是最具有挑战性和前景的，所以如果哈想更近一层楼就不妨学习一下 Docker 和 Kuberneets 这一块。
 
@@ -74,11 +74,29 @@ comment: true
 
 咱的 VPS 清一色 Ubuntu 1804 ，主要是省事儿。
 
-## 命令行
+## 命令行工具
 
 ### 文本处理
 
 提到 Linux 上的文本处理工具当然是离不开三剑客（awk、grep、sed），这也是咱当初跟着《鸟哥 Linux 私房菜》学来的😂。
+
+#### sed
+
+#### awk
+
+#### grep
+
+#### jq
+
+#### tr
+
+#### sort
+
+#### wc
+
+#### join
+
+#### cut
 
 ### 系统信息
 
@@ -86,7 +104,7 @@ comment: true
 
 top 黑乎乎的颜值太低了，咱还是喜欢花花绿绿的 htop （大雾
 
-install
+- install
 
 ```shell
 # RHEL/CentOS
@@ -98,10 +116,9 @@ apt install htop
 
 ![image-20200506142544440](img/image-20200506142544440.png)
 
-
 ### [bashtop](https://github.com/aristocratos/bashtop)
 
-#### install
+- install
 
 安装起来很简单，其实这是一个 shell 可执行文件，直接使用 curl 或者 wget 命令下载到本地并赋予 +x 权限即可。
 
@@ -117,9 +134,9 @@ curl -fsSL https://cdn.jsdelivr.net/gh/aristocratos/bashtop/bashtop  -o /usr/bin
 
 ![image-20200506151706148](img/image-20200506151706148.png)
 
-### pstree
+#### pstree
 
-#### install
+- install
 
 ```shell
 # RHEL/CentOS
@@ -129,7 +146,7 @@ yum install psmisc
 apt install psmisc
 ```
 
-#### output example
+- output example
 
 ```shell
 ╭─root@k8s-node-3 /proc
@@ -189,11 +206,11 @@ systemd─┬─agetty
         └─tuned───4*[{tuned}]
 ```
 
-### ncdu
+#### ncdu
 
 使用 `ncdu` 的好处就是可以通过交互式的方式查看目录占用空间的大小，要比 `du -sh` 命令方便很多
 
-#### install
+- install
 
 ```shell
 # RHEL/CentOS
@@ -203,7 +220,7 @@ yum install ncdu
 apt install ncdu
 ```
 
-#### output example
+- output example
 
 使用反向键和回车键进行目录奇幻，很方便的说😂
 
@@ -214,18 +231,18 @@ ncdu 1.13 ~ Use the arrow keys to navigate, press ? for help
     2.2 GiB [####      ] /opt
     2.0 GiB [###       ] /usr
   363.6 MiB [          ] /root
-   45.8 MiB [          ] /boot
-   45.2 MiB [          ] /run
-    4.6 MiB [          ] /etc
-   44.0 KiB [          ] /tmp
-   24.0 KiB [          ] /home
+	45.8 MiB [          ] /boot
+	45.2 MiB [          ] /run
+	 4.6 MiB [          ] /etc
+	44.0 KiB [          ] /tmp
+	24.0 KiB [          ] /home
 e  16.0 KiB [          ] /lost+found
-    8.0 KiB [          ] /media
+	 8.0 KiB [          ] /media
 e   4.0 KiB [          ] /srv
 e   4.0 KiB [          ] /mnt
 .   0.0   B [          ] /proc
-    0.0   B [          ] /sys
-    0.0   B [          ] /dev
+	 0.0   B [          ] /sys
+	 0.0   B [          ] /dev
 @   0.0   B [          ]  initrd.img.old
 @   0.0   B [          ]  initrd.img
 @   0.0   B [          ]  vmlinuz.old
@@ -237,26 +254,26 @@ e   4.0 KiB [          ] /mnt
 
 ncdu 1.13 ~ Use the arrow keys to navigate, press ? for help
 --- /var --------------
-    3.5 GiB [##########] /lib
-    1.4 GiB [####      ] /opt
+	 3.5 GiB [##########] /lib
+	 1.4 GiB [####      ] /opt
   156.9 MiB [          ] /cache
-   79.6 MiB [          ] /log
-    1.8 MiB [          ] /backups
-   20.0 KiB [          ] /tmp
-   16.0 KiB [          ] /spool
+	79.6 MiB [          ] /log
+	 1.8 MiB [          ] /backups
+	20.0 KiB [          ] /tmp
+	16.0 KiB [          ] /spool
 e   4.0 KiB [          ] /mail
 e   4.0 KiB [          ] /local
 @   0.0   B [          ]  lock
 @   0.0   B [          ]  run
 ```
 
-#### G/GB
+- G/GB
 
 > The SIZE argument is an integer and optional unit (example: 10K is 10*1024). Units are K,M,G,T,P,E,Z,Y (powers of 1024) or KB,MB,... (powers of 1000).
 
-### nload
+#### nload
 
-#### install
+- install
 
 ```shell
 # RHEL/CentOS
@@ -266,12 +283,11 @@ yum install nload
 apt install nload
 ```
 
-#### output example
+- output example
 
 按下回车键可以切换不同的网卡
 
 ![image-20200506143310955](img/image-20200506143310955.png)
-
 
 ### ls 兄弟们
 
@@ -308,7 +324,7 @@ sda                         8:0    0  30G  0 disk
 
 #### lsb_release
 
->  lsb_release - print distribution-specific information 打印发行版详情
+> lsb_release - print distribution-specific information 打印发行版详情
 
 #### lscpu
 
@@ -430,11 +446,11 @@ SEMOPM   Max number of operations per semop(2)              32    -     -
 SEMVMX   Semaphore max value                             32767    -     -
 ```
 
-####  lslocks
+#### lslocks
 
->  lslocks - list local system locks
+> lslocks - list local system locks
 >
->  lslocks lists information about all the currently held file locks in a Linux system
+> lslocks lists information about all the currently held file locks in a Linux system
 
 ```bash
 ╭─root@gitlab /opt
@@ -456,23 +472,23 @@ runsv           54095 FLOCK   0B WRITE 0     0   0 /opt/gitlab/sv/sidekiq/log/su
 ╭─root@gitlab /opt
 ╰─# lslogins
   UID USER              PROC PWD-LOCK PWD-DENY LAST-LOGIN GECOS
-    0 root               211        0        0      06:58 root
-    1 daemon               1        0        1            daemon
-    2 bin                  0        0        1            bin
-    3 sys                  0        0        1            sys
-    4 sync                 0        0        1            sync
-    5 games                0        0        1            games
-    6 man                  0        0        1            man
-    7 lp                   0        0        1            lp
-    8 mail                 0        0        1            mail
-    9 news                 0        0        1            news
-   10 uucp                 0        0        1            uucp
-   13 proxy                0        0        1            proxy
-   33 www-data             0        0        1            www-data
-   34 backup               0        0        1            backup
-   38 list                 0        0        1            Mailing List Manager
-   39 irc                  0        0        1            ircd
-   41 gnats                0        0        1            Gnats Bug-Reporting System (admin)
+	 0 root               211        0        0      06:58 root
+	 1 daemon               1        0        1            daemon
+	 2 bin                  0        0        1            bin
+	 3 sys                  0        0        1            sys
+	 4 sync                 0        0        1            sync
+	 5 games                0        0        1            games
+	 6 man                  0        0        1            man
+	 7 lp                   0        0        1            lp
+	 8 mail                 0        0        1            mail
+	 9 news                 0        0        1            news
+	10 uucp                 0        0        1            uucp
+	13 proxy                0        0        1            proxy
+	33 www-data             0        0        1            www-data
+	34 backup               0        0        1            backup
+	38 list                 0        0        1            Mailing List Manager
+	39 irc                  0        0        1            ircd
+	41 gnats                0        0        1            Gnats Bug-Reporting System (admin)
   100 systemd-network      1        0        1            systemd Network Management,,,
   101 systemd-resolve      1        0        1            systemd Resolver,,,
   102 syslog               1        0        1
@@ -521,7 +537,7 @@ Total offline memory:      0B
 
 #### lsmod
 
->  lsmod - Show the status of modules in the Linux Kernel
+> lsmod - Show the status of modules in the Linux Kernel
 
 ```bash
 ╭─root@gitlab /opt
@@ -601,7 +617,7 @@ lsns  lists  information  about all the currently accessible namespaces or about
 ```bash
 ╭─root@gitlab /opt
 ╰─# lsns
-        NS TYPE   NPROCS   PID USER             COMMAND
+		  NS TYPE   NPROCS   PID USER             COMMAND
 4026531835 cgroup    264     1 root             /lib/systemd/systemd --system --deserialize 39
 4026531836 pid       264     1 root             /lib/systemd/systemd --system --deserialize 39
 4026531837 user      264     1 root             /lib/systemd/systemd --system --deserialize 39
@@ -618,7 +634,7 @@ lsns  lists  information  about all the currently accessible namespaces or about
 
 #### lsof - list open files
 
-###  lspci - list all PCI devices
+#### lspci - list all PCI devices
 
 > lspci is a utility for displaying information about PCI buses in the system and devices connected to them.
 
@@ -644,134 +660,133 @@ lsns  lists  information  about all the currently accessible namespaces or about
 ╭─root@sg-02 /home/ubuntu
 ╰─# lshw
 sg-02
-    description: Computer
-    product: HVM domU
-    vendor: Xen
-    version: 4.2.amazon
-    serial: ec2c5773-d127-c5a4-60a3-221becf4e6ae
-    width: 64 bits
-    capabilities: smbios-2.7 dmi-2.7 vsyscall32
-    configuration: boot=normal uuid=73572CEC-27D1-A4C5-60A3-221BECF4E6AE
+	 description: Computer
+	 product: HVM domU
+	 vendor: Xen
+	 version: 4.2.amazon
+	 serial: ec2c5773-d127-c5a4-60a3-221becf4e6ae
+	 width: 64 bits
+	 capabilities: smbios-2.7 dmi-2.7 vsyscall32
+	 configuration: boot=normal uuid=73572CEC-27D1-A4C5-60A3-221BECF4E6AE
   *-core
-       description: Motherboard
-       physical id: 0
-     *-firmware
-          description: BIOS
-          vendor: Xen
-          physical id: 0
-          version: 4.2.amazon
-          date: 08/24/2006
-          size: 96KiB
-          capabilities: pci edd
-     *-cpu
-          description: CPU
-          product: Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz
-          vendor: Intel Corp.
-          physical id: 401
-          bus info: cpu@0
-          slot: CPU 1
-          size: 2400MHz
-          capacity: 2400MHz
-          width: 64 bits
-          capabilities: fpu fpu_exception wp vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp x86-64 constant_tsc rep_good nopl xtopology cpuid pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm cpuid_fault invpcid_single pti fsgsbase bmi1 avx2 smep bmi2 erms invpcid xsaveopt
-     *-memory
-          description: System Memory
-          physical id: 1000
-          size: 1GiB
-          capacity: 1GiB
-          capabilities: ecc
-          configuration: errordetection=multi-bit-ecc
-        *-bank
-             description: DIMM RAM
-             physical id: 0
-             slot: DIMM 0
-             size: 1GiB
-             width: 64 bits
-     *-pci
-          description: Host bridge
-          product: 440FX - 82441FX PMC [Natoma]
-          vendor: Intel Corporation
-          physical id: 100
-          bus info: pci@0000:00:00.0
-          version: 02
-          width: 32 bits
-          clock: 33MHz
-        *-isa
-             description: ISA bridge
-             product: 82371SB PIIX3 ISA [Natoma/Triton II]
-             vendor: Intel Corporation
-             physical id: 1
-             bus info: pci@0000:00:01.0
-             version: 00
-             width: 32 bits
-             clock: 33MHz
-             capabilities: isa bus_master
-             configuration: latency=0
-        *-ide
-             description: IDE interface
-             product: 82371SB PIIX3 IDE [Natoma/Triton II]
-             vendor: Intel Corporation
-             physical id: 1.1
-             bus info: pci@0000:00:01.1
-             version: 00
-             width: 32 bits
-             clock: 33MHz
-             capabilities: ide bus_master
-             configuration: driver=ata_piix latency=64
-             resources: irq:0 ioport:1f0(size=8) ioport:3f6 ioport:170(size=8) ioport:376 ioport:c100(size=16)
-        *-bridge UNCLAIMED
-             description: Bridge
-             product: 82371AB/EB/MB PIIX4 ACPI
-             vendor: Intel Corporation
-             physical id: 1.3
-             bus info: pci@0000:00:01.3
-             version: 01
-             width: 32 bits
-             clock: 33MHz
-             capabilities: bridge bus_master
-             configuration: latency=0
-        *-display UNCLAIMED
-             description: VGA compatible controller
-             product: GD 5446
-             vendor: Cirrus Logic
-             physical id: 2
-             bus info: pci@0000:00:02.0
-             version: 00
-             width: 32 bits
-             clock: 33MHz
-             capabilities: vga_controller bus_master
-             configuration: latency=0
-             resources: memory:f0000000-f1ffffff memory:f3000000-f3000fff memory:c0000-dffff
-        *-generic
-             description: Unassigned class
-             product: Xen Platform Device
-             vendor: XenSource, Inc.
-             physical id: 3
-             bus info: pci@0000:00:03.0
-             version: 01
-             width: 32 bits
-             clock: 33MHz
-             capabilities: bus_master
-             configuration: driver=xen-platform-pci latency=0
-             resources: irq:28 ioport:c000(size=256) memory:f2000000-f2ffffff
+		 description: Motherboard
+		 physical id: 0
+	  *-firmware
+			 description: BIOS
+			 vendor: Xen
+			 physical id: 0
+			 version: 4.2.amazon
+			 date: 08/24/2006
+			 size: 96KiB
+			 capabilities: pci edd
+	  *-cpu
+			 description: CPU
+			 product: Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz
+			 vendor: Intel Corp.
+			 physical id: 401
+			 bus info: cpu@0
+			 slot: CPU 1
+			 size: 2400MHz
+			 capacity: 2400MHz
+			 width: 64 bits
+			 capabilities: fpu fpu_exception wp vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp x86-64 constant_tsc rep_good nopl xtopology cpuid pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm cpuid_fault invpcid_single pti fsgsbase bmi1 avx2 smep bmi2 erms invpcid xsaveopt
+	  *-memory
+			 description: System Memory
+			 physical id: 1000
+			 size: 1GiB
+			 capacity: 1GiB
+			 capabilities: ecc
+			 configuration: errordetection=multi-bit-ecc
+		  *-bank
+				 description: DIMM RAM
+				 physical id: 0
+				 slot: DIMM 0
+				 size: 1GiB
+				 width: 64 bits
+	  *-pci
+			 description: Host bridge
+			 product: 440FX - 82441FX PMC [Natoma]
+			 vendor: Intel Corporation
+			 physical id: 100
+			 bus info: pci@0000:00:00.0
+			 version: 02
+			 width: 32 bits
+			 clock: 33MHz
+		  *-isa
+				 description: ISA bridge
+				 product: 82371SB PIIX3 ISA [Natoma/Triton II]
+				 vendor: Intel Corporation
+				 physical id: 1
+				 bus info: pci@0000:00:01.0
+				 version: 00
+				 width: 32 bits
+				 clock: 33MHz
+				 capabilities: isa bus_master
+				 configuration: latency=0
+		  *-ide
+				 description: IDE interface
+				 product: 82371SB PIIX3 IDE [Natoma/Triton II]
+				 vendor: Intel Corporation
+				 physical id: 1.1
+				 bus info: pci@0000:00:01.1
+				 version: 00
+				 width: 32 bits
+				 clock: 33MHz
+				 capabilities: ide bus_master
+				 configuration: driver=ata_piix latency=64
+				 resources: irq:0 ioport:1f0(size=8) ioport:3f6 ioport:170(size=8) ioport:376 ioport:c100(size=16)
+		  *-bridge UNCLAIMED
+				 description: Bridge
+				 product: 82371AB/EB/MB PIIX4 ACPI
+				 vendor: Intel Corporation
+				 physical id: 1.3
+				 bus info: pci@0000:00:01.3
+				 version: 01
+				 width: 32 bits
+				 clock: 33MHz
+				 capabilities: bridge bus_master
+				 configuration: latency=0
+		  *-display UNCLAIMED
+				 description: VGA compatible controller
+				 product: GD 5446
+				 vendor: Cirrus Logic
+				 physical id: 2
+				 bus info: pci@0000:00:02.0
+				 version: 00
+				 width: 32 bits
+				 clock: 33MHz
+				 capabilities: vga_controller bus_master
+				 configuration: latency=0
+				 resources: memory:f0000000-f1ffffff memory:f3000000-f3000fff memory:c0000-dffff
+		  *-generic
+				 description: Unassigned class
+				 product: Xen Platform Device
+				 vendor: XenSource, Inc.
+				 physical id: 3
+				 bus info: pci@0000:00:03.0
+				 version: 01
+				 width: 32 bits
+				 clock: 33MHz
+				 capabilities: bus_master
+				 configuration: driver=xen-platform-pci latency=0
+				 resources: irq:28 ioport:c000(size=256) memory:f2000000-f2ffffff
   *-network:0
-       description: Ethernet interface
-       physical id: 1
-       logical name: eth0
-       serial: 02:24:d2:49:f2:94
-       capabilities: ethernet physical
-       configuration: broadcast=yes driver=vif ip=172.26.17.53 link=yes multicast=yes
+		 description: Ethernet interface
+		 physical id: 1
+		 logical name: eth0
+		 serial: 02:24:d2:49:f2:94
+		 capabilities: ethernet physical
+		 configuration: broadcast=yes driver=vif ip=172.26.17.53 link=yes multicast=yes
   *-network:1
-       description: Ethernet interface
-       physical id: 2
-       logical name: docker0
-       serial: 02:42:37:cf:cf:aa
-       capabilities: ethernet physical
-       configuration: broadcast=yes driver=bridge driverversion=2.3 firmware=N/A ip=172.17.0.1 link=no multicast=yes
+		 description: Ethernet interface
+		 physical id: 2
+		 logical name: docker0
+		 serial: 02:42:37:cf:cf:aa
+		 capabilities: ethernet physical
+		 configuration: broadcast=yes driver=bridge driverversion=2.3 firmware=N/A ip=172.17.0.1 link=no multicast=yes
 ╭─root@sg-02 /home/ubuntu
 ╰─#
 ```
-
 
 ### proc
 
@@ -779,7 +794,7 @@ sg-02
 
 #### CPU
 
-`cat /proc/cpuinfo` 和 `lscpu` 
+`cat /proc/cpuinfo` 和 `lscpu`
 
 ```yaml
 [root@k8s-master-01 ~]# cat /proc/cpuinfo
@@ -864,7 +879,7 @@ DirectMap1G:     2097152 kB
 
 #### net
 
-**arp**
+- arp
 
 ```shell
 ╭─root@k8s-node-3 /proc/net
@@ -880,101 +895,101 @@ IP address       HW type     Flags       HW address            Mask     Device
 10.20.172.106    0x1         0x2         98:90:96:d0:86:8a     *        ens160
 ```
 
-**route**
+- route
 
 ```shell
 ╭─root@k8s-node-3 ~
 ╰─# cat /proc/net/fib_trie
 Main:
   +-- 0.0.0.0/0 3 1 5
-     +-- 0.0.0.0/4 2 0 2
-        |-- 0.0.0.0
-           /0 universe UNICAST
-        +-- 10.0.0.0/9 2 0 2
-           +-- 10.20.172.0/24 2 1 2
-              |-- 10.20.172.0
-                 /32 link BROADCAST
-                 /24 link UNICAST
-              +-- 10.20.172.192/26 2 0 2
-                 |-- 10.20.172.211
-                    /32 host LOCAL
-                 |-- 10.20.172.255
-                    /32 link BROADCAST
-           +-- 10.96.0.0/12 4 1 7
-              +-- 10.96.0.0/16 2 0 1
-                 +-- 10.96.0.0/28 2 0 2
-                    |-- 10.96.0.1
-                       /32 host LOCAL
-                    |-- 10.96.0.10
-                       /32 host LOCAL
-                 |-- 10.96.94.140
-                    /32 host LOCAL
-                 |-- 10.96.130.114
-                    /32 host LOCAL
-              |-- 10.99.89.188
-                 /32 host LOCAL
-              |-- 10.101.71.131
-                 /32 host LOCAL
-              |-- 10.104.241.211
-                 /32 host LOCAL
-              |-- 10.107.246.53
-                 /32 host LOCAL
-              |-- 10.108.171.54
-                 /32 host LOCAL
-              |-- 10.109.20.145
-                 /32 host LOCAL
-              |-- 10.110.206.28
-                 /32 host LOCAL
-              |-- 10.111.25.53
-                 /32 host LOCAL
-     +-- 96.0.0.0/3 2 0 2
-        +-- 100.64.0.0/10 3 0 3
-           +-- 100.78.36.64/26 3 0 6
-              +-- 100.78.36.64/30 2 0 0
-                 |-- 100.78.36.64
-                    /32 host LOCAL
-                    /32 link BROADCAST
-                    /26 universe BLACKHOLE
-                 |-- 100.78.36.65
-                    /32 link UNICAST
-                 |-- 100.78.36.66
-                    /32 link UNICAST
-                 |-- 100.78.36.67
-                    /32 link UNICAST
-              |-- 100.78.36.105
-                 /32 link UNICAST
-           |-- 100.87.114.192
-              /26 universe UNICAST
-           |-- 100.107.127.64
-              /26 universe UNICAST
-           |-- 100.112.151.128
-              /26 universe UNICAST
-           |-- 100.123.190.192
-              /26 universe UNICAST
-        +-- 127.0.0.0/8 2 0 2
-           +-- 127.0.0.0/31 1 0 0
-              |-- 127.0.0.0
-                 /32 link BROADCAST
-                 /8 host LOCAL
-              |-- 127.0.0.1
-                 /32 host LOCAL
-           |-- 127.255.255.255
-              /32 link BROADCAST
-     +-- 168.0.0.0/5 2 0 2
-        |-- 169.254.0.0
-           /16 link UNICAST
-        +-- 172.16.0.0/14 3 0 6
-           +-- 172.17.0.0/31 1 0 0
-              |-- 172.17.0.0
-                 /32 link BROADCAST
-                 /16 link UNICAST
-              |-- 172.17.0.1
-                 /32 host LOCAL
-           |-- 172.17.255.255
-              /32 link BROADCAST
+	  +-- 0.0.0.0/4 2 0 2
+		  |-- 0.0.0.0
+			  /0 universe UNICAST
+		  +-- 10.0.0.0/9 2 0 2
+			  +-- 10.20.172.0/24 2 1 2
+				  |-- 10.20.172.0
+					  /32 link BROADCAST
+					  /24 link UNICAST
+				  +-- 10.20.172.192/26 2 0 2
+					  |-- 10.20.172.211
+						  /32 host LOCAL
+					  |-- 10.20.172.255
+						  /32 link BROADCAST
+			  +-- 10.96.0.0/12 4 1 7
+				  +-- 10.96.0.0/16 2 0 1
+					  +-- 10.96.0.0/28 2 0 2
+						  |-- 10.96.0.1
+							  /32 host LOCAL
+						  |-- 10.96.0.10
+							  /32 host LOCAL
+					  |-- 10.96.94.140
+						  /32 host LOCAL
+					  |-- 10.96.130.114
+						  /32 host LOCAL
+				  |-- 10.99.89.188
+					  /32 host LOCAL
+				  |-- 10.101.71.131
+					  /32 host LOCAL
+				  |-- 10.104.241.211
+					  /32 host LOCAL
+				  |-- 10.107.246.53
+					  /32 host LOCAL
+				  |-- 10.108.171.54
+					  /32 host LOCAL
+				  |-- 10.109.20.145
+					  /32 host LOCAL
+				  |-- 10.110.206.28
+					  /32 host LOCAL
+				  |-- 10.111.25.53
+					  /32 host LOCAL
+	  +-- 96.0.0.0/3 2 0 2
+		  +-- 100.64.0.0/10 3 0 3
+			  +-- 100.78.36.64/26 3 0 6
+				  +-- 100.78.36.64/30 2 0 0
+					  |-- 100.78.36.64
+						  /32 host LOCAL
+						  /32 link BROADCAST
+						  /26 universe BLACKHOLE
+					  |-- 100.78.36.65
+						  /32 link UNICAST
+					  |-- 100.78.36.66
+						  /32 link UNICAST
+					  |-- 100.78.36.67
+						  /32 link UNICAST
+				  |-- 100.78.36.105
+					  /32 link UNICAST
+			  |-- 100.87.114.192
+				  /26 universe UNICAST
+			  |-- 100.107.127.64
+				  /26 universe UNICAST
+			  |-- 100.112.151.128
+				  /26 universe UNICAST
+			  |-- 100.123.190.192
+				  /26 universe UNICAST
+		  +-- 127.0.0.0/8 2 0 2
+			  +-- 127.0.0.0/31 1 0 0
+				  |-- 127.0.0.0
+					  /32 link BROADCAST
+					  /8 host LOCAL
+				  |-- 127.0.0.1
+					  /32 host LOCAL
+			  |-- 127.255.255.255
+				  /32 link BROADCAST
+	  +-- 168.0.0.0/5 2 0 2
+		  |-- 169.254.0.0
+			  /16 link UNICAST
+		  +-- 172.16.0.0/14 3 0 6
+			  +-- 172.17.0.0/31 1 0 0
+				  |-- 172.17.0.0
+					  /32 link BROADCAST
+					  /16 link UNICAST
+				  |-- 172.17.0.1
+					  /32 host LOCAL
+			  |-- 172.17.255.255
+				  /32 link BROADCAST
 ```
 
-**nf_conntrack**
+- nf_conntrack
 
 ```shell
 ╭─root@k8s-node-3 /proc/net
@@ -996,17 +1011,15 @@ Linux version 3.10.0-862.el7.x86_64 (builder@kbuilder.dev.centos.org) (gcc versi
 
 ### 网络
 
+#### nc netcat
 
-### nc
-
-### nmap
+#### nmap
 
 ### 测试
 
+#### [fio](https://github.com/axboe/fio)
 
-### [fio](https://github.com/axboe/fio)
-
-#### install
+- install
 
 ```shell
 # RHEL/CentOS
@@ -1016,7 +1029,7 @@ yum install fio
 apt install fio
 ```
 
-#### usage
+- usage
 
 ```ini
 filename=/tmp        # 测试文件名称，通常选择需要测试的盘的 data 目录
@@ -1039,7 +1052,7 @@ nrfiles=8            # 每个进程生成文件的数量
 
 `注意：` 只要不是测试空盘，`filename` 参数千万不要使用类似 `/dev/sda` 这无异于删库跑路😂。所以推荐使用路径而不是设备。
 
-#### output example
+- output example
 
 ```shell
 ╭─root@nfs ~
@@ -1051,58 +1064,57 @@ Starting 30 threads
 mytest1: Laying out IO file (1 file / 1024MiB)
 Jobs: 30 (f=30): [m(30)][100.0%][r=1265KiB/s,w=560KiB/s][r=79,w=35 IOPS][eta 00m:00s]
 mytest1: (groupid=0, jobs=30): err= 0: pid=45930: Mon Apr 27 23:09:21 2020
-   read: IOPS=71, BW=1149KiB/s (1177kB/s)(113MiB/100321msec)
-    clat (usec): min=349, max=999812, avg=292473.60, stdev=188905.70
-     lat (usec): min=349, max=999813, avg=292473.83, stdev=188905.69
-    clat percentiles (msec):
-     |  1.00th=[    5],  5.00th=[    8], 10.00th=[   11], 20.00th=[   24],
-     | 30.00th=[  247], 40.00th=[  313], 50.00th=[  342], 60.00th=[  372],
-     | 70.00th=[  401], 80.00th=[  430], 90.00th=[  481], 95.00th=[  542],
-     | 99.00th=[  751], 99.50th=[  818], 99.90th=[  894], 99.95th=[  936],
-     | 99.99th=[ 1003]
-   bw (  KiB/s): min=   31, max=   96, per=3.53%, avg=40.55, stdev=14.30, samples=5661
-   iops        : min=    1, max=    6, avg= 2.48, stdev= 0.93, samples=5661
+	read: IOPS=71, BW=1149KiB/s (1177kB/s)(113MiB/100321msec)
+	 clat (usec): min=349, max=999812, avg=292473.60, stdev=188905.70
+	  lat (usec): min=349, max=999813, avg=292473.83, stdev=188905.69
+	 clat percentiles (msec):
+	  |  1.00th=[    5],  5.00th=[    8], 10.00th=[   11], 20.00th=[   24],
+	  | 30.00th=[  247], 40.00th=[  313], 50.00th=[  342], 60.00th=[  372],
+	  | 70.00th=[  401], 80.00th=[  430], 90.00th=[  481], 95.00th=[  542],
+	  | 99.00th=[  751], 99.50th=[  818], 99.90th=[  894], 99.95th=[  936],
+	  | 99.99th=[ 1003]
+	bw (  KiB/s): min=   31, max=   96, per=3.53%, avg=40.55, stdev=14.30, samples=5661
+	iops        : min=    1, max=    6, avg= 2.48, stdev= 0.93, samples=5661
   write: IOPS=30, BW=483KiB/s (494kB/s)(47.3MiB/100321msec)
-    clat (msec): min=2, max=937, avg=297.02, stdev=194.75
-     lat (msec): min=2, max=937, avg=297.02, stdev=194.75
-    clat percentiles (msec):
-     |  1.00th=[    5],  5.00th=[    9], 10.00th=[   11], 20.00th=[   16],
-     | 30.00th=[  266], 40.00th=[  326], 50.00th=[  355], 60.00th=[  380],
-     | 70.00th=[  405], 80.00th=[  435], 90.00th=[  481], 95.00th=[  550],
-     | 99.00th=[  760], 99.50th=[  810], 99.90th=[  902], 99.95th=[  927],
-     | 99.99th=[  936]
-   bw (  KiB/s): min=   31, max=  256, per=9.65%, avg=46.52, stdev=25.43, samples=2071
-   iops        : min=    1, max=   16, avg= 2.85, stdev= 1.61, samples=2071
+	 clat (msec): min=2, max=937, avg=297.02, stdev=194.75
+	  lat (msec): min=2, max=937, avg=297.02, stdev=194.75
+	 clat percentiles (msec):
+	  |  1.00th=[    5],  5.00th=[    9], 10.00th=[   11], 20.00th=[   16],
+	  | 30.00th=[  266], 40.00th=[  326], 50.00th=[  355], 60.00th=[  380],
+	  | 70.00th=[  405], 80.00th=[  435], 90.00th=[  481], 95.00th=[  550],
+	  | 99.00th=[  760], 99.50th=[  810], 99.90th=[  902], 99.95th=[  927],
+	  | 99.99th=[  936]
+	bw (  KiB/s): min=   31, max=  256, per=9.65%, avg=46.52, stdev=25.43, samples=2071
+	iops        : min=    1, max=   16, avg= 2.85, stdev= 1.61, samples=2071
   lat (usec)   : 500=0.02%, 750=0.02%
   lat (msec)   : 4=0.28%, 10=8.53%, 20=10.86%, 50=6.42%, 100=0.90%
   lat (msec)   : 250=2.90%, 500=62.21%, 750=6.79%, 1000=1.06%
   cpu          : usr=0.00%, sys=0.01%, ctx=19413, majf=0, minf=7
   IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
-     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
-     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
-     issued rwts: total=7204,3026,0,0 short=0,0,0,0 dropped=0,0,0,0
-     latency   : target=0, window=0, percentile=100.00%, depth=1
+	  submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+	  complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+	  issued rwts: total=7204,3026,0,0 short=0,0,0,0 dropped=0,0,0,0
+	  latency   : target=0, window=0, percentile=100.00%, depth=1
 
 Run status group 0 (all jobs):
-   READ: bw=1149KiB/s (1177kB/s), 1149KiB/s-1149KiB/s (1177kB/s-1177kB/s), io=113MiB (118MB), run=100321-100321msec
+	READ: bw=1149KiB/s (1177kB/s), 1149KiB/s-1149KiB/s (1177kB/s-1177kB/s), io=113MiB (118MB), run=100321-100321msec
   WRITE: bw=483KiB/s (494kB/s), 483KiB/s-483KiB/s (494kB/s-494kB/s), io=47.3MiB (49.6MB), run=100321-100321msec
 
 Disk stats (read/write):
-    dm-0: ios=7750/3320, merge=0/0, ticks=200950/123253, in_queue=324237, util=99.83%, aggrios=7765/3135, aggrmerge=0/192, aggrticks=201237/111717, aggrin_queue=312951, aggrutil=99.81%
+	 dm-0: ios=7750/3320, merge=0/0, ticks=200950/123253, in_queue=324237, util=99.83%, aggrios=7765/3135, aggrmerge=0/192, aggrticks=201237/111717, aggrin_queue=312951, aggrutil=99.81%
   sda: ios=7765/3135, merge=0/192, ticks=201237/111717, in_queue=312951, util=99.81%
 ```
 
+#### qperf
 
-### qperf
-
-#### install
+- install
 
 ```shell
 yum install qperf
 apt install qperf
 ```
 
-#### usage
+- usage
 
 ```shell
 ╭─root@debian /opt/trojan
@@ -1111,75 +1123,75 @@ In these examples, we first run qperf on a node called myserver in server
 mode by invoking it with no arguments.  In all the subsequent examples, we
 run qperf on another node and connect to the server which we assume has a
 hostname of myserver.
-    * To run a TCP bandwidth and latency test:
-        qperf myserver tcp_bw tcp_lat
-    * To run a SDP bandwidth test for 10 seconds:
-        qperf myserver -t 10 sdp_bw
-    * To run a UDP latency test and then cause the server to terminate:
-        qperf myserver udp_lat quit
-    * To measure the RDMA UD latency and bandwidth:
-        qperf myserver ud_lat ud_bw
-    * To measure RDMA UC bi-directional bandwidth:
-        qperf myserver rc_bi_bw
-    * To get a range of TCP latencies with a message size from 1 to 64K
-        qperf myserver -oo msg_size:1:64K:*2 -vu tcp_lat
+	 * To run a TCP bandwidth and latency test:
+		  qperf myserver tcp_bw tcp_lat
+	 * To run a SDP bandwidth test for 10 seconds:
+		  qperf myserver -t 10 sdp_bw
+	 * To run a UDP latency test and then cause the server to terminate:
+		  qperf myserver udp_lat quit
+	 * To measure the RDMA UD latency and bandwidth:
+		  qperf myserver ud_lat ud_bw
+	 * To measure RDMA UC bi-directional bandwidth:
+		  qperf myserver rc_bi_bw
+	 * To get a range of TCP latencies with a message size from 1 to 64K
+		  qperf myserver -oo msg_size:1:64K:*2 -vu tcp_lat
 ```
 
-#### output example
+- output example
 
 ```shell
 root@debian-node-02-656868cc46-72lc9:/# qperf  -t 30 100.107.127.100 -v tcp_bw udp_bw tcp_lat udp_lat conf
 tcp_bw:
-    bw              =  3.24 GB/sec
-    msg_rate        =  49.4 K/sec
-    time            =    30 sec
-    send_cost       =   542 ms/GB
-    recv_cost       =   542 ms/GB
-    send_cpus_used  =   176 % cpus
-    recv_cpus_used  =   176 % cpus
+	 bw              =  3.24 GB/sec
+	 msg_rate        =  49.4 K/sec
+	 time            =    30 sec
+	 send_cost       =   542 ms/GB
+	 recv_cost       =   542 ms/GB
+	 send_cpus_used  =   176 % cpus
+	 recv_cpus_used  =   176 % cpus
 udp_bw:
-    send_bw         =  2.62 GB/sec
-    recv_bw         =  2.37 GB/sec
-    msg_rate        =  72.3 K/sec
-    time            =    30 sec
-    send_cost       =   542 ms/GB
-    recv_cost       =   598 ms/GB
-    send_cpus_used  =   142 % cpus
-    recv_cpus_used  =   142 % cpus
+	 send_bw         =  2.62 GB/sec
+	 recv_bw         =  2.37 GB/sec
+	 msg_rate        =  72.3 K/sec
+	 time            =    30 sec
+	 send_cost       =   542 ms/GB
+	 recv_cost       =   598 ms/GB
+	 send_cpus_used  =   142 % cpus
+	 recv_cpus_used  =   142 % cpus
 tcp_lat:
-    latency        =  17.3 us
-    msg_rate       =  57.7 K/sec
-    time           =    30 sec
-    loc_cpus_used  =   110 % cpus
-    rem_cpus_used  =   110 % cpus
+	 latency        =  17.3 us
+	 msg_rate       =  57.7 K/sec
+	 time           =    30 sec
+	 loc_cpus_used  =   110 % cpus
+	 rem_cpus_used  =   110 % cpus
 udp_lat:
-    latency        =  15.4 us
-    msg_rate       =  64.8 K/sec
-    time           =    30 sec
-    loc_cpus_used  =   111 % cpus
-    rem_cpus_used  =   111 % cpus
+	 latency        =  15.4 us
+	 msg_rate       =  64.8 K/sec
+	 time           =    30 sec
+	 loc_cpus_used  =   111 % cpus
+	 rem_cpus_used  =   111 % cpus
 conf:
-    loc_node   =  debian-node-02-656868cc46-72lc9
-    loc_cpu    =  8 Cores: Intel Xeon E3-1271 v3 @ 3.60GHz
-    loc_os     =  Linux 3.10.0-862.el7.x86_64
-    loc_qperf  =  0.4.11
-    rem_node   =  debian-node-02-656868cc46-xftvq
-    rem_cpu    =  8 Cores: Intel Xeon E3-1271 v3 @ 3.60GHz
-    rem_os     =  Linux 3.10.0-862.el7.x86_64
-    rem_qperf  =  0.4.11
+	 loc_node   =  debian-node-02-656868cc46-72lc9
+	 loc_cpu    =  8 Cores: Intel Xeon E3-1271 v3 @ 3.60GHz
+	 loc_os     =  Linux 3.10.0-862.el7.x86_64
+	 loc_qperf  =  0.4.11
+	 rem_node   =  debian-node-02-656868cc46-xftvq
+	 rem_cpu    =  8 Cores: Intel Xeon E3-1271 v3 @ 3.60GHz
+	 rem_os     =  Linux 3.10.0-862.el7.x86_64
+	 rem_qperf  =  0.4.11
 ```
 
-### iperf
+#### iperf
 
-#### install
+- install
 
-#### usage
+- usage
 
-#### output example
+- output example
 
-### [wrk](https://github.com/wg/wrk/)
+#### [wrk](https://github.com/wg/wrk/)
 
-#### install
+- install
 
 ```shell
 git clone https://github.com/wg/wrk.git --depth=1
@@ -1187,23 +1199,23 @@ cd wrk
 make
 ```
 
-#### usage
+- usage
 
 ```shell
 ./wrk
 Usage: wrk <options> <url>
   Options:
-    -c, --connections <N>  Connections to keep open 需要模拟的个并发请求连接数量
-    -d, --duration    <T>  Duration of test 测试的测试时长
-    -t, --threads     <N>  Number of threads to use 并发线程数量
-    -s, --script      <S>  Load Lua script file  指定 Lua 脚本的路径
-    -H, --header      <H>  Add header to request 指定请求带的 Header 参数
-        --latency          Print latency statistics 是否打印请求延迟统计
-        --timeout     <T>  Socket/request timeout 设置请求超时时间
+	 -c, --connections <N>  Connections to keep open 需要模拟的个并发请求连接数量
+	 -d, --duration    <T>  Duration of test 测试的测试时长
+	 -t, --threads     <N>  Number of threads to use 并发线程数量
+	 -s, --script      <S>  Load Lua script file  指定 Lua 脚本的路径
+	 -H, --header      <H>  Add header to request 指定请求带的 Header 参数
+		  --latency          Print latency statistics 是否打印请求延迟统计
+		  --timeout     <T>  Socket/request timeout 设置请求超时时间
 
 ```
 
-#### output example
+- output example
 
 ```shell
 # 对 10.20.172.196 nginx 服务器进行测试
@@ -1212,8 +1224,8 @@ Usage: wrk <options> <url>
 Running 30s test @ http://10.20.172.196
   100 threads and 512 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    44.71ms  108.75ms   1.99s    89.05%
-    Req/Sec   369.78    207.57     1.68k    71.50%
+	 Latency    44.71ms  108.75ms   1.99s    89.05%
+	 Req/Sec   369.78    207.57     1.68k    71.50%
   987158 requests in 30.10s, 840.66MB read
   Socket errors: connect 0, read 0, write 0, timeout 22
 Requests/sec:  32797.65
@@ -1221,13 +1233,13 @@ Transfer/sec:     27.93MB
 # 测试结果，基本能达到 3W+ 的 QPS 的性能
 ```
 
-### httperf
+#### httperf
 
-#### install
+- install
 
-#### usage
+- usage
 
-#### output example
+- output example
 
 ```shell
 ╭─root@ubuntu-238 ~
@@ -1259,13 +1271,13 @@ Errors: total 0 client-timo 0 socket-timo 0 connrefused 0 connreset 0
 Errors: fd-unavail 0 addrunavail 0 ftab-full 0 other 0
 ```
 
-### [ab]()
+#### [ab]()
 
-#### install
+- install
 
-#### usage
+- usage
 
-#### output example
+- output example
 
 ```shell
 ╭─root@test ~
@@ -1303,7 +1315,7 @@ Time per request:       0.107 [ms] (mean, across all concurrent requests)
 Transfer rate:          8076.55 [Kbytes/sec] received
 
 Connection Times (ms)
-              min  mean[+/-sd] median   max
+				  min  mean[+/-sd] median   max
 Connect:        0   29   8.1     29      42
 Processing:    17   36  14.3     45      51
 Waiting:        0   35  14.3     44      50
@@ -1321,12 +1333,11 @@ Percentage of the requests served within a certain time (ms)
  100%     87 (longest request)
 ```
 
+#### stress
 
-### stress
+> [Stress/Stress-NG](https://www.tecmint.com/linux-cpu-load-stress-test-with-stress-ng-tool/)是Linux下两个常用的系统级压力测试工具，**stress**命令简单易用，**stress-ng**是stress的升级版，支持**数百个参数定制各种压CPU、内存、IO、网络**的姿势。在系统过载的场景下，应用服务可能会出现意想不到的错误或异常，在测试**负载均衡和熔断降级**时非常有用。这里只列举了几个常用的命令，详细使用参考”stress-ng –help”或”man stress-ng”。另外，这些“烤机”命令来测试服务器性能也是不错的。
 
->  [Stress/Stress-NG](https://www.tecmint.com/linux-cpu-load-stress-test-with-stress-ng-tool/)是Linux下两个常用的系统级压力测试工具，**stress**命令简单易用，**stress-ng**是stress的升级版，支持**数百个参数定制各种压CPU、内存、IO、网络**的姿势。在系统过载的场景下，应用服务可能会出现意想不到的错误或异常，在测试**负载均衡和熔断降级**时非常有用。这里只列举了几个常用的命令，详细使用参考”stress-ng –help”或”man stress-ng”。另外，这些“烤机”命令来测试服务器性能也是不错的。
-
-#### install
+- install
 
 ```shell
 # RHRL/CentOS
@@ -1339,7 +1350,7 @@ apt install stress stress-ng
 # stress-ng 基本用法与stress完全兼容，但有更多的参数可选，并且可以查看统计信息
 ```
 
-#### usage
+- usage
 
 ```shell
 # 在两个CPU核心上跑开方运算，并且启动一个不断分配释放1G内存的线程，运行10秒后停止
@@ -1352,7 +1363,7 @@ stress --io 1 --hdd 1 --hdd-bytes 512M -v --timeout 10
 stress-ng --sock 2 -v --timeout 10 --metrics-brief
 ```
 
-### output example
+- output example
 
 ```shell
 ╭─root@debian /bashtop  ‹master›
@@ -1374,9 +1385,6 @@ stress: info: [18174] successful run completed in 3s
 
 ![image-20200506154459952](img/image-20200506154459952.png)
 
-## 参考
-
-- [[DevOps] Linux操作系统层的故障注入](http://code2life.top/2019/05/02/0035-fault-injection/)
 
 ### 小工具
 
@@ -1401,66 +1409,41 @@ stress: info: [18174] successful run completed in 3s
 203 directories, 31831 files
 ```
 
-## 杂七杂八的
+### 杂七杂八的
 
-### ffmpeg
+#### nginx
+
+nginx，除了建站當 Web 服務器，是咱在 openwrt 上裝的，目的是為了擺脫 ip 的辦定限制。因為有些設備通過域名來訪問，更換網絡環境，比如搬家之後只需要維修改一下域名解析即可。比如咱使用 X.lo.502.li 作為三級子域名分配給本地內網機器用。
+
+#### ffmpeg
 
 ffmpeg 能干的事情太多了，咱使用最多的还是合并视频转码视频，比如咱的 [mbcf]() ，全称 Merge bilibili cilent file
 
-### [pandoc](https://github.com/jgm/pandoc)
+#### [pandoc](https://github.com/jgm/pandoc)
 
-### rsync
+#### rsync
 
-### resilio sync
+#### resilio sync
 
+resilio sync ，是咱最重要的數據備份工具，比如咱使用 pxder 下載好收藏的老婆們，為了在手機上仔細欣賞老婆們，咱就用。resilio sync 將目錄同步到手機上，並且使用它來與 PC，iPhone ，Android ，Linux 三者無縫同步。簡直好用極了。
 
-### jq
+需要注意的是，如果跨公網同步，在一些網絡環境下因為 GFW 的緣故，無法建立起鏈接，這時候需要使用到預定義主機。其中有兩種比較好的方案，一是在公網 VPS 機器上安裝 resilio sync 並且加入到同步主機當中。這點缺點也明顯，需要佔用磁盤空間，如果同步大量文件以及幾十幾百GB級別的話，小盤機是扛不住的，需要另外添加磁盤。方法二是咱想到的，屢試不爽，就是將本機的 resilio sync 監聽端口 11354 使用 frp 內網穿透到公網服務器，然後在另一台機器上添加上預定義主機，IP 就是 frp 服務器的 IP，端口就是 frp 內網穿透的 remote port。這樣添加好預訂與主機之後，不到一分鐘就能發現主機並建立起連接。
 
+#### curl
 
-### tr
+#### wget
 
-### curl
+#### oh-my-zsh
 
-### wget
+#### zsh
 
+#### frp
 
+#### openwrt
 
-### oh-my-zsh
+#### Trojan
 
-### zsh
-
-## shell
-
-### [rawg]()
-
-```shell
-#!/bin/bash
-# data: 2020-03-31
-# author: muzi502
-# for: Fuck GFW and download some raw file form github without proxy using jsDelivr CDN
-# usage: save the .she to your local such as /usr/bin/rawg, and chmod +x /usr/bin/rawg
-# use rawg https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh to download
-
-set -xue
-# GitHub rul: https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh
-# jsDelivr url: https://cdn.jsdelivr.net/gh/ohmyzsh/ohmyzsh/tools/install.sh
-
-wget $(echo $1 | sed 's/raw.githubusercontent.com/cdn.jsdelivr.net\/gh/' \
-               | sed 's/github.com/cdn.jsdelivr.net\/gh/' \
-               | sed 's/\/master//' | sed 's/\/blob//' )
-
-# curl $(echo $1 | sed 's/raw.githubusercontent.com/cdn.jsdelivr.net\/gh/' \
-#                | sed 's/github.com/cdn.jsdelivr.net\/gh/' \
-#                | sed 's/\/master//' | sed 's/\/blob//' )
-```
-
-### frp
-
-### openwrt
-
-### Trojan
-
-### 常用脚本
+### shell 常用脚本
 
 #### VPS init
 
@@ -1480,7 +1463,7 @@ raw wget 的缩写
 #!/bin/bash
 # data: 2020-03-31
 # author: muzi502
-# for: Fuck GFW and download some raw file form github without proxy using jsDelivr CDN 
+# for: Fuck GFW and download some raw file form github without proxy using jsDelivr CDN
 # usage: save the .she to your local such as /usr/bin/rawg, and chmod +x /usr/bin/rawg
 # use rawg https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh to download
 
@@ -1489,8 +1472,8 @@ set -xue
 # jsDelivr url: https://cdn.jsdelivr.net/gh/ohmyzsh/ohmyzsh/tools/install.sh
 
 wget $(echo $1 | sed 's/raw.githubusercontent.com/cdn.jsdelivr.net\/gh/' \
-               | sed 's/github.com/cdn.jsdelivr.net\/gh/' \
-               | sed 's/\/master//' | sed 's/\/blob//' )
+                | sed 's/github.com/cdn.jsdelivr.net\/gh/' \
+                | sed 's/\/master//' | sed 's/\/blob//' )
 
 # curl $(echo $1 | sed 's/raw.githubusercontent.com/cdn.jsdelivr.net\/gh/' \
 #                | sed 's/github.com/cdn.jsdelivr.net\/gh/' \
@@ -1611,19 +1594,19 @@ do
     upload_time=$(grep -Eo "20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]" *.info)
     Uploader=$(jq ".Uploader" *.info | tr -d "[:punct:]\040\011\012\015")
     mp4_audio=$(jq ".VideoDashInfo" *.info | tr -d "[:punct:]\040\011\012\015")
-    
+
     if [ "null" = "${part_name}" ];then
-      mp4_file_name=${video_name}.mp4
+    mp4_file_name=${video_name}.mp4
     else
-      mp4_file_name=${video_name}_${p_dir}_${part_name}.mp4
+    mp4_file_name=${video_name}_${p_dir}_${part_name}.mp4
     fi
 
     if [ "null" = "${mp4_audio}" ];then
-      ls *.flv | sort -n > ff.txt
-      sed -i 's/^/file /g' ff.txt
-      ffmpeg -f concat -i ff.txt -c copy ${mp4_dir}/${up_name}/"${mp4_file_name}";rm -rf ff.txt
+    ls *.flv | sort -n > ff.txt
+    sed -i 's/^/file /g' ff.txt
+    ffmpeg -f concat -i ff.txt -c copy ${mp4_dir}/${up_name}/"${mp4_file_name}";rm -rf ff.txt
     else
-      ffmpeg  -i video.mp4 -i audio1.mp4 -c:v copy -c:a copy ${mp4_dir}/${up_name}/"${mp4_file_name}"
+    ffmpeg  -i video.mp4 -i audio1.mp4 -c:v copy -c:a copy ${mp4_dir}/${up_name}/"${mp4_file_name}"
     fi
     cd ${download_dir}/${video_dir}
   cd ${download_dir}
@@ -1649,9 +1632,13 @@ p=$(curl https://conoha.mikumo.com/wallpaper/ \
 | sed 's/^/https:\/\/conoha.mikumo.com\/wp-content\/themes\/conohamikumo\/images\/wallpaper\//')
 
 for pic in ${p}
-do  
+do
     file_name=$(echo ${pic} | awk -F "/" '{print $9}')
     wget ${pic}/1080_1920.jpg -O ${file_name}_1080.jpg
     wget ${pic}/2560_1440.jpg -O ${file_name}_1440.jpg
 done
 ```
+
+## 参考
+
+- [[DevOps] Linux操作系统层的故障注入](http://code2life.top/2019/05/02/0035-fault-injection/)
