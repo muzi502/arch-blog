@@ -118,6 +118,8 @@ apt install htop
 
 ### [bashtop](https://github.com/aristocratos/bashtop)
 
+bashtop 相比于 htop 有种吊炸天的感觉，炫酷无比😄
+
 - install
 
 安装起来很简单，其实这是一个 shell 可执行文件，直接使用 curl 或者 wget 命令下载到本地并赋予 +x 权限即可。
@@ -135,6 +137,8 @@ curl -fsSL https://cdn.jsdelivr.net/gh/aristocratos/bashtop/bashtop  -o /usr/bin
 ![image-20200506151706148](img/image-20200506151706148.png)
 
 #### pstree
+
+以树状图的方式展现进程之间的派生关系，显示效果比 ps 更直观一些，可以很清楚地分辨出子进程和父进程之间的关系。可以用来排查一些孤儿进程。
 
 - install
 
@@ -206,9 +210,15 @@ systemd─┬─agetty
         └─tuned───4*[{tuned}]
 ```
 
+- 可以看到 init 进程 systemd 为系统的 PID 1 号进程，所有的进程都在 systemd 的管理之下。
+
+- 在运行 docker 的服务器上，容器进程的父进程并不是 dockerd 这个守护进程，而是一个名为　`containerd-shim-${container_name}`　而 containerd-shim 的父进程为容器运行时 [containerd](https://containerd.io/)，docker 是通过 gRPC 协议与 containerd 进程通信来，以此来进行管理所运行的容器。关于容器运行时的关系可以参考 [开放容器标准(OCI) 内部分享](https://xuanwo.io/2019/08/06/oci-intro/)，当时理解 dockerd 、containerd、containerd-shim 这些关系时感觉有点绕，不过用 pstree 命令看一下进程树结构就一目了然了😂，对理解进程之间的关系很有帮助。
+
 #### ncdu
 
-使用 `ncdu` 的好处就是可以通过交互式的方式查看目录占用空间的大小，要比 `du -sh` 命令方便很多
+面试的时候被问道过 `Linux 下如何查看文件见大小？`，当然是 `du -sh` 啦😂。不过咱还是喜欢用 ncdu
+
+使用 `ncdu` 的好处就是可以通过交互式的方式查看目录占用空间的大小，要比 `du -sh` 命令方便很多，不过缺点也有，就是该命令为扫描目标目录下的所有文件，很耗时！如果想要立即查看一下目录占用的大小，还是用 `du -sh` 最方便，使用 ncdu 可以帮助我们分析文件夹下各个文件占用的情况。
 
 - install
 
@@ -273,6 +283,8 @@ e   4.0 KiB [          ] /local
 
 #### nload
 
+nload 命令是一个实时监控网络流量和带宽使用的控制台应用程序，使用两个图表可视化地展示接收和发送的流量，并提供诸如数据交换总量、最小/最大网络带宽使用量等附加信息。
+
 - install
 
 ```shell
@@ -291,6 +303,8 @@ apt install nload
 
 ### ls 兄弟们
 
+以 ls 开头的命令大多都是列出 XX 信息，这些工具也可以方便我们快速了解一下目前系统的状态。
+
 ```bash
 ╭─root@gitlab /opt
 ╰─# ls
@@ -307,9 +321,13 @@ lsattr       LSCOLORS     lshw         lslocks      lsmod        lspci
 
 > lsattr - list file attributes on a Linux second extended file system
 
+列出文件的属性，
+
 #### lsblk
 
 > lsblk - list block devices 列出块设备
+
+这个命令在查看块设备（磁盘) 分区和挂载点，以及磁盘尚未分配的空间信息很有帮助，要比 fdisk 更直观一些。
 
 ```bash
 ╭─root@gitlab /opt
@@ -326,11 +344,15 @@ sda                         8:0    0  30G  0 disk
 
 > lsb_release - print distribution-specific information 打印发行版详情
 
+有些发行版尚未安装
+
 #### lscpu
 
 > lscpu - display information about the CPU architecture
 
-`lscpu`
+列出 CPU 的信息，和 cat /proc/cpuinfo 输出结果类似。相当于 Linux 下的 CPU-Z 😂
+
+- output example
 
 ```yaml
 ╭─root@gitlab /opt
@@ -396,265 +418,24 @@ power management:
 
 #### lshw
 
-```bash
-lshw - list hardware 列出硬件设备
-lshw is a small tool to extract detailed information on the hardware configuration of the machine. It  can report exact memory configuration, firmware version, mainboard configuration, CPU version and speed, cache configuration, bus speed, etc. on DMI-capable x86 or IA-64 systems and on some PowerPC machines  (PowerMac G4 is known to work).It  currently  supports  DMI (x86 and IA-64 only), OpenFirmware device tree (PowerPC only), PCI/AGP, CPUID (x86), IDE/ATA/ATAPI, PCMCIA (only tested on x86), SCSI and USB.
-```
-
-#### lsinitramfs
-
-> lsinitramfs - list content of an initramfs image
+> lshw - list hardware 列出硬件设备
 >
-> The  lsinitramfs  command  lists the content of given initramfs images. It allows one to quickly check the content of one (or multiple) specified initramfs files.
+> lshw is a small tool to extract detailed information on the hardware configuration of the machine. It  can report exact memory configuration, firmware version, mainboard configuration, CPU version and speed, cache configuration, bus speed, etc. on DMI-capable x86 or IA-64 systems and on some PowerPC machines  (PowerMac G4 is known to work).It  currently  supports  DMI (x86 and IA-64 only), OpenFirmware device tree (PowerPC only), PCI/AGP, CPUID (x86), IDE/ATA/ATAPI, PCMCIA (only tested on x86), SCSI and USB.
 
-```bash
-╭─root@gitlab /opt
-╰─# lsinitramfs /boot/initrd.img-4.15.0-58-generic | head -n 10
-.
-usr
-usr/share
-usr/share/plymouth
-usr/share/plymouth/themes
-usr/share/plymouth/themes/details
-usr/share/plymouth/themes/details/details.plymouth
-usr/share/plymouth/themes/text.plymouth
-usr/share/plymouth/themes/ubuntu-text
-usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth.in
+这个命令就相当于 Windows 下的设备管理器，列出系统里的硬件设备。
+
+- install
+
+```shell
+# RHEL/CentOS
+yum install lshw
+
+# Debian/Ubuntu
+apt install lshw
 ```
 
-#### lsipc
+- output example
 
-> lsipc - show information on IPC facilities currently employed in the system
->
-> lsipc  shows  information  on the inter-process communication facilities for which the calling process has read access.
-
-```bash
-╭─root@gitlab /opt
-╰─# lsipc
-RESOURCE DESCRIPTION                                     LIMIT USED  USE%
-MSGMNI   Number of message queues                        32000    0 0.00%
-MSGMAX   Max size of message (bytes)                      8192    -     -
-MSGMNB   Default max size of queue (bytes)               16384    -     -
-SHMMNI   Shared memory segments                           4096    1 0.02%
-SHMALL   Shared memory pages                           4194304    0 0.00%
-SHMMAX   Max size of shared memory segment (bytes) 17179869184    -     -
-SHMMIN   Min size of shared memory segment (bytes)           1    -     -
-SEMMNI   Number of semaphore identifiers                   262    0 0.00%
-SEMMNS   Total number of semaphores                      32000    0 0.00%
-SEMMSL   Max semaphores per semaphore set.                 250    -     -
-SEMOPM   Max number of operations per semop(2)              32    -     -
-SEMVMX   Semaphore max value                             32767    -     -
-```
-
-#### lslocks
-
-> lslocks - list local system locks
->
-> lslocks lists information about all the currently held file locks in a Linux system
-
-```bash
-╭─root@gitlab /opt
-╰─# lslocks
-COMMAND           PID  TYPE SIZE MODE  M START END PATH
-cron              900 FLOCK   4B WRITE 0     0   0 /run/crond.pid
-svlogd          53065 FLOCK   0B WRITE 0     0   0 /var/log/gitlab/redis/lock
-runsv           54095 FLOCK   0B WRITE 0     0   0 /opt/gitlab/sv/sidekiq/supervise/lock
-runsv           54095 FLOCK   0B WRITE 0     0   0 /opt/gitlab/sv/sidekiq/log/supervise/lock
-```
-
-#### lslogins
-
-> lslogins - display information about known users in the system
->
-> Examine the wtmp and btmp logs, /etc/shadow (if necessary) and /etc/passwd and output the desired data. The default action is to list info about all the users in the system.
-
-```bash
-╭─root@gitlab /opt
-╰─# lslogins
-  UID USER              PROC PWD-LOCK PWD-DENY LAST-LOGIN GECOS
-	 0 root               211        0        0      06:58 root
-	 1 daemon               1        0        1            daemon
-	 2 bin                  0        0        1            bin
-	 3 sys                  0        0        1            sys
-	 4 sync                 0        0        1            sync
-	 5 games                0        0        1            games
-	 6 man                  0        0        1            man
-	 7 lp                   0        0        1            lp
-	 8 mail                 0        0        1            mail
-	 9 news                 0        0        1            news
-	10 uucp                 0        0        1            uucp
-	13 proxy                0        0        1            proxy
-	33 www-data             0        0        1            www-data
-	34 backup               0        0        1            backup
-	38 list                 0        0        1            Mailing List Manager
-	39 irc                  0        0        1            ircd
-	41 gnats                0        0        1            Gnats Bug-Reporting System (admin)
-  100 systemd-network      1        0        1            systemd Network Management,,,
-  101 systemd-resolve      1        0        1            systemd Resolver,,,
-  102 syslog               1        0        1
-  103 messagebus           1        0        1
-  104 _apt                 0        0        1
-  105 lxd                  0        0        1
-  106 uuidd                0        0        1
-  107 dnsmasq              0        0        1            dnsmasq,,,
-  108 landscape            0        0        1
-  109 pollinate            0        0        1
-  110 sshd                 0        0        1
-  995 gitlab-prometheus    4        0        1
-  996 gitlab-psql         18        0        1
-  997 gitlab-redis         2        0        1
-  998 git                 16        0        1
-  999 gitlab-www           5        0        1
- 1000 ubuntu               0        0        0 2019-Aug28 ubuntu
-65534 nobody               0        0        1            nobody
-```
-
-#### lsmem
-
-> lsmem - list the ranges of available memory with their online status
->
-> The  lsmem command lists the ranges of available memory with their online status. The listed memory blocks correspond to the memory block representation in sysfs. The command also shows the memory block  size  and the amount of memory in online and offline state.
-
-```bash
-╭─root@gitlab /opt
-╰─# lsmem                                                                                                     127 ↵
-RANGE                                  SIZE  STATE REMOVABLE BLOCK
-0x0000000000000000-0x0000000007ffffff  128M online        no     0
-0x0000000008000000-0x000000000fffffff  128M online       yes     1
-0x0000000010000000-0x000000001fffffff  256M online        no   2-3
-0x0000000020000000-0x0000000027ffffff  128M online       yes     4
-0x0000000028000000-0x0000000037ffffff  256M online        no   5-6
-0x0000000038000000-0x000000003fffffff  128M online       yes     7
-0x0000000040000000-0x000000006fffffff  768M online        no  8-13
-0x0000000070000000-0x0000000077ffffff  128M online       yes    14
-0x0000000078000000-0x00000000bfffffff  1.1G online        no 15-23
-0x0000000100000000-0x000000013fffffff    1G online        no 32-39
-
-Memory block size:       128M
-Total online memory:       4G
-Total offline memory:      0B
-```
-
-#### lsmod
-
-> lsmod - Show the status of modules in the Linux Kernel
-
-```bash
-╭─root@gitlab /opt
-╰─# lsmod
-Module                  Size  Used by
-tcp_diag               16384  0
-inet_diag              24576  1 tcp_diag
-joydev                 24576  0
-input_leds             16384  0
-vmw_balloon            20480  0
-serio_raw              16384  0
-vmw_vsock_vmci_transport    28672  1
-vsock                  36864  2 vmw_vsock_vmci_transport
-vmw_vmci               69632  2 vmw_balloon,vmw_vsock_vmci_transport
-sch_fq_codel           20480  5
-ib_iser                49152  0
-rdma_cm                61440  1 ib_iser
-iw_cm                  45056  1 rdma_cm
-ib_cm                  53248  1 rdma_cm
-ib_core               225280  4 rdma_cm,iw_cm,ib_iser,ib_cm
-iscsi_tcp              20480  0
-libiscsi_tcp           20480  1 iscsi_tcp
-libiscsi               53248  3 libiscsi_tcp,iscsi_tcp,ib_iser
-scsi_transport_iscsi    98304  3 iscsi_tcp,ib_iser,libiscsi
-ip_tables              28672  0
-x_tables               40960  1 ip_tables
-autofs4                40960  2
-btrfs                1130496  0
-zstd_compress         163840  1 btrfs
-raid10                 53248  0
-raid456               143360  0
-async_raid6_recov      20480  1 raid456
-async_memcpy           16384  2 raid456,async_raid6_recov
-async_pq               16384  2 raid456,async_raid6_recov
-async_xor              16384  3 async_pq,raid456,async_raid6_recov
-async_tx               16384  5 async_pq,async_memcpy,async_xor,raid456,async_raid6_recov
-xor                    24576  2 async_xor,btrfs
-raid6_pq              114688  4 async_pq,btrfs,raid456,async_raid6_recov
-libcrc32c              16384  1 raid456
-raid1                  40960  0
-raid0                  20480  0
-multipath              16384  0
-linear                 16384  0
-crct10dif_pclmul       16384  0
-crc32_pclmul           16384  0
-ghash_clmulni_intel    16384  0
-pcbc                   16384  0
-vmwgfx                274432  1
-ttm                   106496  1 vmwgfx
-drm_kms_helper        172032  1 vmwgfx
-aesni_intel           188416  0
-syscopyarea            16384  1 drm_kms_helper
-aes_x86_64             20480  1 aesni_intel
-sysfillrect            16384  1 drm_kms_helper
-crypto_simd            16384  1 aesni_intel
-sysimgblt              16384  1 drm_kms_helper
-glue_helper            16384  1 aesni_intel
-fb_sys_fops            16384  1 drm_kms_helper
-cryptd                 24576  3 crypto_simd,ghash_clmulni_intel,aesni_intel
-psmouse               147456  0
-drm                   401408  4 vmwgfx,drm_kms_helper,ttm
-mptspi                 24576  2
-mptscsih               40960  1 mptspi
-mptbase               102400  2 mptspi,mptscsih
-ahci                   40960  0
-libahci                32768  1 ahci
-i2c_piix4              24576  0
-vmxnet3                57344  0
-scsi_transport_spi     32768  1 mptspi
-pata_acpi              16384  0
-```
-
-#### lsns - list namespaces
-
-lsns  lists  information  about all the currently accessible namespaces or about the given namespace.  The namespace identifier is an inode number.
-
-```bash
-╭─root@gitlab /opt
-╰─# lsns
-		  NS TYPE   NPROCS   PID USER             COMMAND
-4026531835 cgroup    264     1 root             /lib/systemd/systemd --system --deserialize 39
-4026531836 pid       264     1 root             /lib/systemd/systemd --system --deserialize 39
-4026531837 user      264     1 root             /lib/systemd/systemd --system --deserialize 39
-4026531838 uts       264     1 root             /lib/systemd/systemd --system --deserialize 39
-4026531839 ipc       264     1 root             /lib/systemd/systemd --system --deserialize 39
-4026531840 mnt       259     1 root             /lib/systemd/systemd --system --deserialize 39
-4026531861 mnt         1    31 root             kdevtmpfs
-4026531993 net       264     1 root             /lib/systemd/systemd --system --deserialize 39
-4026532531 mnt         1 37609 root             /lib/systemd/systemd-udevd
-4026532556 mnt         1 42954 systemd-timesync /lib/systemd/systemd-timesyncd
-4026532557 mnt         1 42900 systemd-network  /lib/systemd/systemd-networkd
-4026532603 mnt         1 42924 systemd-resolve  /lib/systemd/systemd-resolved
-```
-
-#### lsof - list open files
-
-#### lspci - list all PCI devices
-
-> lspci is a utility for displaying information about PCI buses in the system and devices connected to them.
-
-```bash
-╭─root@gitlab /opt
-╰─# lspci
-00:00.0 Host bridge: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX Host bridge (rev 01)
-00:01.0 PCI bridge: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX AGP bridge (rev 01)
-00:07.0 ISA bridge: Intel Corporation 82371AB/EB/MB PIIX4 ISA (rev 08)
-00:07.1 IDE interface: Intel Corporation 82371AB/EB/MB PIIX4 IDE (rev 01)
-00:07.3 Bridge: Intel Corporation 82371AB/EB/MB PIIX4 ACPI (rev 08)
-00:07.7 System peripheral: VMware Virtual Machine Communication Interface (rev 10)
-00:0f.0 VGA compatible controller: VMware SVGA II Adapter
-00:10.0 SCSI storage controller: LSI Logic / Symbios Logic 53c1030 PCI-X Fusion-MPT Dual Ultra320 SCSI (rev 01)
-00:11.0 PCI bridge: VMware PCI bridge (rev 02)
-```
-
-#### lspgpot
-
-> lspgpot - extracts the ownertrust values from PGP keyrings and list them in GnuPG ownertrust format.
 
 ```shell
 ╭─root@sg-02 /home/ubuntu
@@ -787,6 +568,294 @@ sg-02
 ╭─root@sg-02 /home/ubuntu
 ╰─#
 ```
+#### lsinitramfs
+
+> lsinitramfs - list content of an initramfs image
+>
+> The  lsinitramfs  command  lists the content of given initramfs images. It allows one to quickly check the content of one (or multiple) specified initramfs files.
+
+```bash
+╭─root@gitlab /opt
+╰─# lsinitramfs /boot/initrd.img-4.15.0-58-generic | head -n 10
+.
+usr
+usr/share
+usr/share/plymouth
+usr/share/plymouth/themes
+usr/share/plymouth/themes/details
+usr/share/plymouth/themes/details/details.plymouth
+usr/share/plymouth/themes/text.plymouth
+usr/share/plymouth/themes/ubuntu-text
+usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth.in
+```
+
+#### lsipc
+
+> lsipc - show information on IPC facilities currently employed in the system
+>
+> lsipc  shows  information on the inter-process communication facilities for which the calling process has read access.
+
+```bash
+╭─root@gitlab /opt
+╰─# lsipc
+RESOURCE DESCRIPTION                                     LIMIT USED  USE%
+MSGMNI   Number of message queues                        32000    0 0.00%
+MSGMAX   Max size of message (bytes)                      8192    -     -
+MSGMNB   Default max size of queue (bytes)               16384    -     -
+SHMMNI   Shared memory segments                           4096    1 0.02%
+SHMALL   Shared memory pages                           4194304    0 0.00%
+SHMMAX   Max size of shared memory segment (bytes) 17179869184    -     -
+SHMMIN   Min size of shared memory segment (bytes)           1    -     -
+SEMMNI   Number of semaphore identifiers                   262    0 0.00%
+SEMMNS   Total number of semaphores                      32000    0 0.00%
+SEMMSL   Max semaphores per semaphore set.                 250    -     -
+SEMOPM   Max number of operations per semop(2)              32    -     -
+SEMVMX   Semaphore max value                             32767    -     -
+```
+
+#### lslocks
+
+> lslocks - list local system locks
+>
+> lslocks lists information about all the currently held file locks in a Linux system
+
+列出当前系统中被加锁的文件
+
+```bash
+╭─root@gitlab /opt
+╰─# lslocks
+COMMAND           PID  TYPE SIZE MODE  M START END PATH
+cron              900 FLOCK   4B WRITE 0     0   0 /run/crond.pid
+svlogd          53065 FLOCK   0B WRITE 0     0   0 /var/log/gitlab/redis/lock
+runsv           54095 FLOCK   0B WRITE 0     0   0 /opt/gitlab/sv/sidekiq/supervise/lock
+runsv           54095 FLOCK   0B WRITE 0     0   0 /opt/gitlab/sv/sidekiq/log/supervise/lock
+```
+
+#### lslogins
+
+列出当前已经登录的用户信息
+
+> lslogins - display information about known users in the system
+>
+> Examine the wtmp and btmp logs, /etc/shadow (if necessary) and /etc/passwd and output the desired data. The default action is to list info about all the users in the system.
+
+```bash
+╭─root@gitlab /opt
+╰─# lslogins
+  UID USER              PROC PWD-LOCK PWD-DENY LAST-LOGIN GECOS
+	 0 root               211        0        0      06:58 root
+	 1 daemon               1        0        1            daemon
+	 2 bin                  0        0        1            bin
+	 3 sys                  0        0        1            sys
+	 4 sync                 0        0        1            sync
+	 5 games                0        0        1            games
+	 6 man                  0        0        1            man
+	 7 lp                   0        0        1            lp
+	 8 mail                 0        0        1            mail
+	 9 news                 0        0        1            news
+	10 uucp                 0        0        1            uucp
+	13 proxy                0        0        1            proxy
+	33 www-data             0        0        1            www-data
+	34 backup               0        0        1            backup
+	38 list                 0        0        1            Mailing List Manager
+	39 irc                  0        0        1            ircd
+	41 gnats                0        0        1            Gnats Bug-Reporting System (admin)
+  100 systemd-network      1        0        1            systemd Network Management,,,
+  101 systemd-resolve      1        0        1            systemd Resolver,,,
+  102 syslog               1        0        1
+  103 messagebus           1        0        1
+  104 _apt                 0        0        1
+  105 lxd                  0        0        1
+  106 uuidd                0        0        1
+  107 dnsmasq              0        0        1            dnsmasq,,,
+  108 landscape            0        0        1
+  109 pollinate            0        0        1
+  110 sshd                 0        0        1
+  995 gitlab-prometheus    4        0        1
+  996 gitlab-psql         18        0        1
+  997 gitlab-redis         2        0        1
+  998 git                 16        0        1
+  999 gitlab-www           5        0        1
+ 1000 ubuntu               0        0        0 2019-Aug28 ubuntu
+65534 nobody               0        0        1            nobody
+```
+
+#### lsmem
+
+> lsmem - list the ranges of available memory with their online status
+>
+> The  lsmem command lists the ranges of available memory with their online status. The listed memory blocks correspond to the memory block representation in sysfs. The command also shows the memory block  size  and the amount of memory in online and offline state.
+
+```bash
+╭─root@gitlab /opt
+╰─# lsmem                                                                                                     127 ↵
+RANGE                                  SIZE  STATE REMOVABLE BLOCK
+0x0000000000000000-0x0000000007ffffff  128M online        no     0
+0x0000000008000000-0x000000000fffffff  128M online       yes     1
+0x0000000010000000-0x000000001fffffff  256M online        no   2-3
+0x0000000020000000-0x0000000027ffffff  128M online       yes     4
+0x0000000028000000-0x0000000037ffffff  256M online        no   5-6
+0x0000000038000000-0x000000003fffffff  128M online       yes     7
+0x0000000040000000-0x000000006fffffff  768M online        no  8-13
+0x0000000070000000-0x0000000077ffffff  128M online       yes    14
+0x0000000078000000-0x00000000bfffffff  1.1G online        no 15-23
+0x0000000100000000-0x000000013fffffff    1G online        no 32-39
+
+Memory block size:       128M
+Total online memory:       4G
+Total offline memory:      0B
+```
+
+#### lsmod
+
+列出系统内核模块
+
+> lsmod - Show the status of modules in the Linux Kernel
+
+```bash
+╭─root@gitlab /opt
+╰─# lsmod
+Module                  Size  Used by
+tcp_diag               16384  0
+inet_diag              24576  1 tcp_diag
+joydev                 24576  0
+input_leds             16384  0
+vmw_balloon            20480  0
+serio_raw              16384  0
+vmw_vsock_vmci_transport    28672  1
+vsock                  36864  2 vmw_vsock_vmci_transport
+vmw_vmci               69632  2 vmw_balloon,vmw_vsock_vmci_transport
+sch_fq_codel           20480  5
+ib_iser                49152  0
+rdma_cm                61440  1 ib_iser
+iw_cm                  45056  1 rdma_cm
+ib_cm                  53248  1 rdma_cm
+ib_core               225280  4 rdma_cm,iw_cm,ib_iser,ib_cm
+iscsi_tcp              20480  0
+libiscsi_tcp           20480  1 iscsi_tcp
+libiscsi               53248  3 libiscsi_tcp,iscsi_tcp,ib_iser
+scsi_transport_iscsi    98304  3 iscsi_tcp,ib_iser,libiscsi
+ip_tables              28672  0
+x_tables               40960  1 ip_tables
+autofs4                40960  2
+btrfs                1130496  0
+zstd_compress         163840  1 btrfs
+raid10                 53248  0
+raid456               143360  0
+async_raid6_recov      20480  1 raid456
+async_memcpy           16384  2 raid456,async_raid6_recov
+async_pq               16384  2 raid456,async_raid6_recov
+async_xor              16384  3 async_pq,raid456,async_raid6_recov
+async_tx               16384  5 async_pq,async_memcpy,async_xor,raid456,async_raid6_recov
+xor                    24576  2 async_xor,btrfs
+raid6_pq              114688  4 async_pq,btrfs,raid456,async_raid6_recov
+libcrc32c              16384  1 raid456
+raid1                  40960  0
+raid0                  20480  0
+multipath              16384  0
+linear                 16384  0
+crct10dif_pclmul       16384  0
+crc32_pclmul           16384  0
+ghash_clmulni_intel    16384  0
+pcbc                   16384  0
+vmwgfx                274432  1
+ttm                   106496  1 vmwgfx
+drm_kms_helper        172032  1 vmwgfx
+aesni_intel           188416  0
+syscopyarea            16384  1 drm_kms_helper
+aes_x86_64             20480  1 aesni_intel
+sysfillrect            16384  1 drm_kms_helper
+crypto_simd            16384  1 aesni_intel
+sysimgblt              16384  1 drm_kms_helper
+glue_helper            16384  1 aesni_intel
+fb_sys_fops            16384  1 drm_kms_helper
+cryptd                 24576  3 crypto_simd,ghash_clmulni_intel,aesni_intel
+psmouse               147456  0
+drm                   401408  4 vmwgfx,drm_kms_helper,ttm
+mptspi                 24576  2
+mptscsih               40960  1 mptspi
+mptbase               102400  2 mptspi,mptscsih
+ahci                   40960  0
+libahci                32768  1 ahci
+i2c_piix4              24576  0
+vmxnet3                57344  0
+scsi_transport_spi     32768  1 mptspi
+pata_acpi              16384  0
+```
+
+#### lsns - list namespaces
+
+lsns  lists  information  about all the currently accessible namespaces or about the given namespace.  The namespace identifier is an inode number.
+
+```bash
+╭─root@gitlab /opt
+╰─# lsns
+		  NS TYPE   NPROCS   PID USER             COMMAND
+4026531835 cgroup    264     1 root             /lib/systemd/systemd --system --deserialize 39
+4026531836 pid       264     1 root             /lib/systemd/systemd --system --deserialize 39
+4026531837 user      264     1 root             /lib/systemd/systemd --system --deserialize 39
+4026531838 uts       264     1 root             /lib/systemd/systemd --system --deserialize 39
+4026531839 ipc       264     1 root             /lib/systemd/systemd --system --deserialize 39
+4026531840 mnt       259     1 root             /lib/systemd/systemd --system --deserialize 39
+4026531861 mnt         1    31 root             kdevtmpfs
+4026531993 net       264     1 root             /lib/systemd/systemd --system --deserialize 39
+4026532531 mnt         1 37609 root             /lib/systemd/systemd-udevd
+4026532556 mnt         1 42954 systemd-timesync /lib/systemd/systemd-timesyncd
+4026532557 mnt         1 42900 systemd-network  /lib/systemd/systemd-networkd
+4026532603 mnt         1 42924 systemd-resolve  /lib/systemd/systemd-resolved
+```
+
+#### lsof - list open files
+
+lsof 列出打开的文件。绝对是个排查故障的利器，在一切皆文件的 Linux 世界里，lsof 可以查看打开的文件是：
+
+- 普通文件
+- 目录
+- 网络文件系统的文件
+- 字符或设备文件
+- (函数)共享库
+- 管道、命名管道
+- 符号链接
+- 网络文件（例如：NFS file、网络socket，unix域名socket）
+- 还有其它类型的文件，等等
+
+另外 lsof 命令也是有着最多选项的Linux/Unix命令之一，另一个 nc 命令也是如此😂。
+
+- 列出端口号占用的进程
+
+```sell
+╭─root@blog /opt/shell
+╰─# lsof -i :53      ↵
+COMMAND   PID            USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+systemd-r 538 systemd-resolve   12u  IPv4  13925      0t0  UDP localhost:domain
+systemd-r 538 systemd-resolve   13u  IPv4  13926      0t0  TCP localhost:domain (LISTEN)
+```
+
+> PS：最近面试的时候被问到过
+>
+>Q： Linux 下查看端口占用的命令？
+>
+>A：`netstat -tunlp` 、`ss -tua`、`lsof -i` 😂
+
+#### lspci - list all PCI devices
+
+列出 PCI 设备，比如显卡
+
+> lspci is a utility for displaying information about PCI buses in the system and devices connected to them.
+
+```bash
+╭─root@gitlab /opt
+╰─# lspci
+00:00.0 Host bridge: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX Host bridge (rev 01)
+00:01.0 PCI bridge: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX AGP bridge (rev 01)
+00:07.0 ISA bridge: Intel Corporation 82371AB/EB/MB PIIX4 ISA (rev 08)
+00:07.1 IDE interface: Intel Corporation 82371AB/EB/MB PIIX4 IDE (rev 01)
+00:07.3 Bridge: Intel Corporation 82371AB/EB/MB PIIX4 ACPI (rev 08)
+00:07.7 System peripheral: VMware Virtual Machine Communication Interface (rev 10)
+00:0f.0 VGA compatible controller: VMware SVGA II Adapter
+00:10.0 SCSI storage controller: LSI Logic / Symbios Logic 53c1030 PCI-X Fusion-MPT Dual Ultra320 SCSI (rev 01)
+00:11.0 PCI bridge: VMware PCI bridge (rev 02)
+```
 
 ### proc
 
@@ -794,7 +863,7 @@ sg-02
 
 #### CPU
 
-`cat /proc/cpuinfo` 和 `lscpu`
+`cat /proc/cpuinfo` 和 `lscpu` 二者输出类似
 
 ```yaml
 [root@k8s-master-01 ~]# cat /proc/cpuinfo
@@ -826,6 +895,8 @@ power management:
 ```
 
 #### RAM
+
+用来查看一下系统内存的信息，另外 free 命令是从 /proc/meminfo 中读取信息的，跟我们直接读到的结果一样。
 
 ```yaml
 [root@k8s-master-01 proc]# cat meminfo
@@ -877,9 +948,17 @@ DirectMap2M:     3987456 kB
 DirectMap1G:     2097152 kB
 ```
 
+- buffer：表示块设备(block device)所占用的缓存页，包括：直接读写块设备、以及文件系统元数据(metadata)比如SuperBlock所使用的缓存页；
+
+- cache：表示普通文件数据所占用的缓存页。
+
+二者的区别推荐阅读 [FREE命令显示的BUFFERS与CACHED的区别](http://linuxperf.com/?p=32)，从 Linux 内核源码来区分。
+
 #### net
 
 - arp
+
+用来查看系统 arp 缓存的映射表。
 
 ```shell
 ╭─root@k8s-node-3 /proc/net
@@ -896,6 +975,8 @@ IP address       HW type     Flags       HW address            Mask     Device
 ```
 
 - route
+
+以树级结构列出系统的路由表信息
 
 ```shell
 ╭─root@k8s-node-3 ~
@@ -991,6 +1072,8 @@ Main:
 
 - nf_conntrack
 
+> nf_conntrack(在老版本的 Linux 内核中叫 ip_conntrack)是一个内核模块,用于跟踪一个连接的状态的。连接状态跟踪可以供其他模块使用,最常见的两个使用场景是 iptables 的 nat 的 state 模块。 iptables 的 nat 通过规则来修改目的/源地址,但光修改地址不行,我们还需要能让回来的包能路由到最初的来源主机。这就需要借助 nf_conntrack 来找到原来那个连接的记录才行。而 state 模块则是直接使用 nf_conntrack 里记录的连接的状态来匹配用户定义的相关规则。例如下面这条 INPUT 规则用于放行 80 端口上的状态为 NEW 的连接上的包。
+
 ```shell
 ╭─root@k8s-node-3 /proc/net
 ╰─# cat nf_conntrack | head -n 4
@@ -1000,7 +1083,14 @@ ipv4     2 tcp      6 86366 ESTABLISHED src=10.20.172.211 dst=10.10.107.121 spor
 ipv4     2 tcp      6 62 SYN_SENT src=10.20.172.211 dst=10.10.107.214 sport=37531 dport=179 [UNREPLIED] src=10.10.107.214 dst=10.20.172.211 sport=179 dport=37531 mark=0 secctx=system_u:object_r:unlabeled_t:s0 zone=0 use=2
 ```
 
+- [连接跟踪nf_conntrack与NAT和状态防火墙](http://www.linvon.cn/post/%E8%BF%9E%E6%8E%A5%E8%B7%9F%E8%B8%AAnf_conntrack%E4%B8%8Enat%E5%92%8C%E7%8A%B6%E6%80%81iptables/)
+- [netfilter 链接跟踪机制与NAT原理](https://www.cnblogs.com/liushaodong/archive/2013/02/26/2933593.html)
+- [(五)洞悉linux下的Netfilter&iptables：如何理解连接跟踪机制？](http://blog.chinaunix.net/uid-23069658-id-3169450.html)
+- [Iptables之nf_conntrack模块](https://clodfisher.github.io/2018/09/nf_conntrack/)
+
 #### kernel
+
+可以用来查看一下系统内核版本信息
 
 ```shell
 [root@k8s-master-01 proc]# uname -a
@@ -1013,11 +1103,111 @@ Linux version 3.10.0-862.el7.x86_64 (builder@kbuilder.dev.centos.org) (gcc versi
 
 #### nc netcat
 
+nc 是个瑞士军刀啊，你能想到的你想不到的都能做，在这里仅仅列出几个常用常用的命令，咱平时主要用来判断主机端口是否正常，想要完整地了解推荐阅读下面提到的文章。之前编程随想大佬也写过 nc 命令的使用详解。
+
+- install
+
+```shell
+# RHEL/CentOS
+yum install netcat
+
+# Debian/Ubuntu
+apt install netcat
+```
+
+- 查看主机端口是否打开
+
+```shell
+# 查看远程主机端口是否打开
+╭─root@blog /opt/shell
+╰─# nc -vz bing.com 443
+DNS fwd/rev mismatch: bing.com != a-0001.a-msedge.net
+Warning: inverse host lookup failed for 13.107.21.200: Unknown host
+bing.com [204.79.197.200] 443 (https) open
+# 查看本机端口是否被占用
+╭─root@blog /opt/shell
+╰─# nc -lp 80 -v                                                                    1 ↵
+retrying local 0.0.0.0:80 : Address already in use
+
+```
+
+- 用 nc 传输文件
+
+```shell
+# 接收端】（B 主机）运行如下命令（其中的 xxx 是端口号）
+nc -l -p xxx > file2
+
+# 然后在【发送端】（A 主机）运行如下命令
+nc x.x.x.x xxx < file1
+```
+
+- [扫盲 netcat（网猫）的 N 种用法——从“网络诊断”到“系统入侵”](https://program-think.blogspot.com/2019/09/Netcat-Tricks.html)
+
 #### nmap
+
+nmap 命令用的最多的就是端口扫描，在渗透领域多用来扫描内网机器。
+
+- install
+
+```shell
+# RHEL/CentOS
+yum install nmap
+
+# Debian/Ubuntu
+apt install nmap
+```
+
+- 扫描类型
+
+```shell
+-sT    TCP connect() 扫描，这是最基本的 TCP 扫描方式。这种扫描很容易被检测到，在目标主机的日志中会记录大批的连接请求以及错误信息。
+-sS    TCP 同步扫描 (TCP SYN)，因为不必全部打开一个 TCP 连接，所以这项技术通常称为半开扫描 (half-open)。这项技术最大的好处是，很少有系统能够把这记入系统日志。不过，你需要 root 权限来定制 SYN 数据包。
+-sF,-sX,-sN    秘密 FIN 数据包扫描、圣诞树 (Xmas Tree)、空 (Null) 扫描模式。这些扫描方式的理论依据是：关闭的端口需要对你的探测包回应 RST 包，而打开的端口必需忽略有问题的包（参考 RFC 793 第 64 页）。
+-sP    ping 扫描，用 ping 方式检查网络上哪些主机正在运行。当主机阻塞 ICMP echo 请求包是 ping 扫描是无效的。nmap 在任何情况下都会进行 ping 扫描，只有目标主机处于运行状态，才会进行后续的扫描。
+-sU    UDP 的数据包进行扫描，如果你想知道在某台主机上提供哪些 UDP（用户数据报协议，RFC768) 服务，可以使用此选项。
+-sA    ACK 扫描，这项高级的扫描方法通常可以用来穿过防火墙。
+-sW    滑动窗口扫描，非常类似于 ACK 的扫描。
+-sR    RPC 扫描，和其它不同的端口扫描方法结合使用。
+-b    FTP 反弹攻击 (bounce attack)，连接到防火墙后面的一台 FTP 服务器做代理，接着进行端口扫描。
+```
+
+- 扫描参数
+
+```shell
+-P0    在扫描之前，不 ping 主机。
+-PT    扫描之前，使用 TCP ping 确定哪些主机正在运行。
+-PS    对于 root 用户，这个选项让 nmap 使用 SYN 包而不是 ACK 包来对目标主机进行扫描。
+-PI    设置这个选项，让 nmap 使用真正的 ping(ICMP echo 请求）来扫描目标主机是否正在运行。
+-PB    这是默认的 ping 扫描选项。它使用 ACK(-PT) 和 ICMP(-PI) 两种扫描类型并行扫描。如果防火墙能够过滤其中一种包，使用这种方法，你就能够穿过防火墙。
+-O    这个选项激活对 TCP/IP 指纹特征 (fingerprinting) 的扫描，获得远程主机的标志，也就是操作系统类型。
+-I    打开 nmap 的反向标志扫描功能。
+-f    使用碎片 IP 数据包发送 SYN、FIN、XMAS、NULL。包增加包过滤、入侵检测系统的难度，使其无法知道你的企图。
+-v    冗余模式。强烈推荐使用这个选项，它会给出扫描过程中的详细信息。
+-S <IP>    在一些情况下，nmap 可能无法确定你的源地址 (nmap 会告诉你）。在这种情况使用这个选项给出你的 IP 地址。
+-g port    设置扫描的源端口。一些天真的防火墙和包过滤器的规则集允许源端口为 DNS(53) 或者 FTP-DATA(20) 的包通过和实现连接。显然，如果攻击者把源端口修改为 20 或者 53，就可以摧毁防火墙的防护。
+-oN    把扫描结果重定向到一个可读的文件 logfilename 中。
+-oS    扫描结果输出到标准输出。
+--host_timeout    设置扫描一台主机的时间，以毫秒为单位。默认的情况下，没有超时限制。
+--max_rtt_timeout    设置对每次探测的等待时间，以毫秒为单位。如果超过这个时间限制就重传或者超时。默认值是大约 9000 毫秒。
+--min_rtt_timeout    设置 nmap 对每次探测至少等待你指定的时间，以毫秒为单位。
+-M count    置进行 TCP connect() 扫描时，最多使用多少个套接字进行并行的扫描。
+```
+
+- 获取远程主机系统类型和开放端口
+
+粗暴点就 `nmap -A IP`，或者 `nmap -sS -P0 -sV -O`
+
+- 探测内网在线主机
+
+```shell
+nmap -sP 192.168.0.0/24
+```
 
 ### 测试
 
 #### [fio](https://github.com/axboe/fio)
+
+用来做磁盘性能测试，十分强大的磁盘性能测试工具，可配置项和参数也很丰富。
 
 - install
 
