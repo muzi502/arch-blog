@@ -407,12 +407,6 @@ rss: https://blog.k8s.li/atom.xml
 
 看到这类抄来抄去复制粘贴的博客，简直辣眼睛啊，为了保护自己的眼睛不被这种垃圾信息流污染，墙裂推荐使用开源软件 Chrome&FireFox 插件 [uBlock Origin](https://github.com/gorhill/uBlock) 来在 Google 搜索页屏蔽掉这些国产、垃圾、抄袭、狗屎博客平台的搜索结果，顺带着建议把像 .baidu.com 、360这种无耻坑爹公司的域名也被屏蔽掉。
 
-### 为什么要强调独立二字？
-
-{% raw %}
-<blockquote class="twitter-tweet"><p lang="zh" dir="ltr">自己收藏的个人独立博客<a href="https://t.co/PI0tGM2qHN">https://t.co/PI0tGM2qHN</a><br><br>我为什么要强调独立二字？<br><br>首先中文博客我不喜欢国内像 CSDN、 博客园那样的抄袭博客平台；其次，拥有独立博客、能自己建站、有自己的域名、会生成静态博客等等这些能力就已经帮你过滤掉那些还在用百度的菜鸡了；最后独立博客内容大多都是个人原创 <a href="https://t.co/KHFiZHZnVh">pic.twitter.com/KHFiZHZnVh</a></p>&mdash; 502.li (@muzi_ii) <a href="https://twitter.com/muzi_ii/status/1183394988517838848?ref_src=twsrc%5Etfw">October 13, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-{% endraw %}
-
 ### 推荐个人独立博客列表
 
 放心吧，咱木子推荐的博客和文章绝对是质量相当高的，不像 CSDN 、博客园 、简书等等这些抄来抄去的 **国产** 博客平台。咱一向喜欢读的博客就是 `个人独立博客` 这也是咱在 [友链](https://blog.k8s.li/link/) 中所强调的，对于国产博客平台一向屑之，对微信公众号这种删帖封号、言论审查的平台也只有一个 `呸` 字屑之 ：）。
