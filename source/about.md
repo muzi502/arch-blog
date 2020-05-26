@@ -1,19 +1,24 @@
 ---
 title: about me
-date: 2020-03-20
+date: 2020-05-26
 type: "about"
 tag:
 copyright: true
 comment: true
 ---
 
-## info
+## bio
 
-- 这里是木子的个人博客😘，名字来源于日语 `ムジ`
-- 之前使用的 502.li 域名，现在为 k8s.li
-- 502 是一种 HTTP 协议的服务器端错误状态代码 Bad Gateway
-- li 这个域名是我觉着最好听的域名，还有一个是 io ，这两个域名最萌😂
-- ~~目前在一家 955 企业从事运维方面的工作，主要负责 Kubernetes 平台落地~~
+这里是木子的个人博客😘，名字来源于日语 `ムジ` ，下面就简单地介绍一下咱吧😂
+
+EFF Member | 搬砖社畜 | 屁民一只 🤦‍♂️垃圾佬🛠️翻车王🚐😫运维工程师🔧手稳💪不删库👍不跑路🏃容器虚拟化📦Docker🐳K8s☸️Android📳刷机搞~~基~~机📱📲素食者🍇🍈🍉🍊🍋🍌🍍🍎🍏水果迷 | Debian❤xfce | 开源软件😘自由软件 | Lite | Simple | Unix | Debian GNU/Linux User | OpenWRT | LEDE | 自黑自嘲
+
+- 喜欢捡洋垃圾、折腾软路由、LEDE、OpenWRT、NAS、群晖、服务器、固态硬盘、开发板等
+- 技术方面主要擅长 Linux 运维、Docker 、Kubernetes、监控、日志、搓集群、搓镜像、搓虚拟机等
+- 业余装机、修电脑、修手机、装系统、拆机、魔改、贴膜、换屏、飞线、找资源、下片等等都会干😂
+- 没有女朋友、单身很快乐、自己玩泥巴、有自由又不花钱、不想找、大概三十岁之前都不想找女朋友🙃
+- 住着筒子楼骑单车上班的低端人口，无车无房，买不起也不想买，一穷二白只能靠抠和薅来满足生活🤦‍♂️
+- 创建了一个 telegram 频道 [rss_kubernetes](https://t.me/rss_kubernetes)，使用 rssbot 订阅了一些 kubernetes 相关的个人独立博客😄
 
 ## connect
 
@@ -41,30 +46,13 @@ comment: true
 - WTFPL © Do What the Fuck You Want to Public License
 - 这是我收藏的个人独立博客 [友链](https://blog.k8s.li/link)  以及 [RSS](https://t.me/c/1134301275/1398)，做了简单的分类，在这儿或许能找到你想要的
 
-## bio
-
-EFF Member | 搬砖社畜 | 屁民一只 🤦‍♂️垃圾佬🛠️翻车王🚐😫运维工程师🔧手稳💪不删库👍不跑路🏃容器虚拟化📦Docker🐳K8s☸️Android📳刷机搞~~基~~机📱📲素食者🍇🍈🍉🍊🍋🍌🍍🍎🍏水果迷 | Debian❤xfce | 开源软件😘自由软件 | Lite | Simple | Unix | Debian GNU/Linux User | OpenWRT | LEDE
-
-- 喜欢捡洋垃圾、折腾软路由、LEDE、OpenWRT、NAS、群晖、服务器、固态硬盘、开发板、Arduino 等
-
-- 技术方面主要擅长 Linux 运维、Docker 、Kubernetes、CI/CD 、监控、日志、搓集群、搓镜像、搓虚拟机
-
-- 业余装机、修电脑、修手机、装系统、拆机、魔改、贴膜、换屏、飞线、找资源、下片等等都会干😂
-
-- 没有女朋友、单身很快乐、自己玩泥巴、有自由又不花钱、不想找、大概三十岁之前都不想找女朋友🙃
-
-- RSS 忠实用户，目前在用 [telegram rssbot](https://github.com/iovxw/rssbot)
-
-- 博客收藏爱好者，Chrome 书签 3000+，收藏个人独立博客 500 多个
-
-- 创建了一个 telegram 频道 [rss_kubernetes](https://t.me/rss_kubernetes)，使用 rssbot 订阅了一些 kubernetes 相关的个人独立博客
+- 
 
 ## hobby
 
 - 喜欢捡垃圾和折腾，这是我折腾过的 [垃圾](https://blog.k8s.li/phones-history.html) 和 [软件](https://blog.k8s.li/android-tools.html)
 - 有阅读的习惯，基本上全年每天都有阅读的是时间，每晚都会捧着 Kindle（催眠神器） 看书到困，这是我的 [书单](https://blog.k8s.li/booklist.html) 以及我的 kindle 读书笔记 [kindle.502.li](https://kindle.502.li)
 - 一般路过的二刺螈，喜欢看动漫和轻小说，这是我看过的 [动漫](https://bgm.tv/user/512178)，我只喜欢纸片人（死宅真恶心（小声
-- 喜欢灵梦！
 - 喜欢读别人的博客，收藏博客，也喜欢写博客。一些精彩的博客会制作成电子书在 Kindle 上认真阅读，欢迎给咱喂食一些不错滴博客。
 - 对生命科学/生命起源/地球起源/宇宙太空/等自然科学感兴趣，BBC 纪录片忠实粉丝
 
