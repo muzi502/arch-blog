@@ -24,7 +24,7 @@ comment: true
 
 原来有些程序是不支持软链接目录的，还有一点就是软链接的路径也有点坑。比如我将 `/opt/docker -> /var/lib/docker/` ，在 `/var/lib/docker` 目录下执行 `ls ../` 即它的上一级目录是 `/opt` 而不是 `/var/lib` ，对于一些依赖相对路径的应用（尤其是 shell 脚本）来讲这样使用软链接的方式也容易翻车😂。
 
-那么有没有一种更好的办法将两个目录进行“硬链接”呢，注意我在此用的是双引号，并非是真正的”硬链接“，搜了一圈发现 mount --bind 这种骚操作。比较适合这种场景。
+那么有没有一种更好的办法将两个目录进行“硬链接”呢，注意我在此用的是双引号，并非是真正的”硬链接“，搜了一圈发现 mount --bind 这种骚操作。无论我们对文件使用软链接/硬链接/bind，还是对目录使用软链接，其实都是希望操作的 `src` 和 `dest` 他们二者都能保持一致。通过 bind 挂载的方式具有着挂载点的一些特性，这是链接是不具有的，对一些不支持链接的应用来讲，bind 的方式要友好一些。
 
 ## bind
 
@@ -47,7 +47,7 @@ comment: true
 ╭─root@sg-02 /var/lib
 ╰─# ls -i /var/lib | grep docker
     211 docker
-    
+
 # 使用硬链接链接两个文件
 ╭─root@sg-02 /var/lib
 ╰─# ln /usr/local/bin/docker-compose /usr/bin/docker-compose
@@ -74,27 +74,88 @@ comment: true
 
 当我们使用 bind 的时候，是将一个目录 A  挂载到另一个目录 B ，目录 B 原有的内容就被屏”蔽掉“了，目录 B 里面的内容就是目录 A 里面的内容。这和我们挂在其他分区到挂载点目录一样，目录 B 的内容还是存在的，只不过是被”屏蔽“掉了，当我们 umount B 后，原内容就会复现。
 
-当我们使用 docker run -v PATH:PATH 启动一个容器的时候，实质上
+当我们使用 `docker run -v PATH:PATH` 启动一个容器的时候，实质上也是会用到 `bind`，docker 会将主机的目录通过 `bind` 的方式挂载到容器目录。下面我们启动一个 alpine 容器来实验一下。
 
-
-
+```shell
+docker run --name alpine -v /opt/bind/:/var --privileged --rm -it alpine sh
+docker inspect alpine
 ```
-docker run -v /opt/bind/:/var --privileged --rm -it alpine sh
-docker inspect 
-```
-
-·
 
 ```json
-        "Mounts": [
-            {
-                "Type": "bind",
-                "Source": "/opt/bind",
-                "Destination": "/var",
-                "Mode": "",
-                "RW": true,
-                "Propagation": "rprivate"
-            }
-        ]
+"Mounts": [
+    {
+        "Type": "bind",
+        "Source": "/opt/bind",
+        "Destination": "/var",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+    }
+]
 ```
+
+在容器内使用 umount 命令卸载掉 `/var` ，umount 操作需要 root 权限，这也是为什么要在容器启动的时候加上 `--privileged` 参数来启动一个特权容器的原因。
+
+```shell
+/ # ls /var/
+74898710_p21.jpg    MJSTEALEY.md        docker-compose.yml  letsencrypt         resolv.conf
+CONSOLE.md          README.md           hostname            logs                stop-and-remove.sh
+LICENSE             config              hosts               nginx               webp-server
+/ # umount /var/
+# umount 之后容器内原来的 /var 目录内容"恢复"了
+/ # ls /var/
+cache  empty  lib    local  lock   log    mail   opt    run    spool  tmp
+```
+
+## 其他用处🤔
+
+### 无缝更新 Webp Server Go
+
+在 [小土豆]()、[Nona]() 大佬讨论 [Webp Server Go]() 无缝更新的时候我们提出了一个思路：
+
+>   -   在更新之前先对 nginx 配置文件进行修改，去掉 webp server 的 location 字段：
+>
+>   ```nginx
+>           location ~* \.(png|jpg|jpeg)$ {
+>               proxy_pass http://127.0.0.1:3333;
+>               proxy_set_header HOST $http_host;
+>               add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+>           }
+>   ```
+>
+>   -   然后再 nginx -s reload 不中断 reload 一
+>   -   接着停掉 webp server 服务 `systemctl stop webps`
+>   -   mv webp-server{.bak,}
+>   -   mv ./upload/webp-server-linux-amd64 webp-server
+>   -   接着启动 webp server 服务 `systemctl start webps`
+>   -   然后开倒车把 nginx 配置文件再改回去🍞
+
+在此需要提几点，我们希望**无缝更新**，即在更新的过程中不会导致用户请求图片资源失败，那怕 `+1s`都不行，所以我们需要暂时性地在 nginx 配置文件里去掉 webp server ，使它去请求原图片，等更新完 webp server 之后再添加上去。
+
+对于木子这种经常删库跑路的手残菜鸟来讲，对一个配置文件改来改去不是好方法，万一 nginx 配置文件改来改去没改好， nginx -s reload 一下 nginx 服务就炸了😂。那么使用 cp 和 mv 怎么样。
+
+```shell
+cp blog.conf{,.bak}
+vim blog.conf
+nginx -s reload
+- update webp server
+mv blog.conf{,.bak2}
+mv blog.conf{.bak,}
+nginx -s reload
+```
+
+使用 bind 呢？好像少了一步，下次更新 webp server 的时候只需要 umount 一下，更新完之后再 mount 一下就可以啦。
+
+```shell
+cp blog.conf{,.bak}
+vim blog.conf
+nginx -s reload
+- update webp server
+mount --bind blog.conf.bak blohg.conf
+nginx -s reload
+```
+
+### VPS 搬家助手
+
+
 
