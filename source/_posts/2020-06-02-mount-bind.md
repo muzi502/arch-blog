@@ -1,6 +1,6 @@
 ---
-title: mount 命令 --bind 挂载参数
-date: 2020-05-27
+title: mount 命令之 --bind 挂载参数
+date: 2020-06-02
 updated:
 slug:
 categories: 技术
@@ -17,10 +17,6 @@ comment: true
 由于我的 VPS 不是大盘鸡(就是大容量磁盘机器啦😂)， docker 存储目录 `/var/lib/docker` 所在的分区严重不足，于是就想着在不改变 docker 配置的下将 `/opt` 目录下的分区分配给 `/var/lib/docker` 目录。首先想到的是把 `/var/lib/docker` 复制到 `/opt/docker`，然后再将 `/opt/docker` 软链接到 `/var/lib/docker` 。
 
 于是我就一顿操作猛如虎，`mv /var/lib/docker /opt/docker && ln -s /opt/docker /var/lib/docker` 一把梭，然后我启动一个容器的时候当场就翻车了🤣。
-
-```shell
-
-```
 
 原来有些程序是不支持软链接目录的，还有一点就是软链接的路径也有点坑。比如我将 `/opt/docker -> /var/lib/docker/` ，在 `/var/lib/docker` 目录下执行 `ls ../` 即它的上一级目录是 `/opt` 而不是 `/var/lib` ，对于一些依赖相对路径的应用（尤其是 shell 脚本）来讲这样使用软链接的方式也容易翻车😂。
 
@@ -157,5 +153,5 @@ nginx -s reload
 
 ### VPS 搬家助手
 
-
+其实还有很多用途啦，这里就不罗列了
 
