@@ -20,11 +20,23 @@ comment: true
 
 所谓炼成像就是构建镜像啦，下面用到的**搓**和**炼制**都是指的构建镜像啦，只是个人习惯用语而已😂。
 
-对于正处于容器时代的我们来讲，容器已经是我们互联网行业家喻户晓的工具。
+提到容器镜像就不得不提一下 OCI ，即 Open Container Initiative 旨在围绕容器格式和运行时制定一个开放的工业化标准。目前 OCI 主要有三个规范： 运行时规范 [runtime-spec](https://github.com/opencontainers/runtime-spec) ，镜像规范 [image-spec](http://www.github.com/opencontainers/image-spec) 以及不常见的镜像仓库规范 [distribution-spec](https://github.com/opencontainers/distribution-spec) 。下面这些大白话从 [容器开放接口规范（CRI OCI）](https://wilhelmguo.cn/blog/post/william/%E5%AE%B9%E5%99%A8%E5%BC%80%E6%94%BE%E6%8E%A5%E5%8F%A3%E8%A7%84%E8%8C%83%EF%BC%88CRI-OCI%EF%BC%89-2) 复制过来的，我也就懒得自己组织语言灌水了😂（凑字数
 
-OCI目前有两个规范： 运行时规范 ([runtime-spec](https://github.com/opencontainers/runtime-spec)) 和镜像规范 ([image-spec](http://www.github.com/opencontainers/image-spec))。 
+>   制定容器格式标准的宗旨概括来说就是不受上层结构的绑定，如特定的客户端、编排栈等，同时也不受特定的供应商或项目的绑定，即不限于某种特定操作系统、硬件、CPU架构、公有云等。
+>
+>   这两个协议通过 OCI runtime filesytem bundle 的标准格式连接在一起，OCI 镜像可以通过工具转换成 bundle，然后 OCI 容器引擎能够识别这个 bundle 来运行容器
+>
+>   -   操作标准化：容器的标准化操作包括使用标准容器创建、启动、停止容器，使用标准文件系统工具复制和创建容器快照，使用标准化网络工具进行下载和上传。
+>   -   内容无关：内容无关指不管针对的具体容器内容是什么，容器标准操作执行后都能产生同样的效果。如容器可以用同样的方式上传、启动，不管是PHP应用还是MySQL数据库服务。
+>   -   基础设施无关：无论是个人的笔记本电脑还是AWS S3，亦或是OpenStack，或者其它基础设施，都应该对支持容器的各项操作。
+>   -   为自动化量身定制：制定容器统一标准，是的操作内容无关化、平台无关化的根本目的之一，就是为了可以使容器操作全平台自动化。
+>   -   工业级交付：制定容器标准一大目标，就是使软件分发可以达到工业级交付成为现实
 
-其实 OCI 规范就是一堆 markdown 文件啦，内容很容易理解，不像 RFC 和 ISO 那么高深莫测，所以汝想对容器镜像有个深入的了解还是推荐大家去读一下这些 markdown 文件😂。是免费的哦，不像大多数 ISO 规范还要交钱才能看（︶^︶）哼。
+其实 OCI 规范就是一堆 markdown 文件啦，内容也很容易理解，不像 RFC 和 ISO 那么高深莫测，所以汝想对容器镜像有个深入的了解还是推荐大家去读一下这些 markdown 文件😂。OCI 规范是免费的哦，不像大多数 ISO 规范还要交钱才能看（︶^︶）哼。
+
+
+
+
 
 ### OCI image-spec
 
@@ -38,7 +50,13 @@ OCI目前有两个规范： 运行时规范 ([runtime-spec](https://github.com/o
 
 #### manifest
 
-[manifest 文件](https://github.com/opencontainers/image-spec/blob/master/manifest.md)：镜像的 config 文件索引，有哪些 layer，额外的 annotation 信息，manifest 文件中保存了很多和当前平台有关的信息
+[manifest 文件](https://github.com/opencontainers/image-spec/blob/master/manifest.md)：镜像的 config 文件索引，有哪些 layer，额外的 annotation 信息，manifest 文件中保存了很多和当前平台有关的信息。切记 manifest 中的 layer 和 config 中的 layer 表达的虽然都是镜像的 layer ，但二者代表的意义不太一样，稍后会讲到。根据 OCI image-spec 规范中 [OCI Image Manifest Specification](https://github.com/opencontainers/image-spec/blob/master/manifest.md) 的定义可以得知，镜像的 manifest 文件主要有以下三个目标：
+
+>   There are three main goals of the Image Manifest Specification.
+>
+>   -   The first goal is content-addressable images, by supporting an image model where the image's configuration can be hashed to generate a unique ID for the image and its components. 
+>   -   The second goal is to allow multi-architecture images, through a "fat manifest" which references image manifests for platform-specific versions of an image. In OCI, this is codified in an [image index](https://github.com/opencontainers/image-spec/blob/master/image-index.md). 
+>   -   The third goal is to be [translatable](https://github.com/opencontainers/image-spec/blob/master/conversion.md) to the [OCI Runtime Specification](https://github.com/opencontainers/runtime-spec).
 
 #### index
 
@@ -170,7 +188,7 @@ VOLUME /opt/exhaust
 CMD ["/usr/bin/webp-server", "--config", "/etc/config.json"]
 ```
 
-需要注意的是，在 RUN 指令的每行结尾我使用的是 `;\` 来接下一行 shell ，另一种写法是 `&&` 。二者有本质的区别，比如 COMMAND 1;COMMAND 2 ，当 `COMMAND 1` 运行失败时也继续运行 `COMMAND2`。而 COMMAND 1&& COMMAND 2，时 `COMMAND 1` 运行成功时才接着运行 `COMMAND 2` ， `COMMAND 1`运行失败会退出。不过建议用 `&&` ，如果是老司机的话用 `;` ，docker hub 官方镜像中用 `;` 较多一些，因为 `;` 比 `&&` 要美观一些（大雾😂
+需要注意的是，在 RUN 指令的每行结尾我使用的是 `;\` 来接下一行 shell ，另一种写法是 `&&` 。二者有本质的区别，比如 COMMAND 1;COMMAND 2 ，当 `COMMAND 1` 运行失败时也继续运行 `COMMAND2`。而 COMMAND 1&& COMMAND 2，时 `COMMAND 1` 运行成功时才接着运行 `COMMAND 2` ， `COMMAND 1`运行失败会退出。不过建议用 `&&` ，如果是老司机的话建议用 `;` ，docker hub 官方镜像中用 `;` 较多一些，因为 `;` 比 `&&` 要美观一些（大雾😂
 
 ### base image
 
@@ -265,8 +283,6 @@ Successfully tagged debian:buster
 要弄懂这两个问题首先要明白**相同**是指的什么相同？回到我们的起点镜像是怎炼成的，我们可以得知，既然一个镜像是由 layer 和元数据组成的。那么这里的相同就是指的两个镜像的 layer 相同，元数据相同。
 
 呜呜呜，我哭了。我把 debian 官方的镜像 pull 后发现我搓的镜像和 docker hub 官方的镜像不一样，为什么有同样的 `Dockerfile` 和 `rootfs.tar.xz` 以及镜像，搓出来的基础镜像不一样呢（掀桌儿！
-
->   就像复制粘贴别人相同的代码在自己机器上跑不起来一样苦恼😂
 
 ```shell
 ╭─root@sg-02 ~/docker-debian-artifacts/buster ‹dist-amd64›
@@ -626,11 +642,31 @@ d82f3623bb12        About a minute ago   /bin/sh -c #(nop) ADD file:a82014afc29e
 
 docker push 就和我们使用 git push 一样，将本地的镜像推送到一个称之为 registry 的镜像仓库，这个 registry 镜像仓库就像 GitHub 用来存放公共/私有的镜像，一个中心化的镜像仓库方便大家来进行交流和搬运镜像。这个 registry 稍后在镜像是怎样存放的章节详细讲一下。
 
-
-
 #### docker pull
 
+
+
+![image](https://user-images.githubusercontent.com/12036324/70367494-646d2380-18db-11ea-992a-d2bca4cbfeb0.png)
+
 docker pull 就和我们使用 git clone 一样效果，将远程的镜像仓库
+
+1.  由镜像名请求Manifest Schema v2
+
+
+
+2.  解析Manifest获取镜像Configuration
+
+
+
+3.  下载各Layer gzip压缩文件
+
+
+
+4.  验证Configuration中的RootFS.DiffIDs是否与下载（解压后）hash相同
+
+
+
+5.  解析Manifest获取镜像Configuration
 
 #### docker save
 
@@ -881,9 +917,44 @@ image
 21 directories, 119 files
 ```
 
+-   `repositories.json`
+
+repositories.json 就是存储镜像元数据信息，主要是 image name和 image id 的对应，digest 和 image id 的对应。当 pull 完一个镜像的时候 docker 会更新这个文件。当我们 docker run 一个容器的时候也用到这个文件去索引本地是否存在该镜像，没有镜像的话就自动去 pull 这个镜像。
+
+```json
+╭─root@sg-02 /var/lib/docker/image/overlay2
+╰─# jq "." repositories.json
+{
+  "Repositories": {
+    "debian": {
+      "debian:v1": "sha256:cfba37fd24f80f59e5d7c1f7735cae7a383e887d8cff7e2762fdd78c0d73568d",
+      "debian:v2": "sha256:e6e782a57a51d01168907938beb5cd5af24fcb7ebed8f0b32c203137ace6d3df"
+    },
+    "localhost:5000/library/debian": {
+      "localhost:5000/library/debian:v1": "sha256:cfba37fd24f80f59e5d7c1f7735cae7a383e887d8cff7e2762fdd78c0d73568d",
+      "localhost:5000/library/debian:v2": "sha256:e6e782a57a51d01168907938beb5cd5af24fcb7ebed8f0b32c203137ace6d3df",
+      "localhost:5000/library/debian@sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239": "sha256:cfba37fd24f80f59e5d7c1f7735cae7a383e887d8cff7e2762fdd78c0d73568d",
+      "localhost:5000/library/debian@sha256:c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bcf11": "sha256:e6e782a57a51d01168907938beb5cd5af24fcb7ebed8f0b32c203137ace6d3df"
+    },
+    "registry": {
+      "registry:latest": "sha256:708bc6af7e5e539bdb59707bbf1053cc2166622f5e1b17666f0ba5829ca6aaea",
+      "registry@sha256:7d081088e4bfd632a88e3f3bcd9e007ef44a796fddfe3261407a3f9f04abe1e7": "sha256:708bc6af7e5e539bdb59707bbf1053cc2166622f5e1b17666f0ba5829ca6aaea"
+    }
+  }
+}
+```
+
+
+
+```
+
+```
+
+
+
 #### /var/lib/docker/overlay2
 
-下面是一段从 StackOverflow 上搬运过来的解释，
+下面是一段从 [StackOverflow](https://stackoverflow.com/questions/56550890/docker-image-merged-diff-work-lowerdir-components-of-graphdriver) 上搬运过来的解释，
 
 >   **LowerDir**: these are the read-only layers of an overlay filesystem. For docker, these are the image layers assembled in order.
 >
@@ -1258,7 +1329,7 @@ _uploads
 ./debian/_manifests/revisions/sha256/c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bcf11/link
 ```
 
-`_manifests` 文件夹下包含着镜像的 tags 和 revisions 信息，每一个镜像的每一个 tag 对应着于 tag 名相同的目录。镜像的 tag 并不存储在 image config 中，而是以目录的形式来形成镜像的 tag，这一点比较奇妙。
+`_manifests` 文件夹下包含着镜像的 `tags` 和 `revisions` 信息，每一个镜像的每一个 tag 对应着于 tag 名相同的目录。镜像的 tag 并不存储在 image config 中，而是以目录的形式来形成镜像的 tag，这一点比较奇妙。
 
 ```shell
 .
@@ -1299,7 +1370,7 @@ _uploads
 
 #### 镜像的 tag
 
-`tag` 目录下着一个名为 `link` 文件，文件的值是指向 `blobs` 目录下的 `image config` 的 `data` 文件。
+ 每个 `tag`名目录下面有 `current` 目录和 `index` 目录， `current` 目录下的 link 文件保存了该 tag 目前的 manifest 文件的 sha256 编码，对应在 `blobs` 中的 `sha256` 目录下的 `data` 文件，而 `index` 目录则列出了该 `tag` 历史上传的所有版本的 `sha256` 编码信息。`_revisions` 目录里存放了该 `repository` 历史上上传版本的所有 sha256 编码信息。
 
 ```shell
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2/repositories/library/debian/_manifests/tags/v1
@@ -1316,7 +1387,7 @@ sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239
 │       └── [ 529]  data
 ```
 
-当我们 pull 镜像的时候如果不指定镜像的 tag 默认就是 latest，registry 会首先会解析到这个 tag 名，然后根据 tag 名目录下的 link 文件找到该镜像的 manifest 的位置，接着去请求这个 manifest 文件，客户端根据这个 manifest 文件来 pull 相应的镜像 layer 。
+当我们 `pull` 镜像的时候如果不指定镜像的 `tag`名，默认就是 latest，registry 会从 HTTP 请求中解析到这个 tag 名，然后根据 tag 名目录下的 link 文件找到该镜像的 manifest 的位置返回给客户端，客户端接着去请求这个 manifest 文件，客户端根据这个 manifest 文件来 pull 相应的镜像 layer 。
 
 ```json
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2/repositories/library/debian/_manifests/tags/v1
@@ -1339,11 +1410,15 @@ sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239
 }
 ```
 
+最后再补充一点就是，同一个镜像在 registry 中存储的位置是相同的，具体的分析可以参考 [镜像仓库中镜像存储的原理解析](https://supereagle.github.io/2018/04/24/docker-registry/) 这篇博客。
+
+>   -   通过 Registry API 获得的两个镜像仓库中相同镜像的 manifest 信息完全相同。
+>   -   两个镜像仓库中相同镜像的 manifest 信息的存储路径和内容完全相同。
+>   -   两个镜像仓库中相同镜像的 blob 信息的存储路径和内容完全相同。
+
 ### docker-archive
 
 本来我想着 docker save 出来的并不是一个镜像，而是一个 `.tar` 文件，但我想了又想，还是觉着它是一个镜像，只不过存在的方式不同而已。于在 docker 和 registry 中存放的方式不同，使用 docker save 出来的镜像是一个孤立的存在。就像是从蛋糕店里拿出来的蛋糕，外面肯定要有个精美的包装是吧，你总没见过。放在哪里都可以，使用的时候我们使用 docker load 拆开外包装(`.tar`)就可。
-
-
 
 ## 镜像是怎么食用的😋
 
@@ -1393,10 +1468,6 @@ overlay2
 │       └── work
 ```
 
-### containerd
-
-### Pod
-
 ## 镜像是怎么焚毁的
 
 当我们食用完一个镜像之后，如果今后不再需要它了，我们怎么从本地删除一个镜像呢，其实就是 `rm -rf /` 啦（才不是x
@@ -1415,7 +1486,9 @@ overlay2
 -   [Docker Registry HTTP API V2](https://docs.docker.com/registry/spec/api/)
 -   [image](https://github.com/containers/image)
 -   [OCI Image Manifest Specification](https://github.com/opencontainers/image-spec)
+-   [distribution-spec](https://github.com/opencontainers/distribution-spec)
 -   [debuerreotype/](https://doi-janky.infosiftr.net/job/tianon/job/debuerreotype/)
+-    [overlayfs.txt](https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt) 
 
 ### 源码
 
