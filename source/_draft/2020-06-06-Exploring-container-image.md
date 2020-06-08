@@ -34,10 +34,6 @@ comment: true
 
 其实 OCI 规范就是一堆 markdown 文件啦，内容也很容易理解，不像 RFC 和 ISO 那么高深莫测，所以汝想对容器镜像有个深入的了解还是推荐大家去读一下这些 markdown 文件😂。OCI 规范是免费的哦，不像大多数 ISO 规范还要交钱才能看（︶^︶）哼。
 
-
-
-
-
 ### OCI image-spec
 
 #### layer
@@ -206,9 +202,9 @@ CMD ["bash"]
 
 `ADD rootfs.tar.xz /` 中，这个 `rootfs.tar.xz` 就是我们经过一系列骚操作搓出来的根文件系统，这个操作比较复杂，木子太菜了就不在这里瞎掰掰了🤣，所以感兴趣的可以去看一下构建 debian 基础镜像的 Jenkins 流水线任务 [debuerreotype](https://doi-janky.infosiftr.net/job/tianon/job/debuerreotype/)，上面有构建这个 `rootfs.tar.xz` 完整过程，或者参考 Debian 官方的 [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts) 这个 repo 里的 shell 脚本。其实基础镜像通过一系列操作，比如源码构建，搓出来一个 `rootfs.tar.xz` 就可以啦。
 
-需要额外注意一点，在这里往镜像里添加 `rootfs.tar.xz` 时使用的时 `ADD` 而不是 `COPY` ，因为在 Dockerfile 中的 ADD 指令 src 文件可以是本机当前目录下的文件，也可以是个 URL ，而且如果往里面添加的文件是个 tar 包 ，使用 ADD 指令构建的时候 docker 会帮我们把 tar 包解开，使用 COPY 并不会解开 tarball 。
+需要额外注意一点，在这里往镜像里添加 `rootfs.tar.xz` 时使用的时 `ADD` 而不是 `COPY` ，因为在 Dockerfile 中的 ADD 指令 src 文件如果是个 tar 包，在构建的时候 docker 会帮我们把 tar 包解开到指定目录，使用 copy 指令则不会解开 tar 包。另外一点区别就是  ADD 指令是添加一个文件，这个文件可以是构建上下文环境中的文件，也可以是个 URL，而 COPY 只能添加构建上下文中的文件。所谓的构建上下文就是我们构建镜像的时候最后一个参数啦。
 
->   PS：面试的时候经常被问 ADD 和 COPY 的区别😂。
+>   PS：面试的时候经常被问 ADD 与 COPY 的区别；CMD 与 ENTRYPOINT 的区别😂。
 
 搓这个 `rootfs.tar.xz` 不同的发行版方法可能不太一样，Debian 发行版的  `rootfs.tar.xz` 可以在 [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts) 这个 repo 上找到，根据不同处理器 arch 选择相应的 branch ，然后这个 branch 下的目录就对应着该发行版的不同的版本的代号。发现 Debian 官方是将所有 arch 和所有版本的 `rootfs.tar.xz` 都放在这个 repo 里的，以至于这个 repo 的大小接近 2.88 GiB 😨，当网盘来用的嘛🤣（：手动滑稽
 
@@ -328,8 +324,6 @@ IMAGE               CREATED             CREATED BY                              
 5971ee6076a0        3 weeks ago         /bin/sh -c #(nop)  CMD ["bash"]                 0B
 <missing>           3 weeks ago         /bin/sh -c #(nop) ADD file:fb54c709daa205bf9…   114MB
 ```
-
-
 
 docker history debian:v1
 
@@ -580,14 +574,6 @@ d82f3623bb12        About a minute ago   /bin/sh -c #(nop) ADD file:a82014afc29e
 
 结论，根据 docker build 的原理我们可以大胆地论断，**世界上两台机器上不可能构建出完全相同镜像！**
 
-
-
-```shell
-
-```
-
-
-
 ```json
 ╭─root@sg-02 ~/buster/slim
 ╰─# skopeo inspect docker-daemon:debian:v1 --raw | jq "."
@@ -609,8 +595,6 @@ d82f3623bb12        About a minute ago   /bin/sh -c #(nop) ADD file:a82014afc29e
 }
 ```
 
-
-
 ```json
 {
   "schemaVersion": 2,
@@ -630,7 +614,168 @@ d82f3623bb12        About a minute ago   /bin/sh -c #(nop) ADD file:a82014afc29e
 }
 ```
 
+## 镜像是怎样存放的 （一） 🙄
 
+当我们构建完一个镜像之后，镜像就存储在了我们 docker 本地存储目录，默认情况下为 `/var/lib/docker`，下面就探寻一下镜像是以什么样的目录结构存放的。在开始 hack 之前我们先统一一下环境信息，我使用的机器是 Ubuntu 1804，`docker info` 信息如下：
+
+```yaml
+╭─root@sg-02 /var/lib/docker
+╰─# docker info
+Client:
+ Debug Mode: false
+ Plugins:
+  buildx: Build with BuildKit (Docker Inc., v0.3.1-tp-docker)
+  app: Docker Application (Docker Inc., v0.8.0)
+Server:
+ Containers: 0
+  Running: 0
+  Paused: 0
+  Stopped: 0
+ Images: 2
+ Server Version: 19.03.5
+ Storage Driver: overlay2
+  Backing Filesystem: extfs
+  Supports d_type: true
+  Native Overlay Diff: true
+ Logging Driver: json-file
+ Cgroup Driver: cgroupfs
+ Plugins:
+  Volume: local
+  Network: bridge host ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog
+ Swarm: inactive
+ Runtimes: runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version: b34a5c8af56e510852c35414db4c1f4fa6172339
+ runc version: 3e425f80a8c931f88e6d94a8c831b9d5aa481657
+ init version: fec3683
+ Security Options:
+  apparmor
+  seccomp
+   Profile: default
+ Kernel Version: 4.15.0-1052-aws
+ Operating System: Ubuntu 18.04.1 LTS
+ OSType: linux
+ Architecture: x86_64
+ CPUs: 1
+ Total Memory: 983.9MiB
+ Name: sg-02
+ ID: B7J5:Y7ZM:Y477:7AS6:WMYI:6NLV:YOMA:W32Y:H4NZ:UQVD:XHDX:Y5EF
+ Docker Root Dir: /opt/docker
+ Debug Mode: false
+ Username: webpsh
+ Registry: https://index.docker.io/v1/
+ Labels:
+ Experimental: false
+ Insecure Registries:
+  127.0.0.0/8
+ Registry Mirrors:
+  https://registry.k8s.li/
+ Live Restore Enabled: false
+```
+
+为了方便分析，我将其他的 docker image 全部清空掉，只保留 `debian:v1` 和 `debian:v2` 这两个镜像，这两个镜像足够帮助我们理解容器镜像是如何存放的，镜像多了多话分析下面存储目录的时候可能不太方便（＞﹏＜），这两个镜像是我们利用 `rootfs.tar.xz` 构建出来的基础镜像。
+
+```shell
+╭─root@sg-02 /var/lib/docker
+╰─# docker images
+REPOSITORY       TAG         IMAGE ID            CREATED             SIZE
+debian           v2          e6e782a57a51        22 hours ago        69.2MB
+debian           v1          cfba37fd24f8        22 hours ago        69.2MB
+```
+
+### docker (/var/lib/docker)
+
+```shell
+╭─root@sg-02 /var/lib/docker
+╰─# tree -d -L 1
+.
+├── builder
+├── buildkit
+├── containers
+├── image
+├── network
+├── overlay2
+├── plugins
+├── runtimes
+├── swarm
+├── tmp
+├── trust
+└── volumes
+
+12 directories
+```
+
+根据目录的名字我们可以大致推断出关于容器镜像的存储，我们只关心 image 和 overlay2 这两个文件夹即可，容器的元数据存放在 image 目录下，容器的 layer 数据存放在 overlay2 目录下。
+
+#### /var/lib/docker/image
+
+```shell
+image
+└── overlay2
+    ├── distribution
+    │   ├── diffid-by-digest
+    │   │   └── sha256
+    │   │       ├── 039b991354af4dcbc534338f687e27643c717bb57e11b87c2e81d50bdd0b2376
+    │   │       ├── 09a4142c5c9dde2fbf35e7a6e6475eba75a8c28540c375c80be7eade4b7cb438
+    │   └── v2metadata-by-diffid
+    │       └── sha256
+    │           ├── 0683de2821778aa9546bf3d3e6944df779daba1582631b7ea3517bb36f9e4007
+    │           ├── 0f7493e3a35bab1679e587b41b353b041dca1e7043be230670969703f28a1d83
+    ├── imagedb
+    │   ├── content
+    │   │   └── sha256
+    │   │       ├── 708bc6af7e5e539bdb59707bbf1053cc2166622f5e1b17666f0ba5829ca6aaea
+    │   │       └── f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a
+    │   └── metadata
+    │       └── sha256
+    ├── layerdb
+    │   ├── mounts
+    │   ├── sha256
+    │   │   ├── b9835d6a62886d4e85b65abb120c0ea44ff1b3d116d7a707620785d4664d8c1a
+    │   │   │   ├── cache-id
+    │   │   │   ├── diff
+    │   │   │   ├── parent
+    │   │   │   ├── size
+    │   │   │   └── tar-split.json.gz
+    │   │   └── d9b567b77bcdb9d8944d3654ea9bb5f6f4f7c4d07a264b2e40b1bb09af171dd3
+    │   │       ├── cache-id
+    │   │       ├── diff
+    │   │       ├── parent
+    │   │       ├── size
+    │   │       └── tar-split.json.gz
+    │   └── tmp
+    └── repositories.json
+21 directories, 119 files
+```
+
+-   `repositories.json`
+
+repositories.json 就是存储镜像元数据信息，主要是 image name 和 image id 的对应，digest 和 image id 的对应。当 pull 完一个镜像的时候 docker 会更新这个文件。当我们 docker run 一个容器的时候也用到这个文件去索引本地是否存在该镜像，没有镜像的话就自动去 pull 这个镜像。
+
+```json
+╭─root@sg-02 /var/lib/docker/image/overlay2
+╰─# jq "." repositories.json
+{
+  "Repositories": {
+    "debian": {
+      "debian:v1": "sha256:cfba37fd24f80f59e5d7c1f7735cae7a383e887d8cff7e2762fdd78c0d73568d",
+      "debian:v2": "sha256:e6e782a57a51d01168907938beb5cd5af24fcb7ebed8f0b32c203137ace6d3df"
+    },
+    "localhost:5000/library/debian": {
+      "localhost:5000/library/debian:v1": "sha256:cfba37fd24f80f59e5d7c1f7735cae7a383e887d8cff7e2762fdd78c0d73568d",
+      "localhost:5000/library/debian:v2": "sha256:e6e782a57a51d01168907938beb5cd5af24fcb7ebed8f0b32c203137ace6d3df",
+      "localhost:5000/library/debian@sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239": "sha256:cfba37fd24f80f59e5d7c1f7735cae7a383e887d8cff7e2762fdd78c0d73568d",
+      "localhost:5000/library/debian@sha256:c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bcf11": "sha256:e6e782a57a51d01168907938beb5cd5af24fcb7ebed8f0b32c203137ace6d3df"
+    },
+    "registry": {
+      "registry:latest": "sha256:708bc6af7e5e539bdb59707bbf1053cc2166622f5e1b17666f0ba5829ca6aaea",
+      "registry@sha256:7d081088e4bfd632a88e3f3bcd9e007ef44a796fddfe3261407a3f9f04abe1e7": "sha256:708bc6af7e5e539bdb59707bbf1053cc2166622f5e1b17666f0ba5829ca6aaea"
+    }
+  }
+}
+```
 
 ## 镜像是怎么搬运的🤣
 
@@ -644,27 +789,17 @@ docker push 就和我们使用 git push 一样，将本地的镜像推送到一�
 
 #### docker pull
 
-
-
 ![image](https://user-images.githubusercontent.com/12036324/70367494-646d2380-18db-11ea-992a-d2bca4cbfeb0.png)
 
 docker pull 就和我们使用 git clone 一样效果，将远程的镜像仓库
 
 1.  由镜像名请求Manifest Schema v2
 
-
-
 2.  解析Manifest获取镜像Configuration
-
-
 
 3.  下载各Layer gzip压缩文件
 
-
-
 4.  验证Configuration中的RootFS.DiffIDs是否与下载（解压后）hash相同
-
-
 
 5.  解析Manifest获取镜像Configuration
 
@@ -781,176 +916,8 @@ root@deploy:/root # skopeo inspect docker://index.docker.io/webpsh/webps:latest 
 
 ### containerd
 
-## 镜像是怎样存放的🙄
 
-在开始 hack 之前我们先统一一下环境信息，我使用的机器是 Ubuntu 1804，`docker info` 信息如下：
-
-```yaml
-╭─root@sg-02 /var/lib/docker
-╰─# docker info
-Client:
- Debug Mode: false
- Plugins:
-  buildx: Build with BuildKit (Docker Inc., v0.3.1-tp-docker)
-  app: Docker Application (Docker Inc., v0.8.0)
-Server:
- Containers: 0
-  Running: 0
-  Paused: 0
-  Stopped: 0
- Images: 2
- Server Version: 19.03.5
- Storage Driver: overlay2
-  Backing Filesystem: extfs
-  Supports d_type: true
-  Native Overlay Diff: true
- Logging Driver: json-file
- Cgroup Driver: cgroupfs
- Plugins:
-  Volume: local
-  Network: bridge host ipvlan macvlan null overlay
-  Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog
- Swarm: inactive
- Runtimes: runc
- Default Runtime: runc
- Init Binary: docker-init
- containerd version: b34a5c8af56e510852c35414db4c1f4fa6172339
- runc version: 3e425f80a8c931f88e6d94a8c831b9d5aa481657
- init version: fec3683
- Security Options:
-  apparmor
-  seccomp
-   Profile: default
- Kernel Version: 4.15.0-1052-aws
- Operating System: Ubuntu 18.04.1 LTS
- OSType: linux
- Architecture: x86_64
- CPUs: 1
- Total Memory: 983.9MiB
- Name: sg-02
- ID: B7J5:Y7ZM:Y477:7AS6:WMYI:6NLV:YOMA:W32Y:H4NZ:UQVD:XHDX:Y5EF
- Docker Root Dir: /opt/docker
- Debug Mode: false
- Username: webpsh
- Registry: https://index.docker.io/v1/
- Labels:
- Experimental: false
- Insecure Registries:
-  127.0.0.0/8
- Registry Mirrors:
-  https://registry.k8s.li/
- Live Restore Enabled: false
-```
-
-为了方便分析，我将其他的 docker image 全部清空掉，只保留 `alpine:latest` 和 `registry:v2` 这两个镜像，这两个镜像足够帮助我们理解容器镜像是如何存放的，镜像多了多话分析下面存储目录的时候可能不太方便（＞﹏＜）
-
-```shell
-╭─root@sg-02 /var/lib/docker
-╰─# docker images
-REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-alpine              latest              f70734b6a266        6 weeks ago         5.61MB
-registry            2                   708bc6af7e5e        4 months ago        25.8MB
-```
-
-### docker (/var/lib/docker)
-
-```shell
-╭─root@sg-02 /var/lib/docker
-╰─# tree -d -L 1
-.
-├── builder
-├── buildkit
-├── containers
-├── image
-├── network
-├── overlay2
-├── plugins
-├── runtimes
-├── swarm
-├── tmp
-├── trust
-└── volumes
-
-12 directories
-```
-
-关于容器镜像的存储，我们只关心 image 和 overlay2 这两个文件夹即可，容器的元数据存放在 image 目录下，容器的 layer 数据存放在 overlay2 目录下。
-
-#### /var/lib/docker/image
-
-```shell
-image
-└── overlay2
-    ├── distribution
-    │   ├── diffid-by-digest
-    │   │   └── sha256
-    │   │       ├── 039b991354af4dcbc534338f687e27643c717bb57e11b87c2e81d50bdd0b2376
-    │   │       ├── 09a4142c5c9dde2fbf35e7a6e6475eba75a8c28540c375c80be7eade4b7cb438
-    │   └── v2metadata-by-diffid
-    │       └── sha256
-    │           ├── 0683de2821778aa9546bf3d3e6944df779daba1582631b7ea3517bb36f9e4007
-    │           ├── 0f7493e3a35bab1679e587b41b353b041dca1e7043be230670969703f28a1d83
-    ├── imagedb
-    │   ├── content
-    │   │   └── sha256
-    │   │       ├── 708bc6af7e5e539bdb59707bbf1053cc2166622f5e1b17666f0ba5829ca6aaea
-    │   │       └── f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a
-    │   └── metadata
-    │       └── sha256
-    ├── layerdb
-    │   ├── mounts
-    │   ├── sha256
-    │   │   ├── b9835d6a62886d4e85b65abb120c0ea44ff1b3d116d7a707620785d4664d8c1a
-    │   │   │   ├── cache-id
-    │   │   │   ├── diff
-    │   │   │   ├── parent
-    │   │   │   ├── size
-    │   │   │   └── tar-split.json.gz
-    │   │   └── d9b567b77bcdb9d8944d3654ea9bb5f6f4f7c4d07a264b2e40b1bb09af171dd3
-    │   │       ├── cache-id
-    │   │       ├── diff
-    │   │       ├── parent
-    │   │       ├── size
-    │   │       └── tar-split.json.gz
-    │   └── tmp
-    └── repositories.json
-21 directories, 119 files
-```
-
--   `repositories.json`
-
-repositories.json 就是存储镜像元数据信息，主要是 image name和 image id 的对应，digest 和 image id 的对应。当 pull 完一个镜像的时候 docker 会更新这个文件。当我们 docker run 一个容器的时候也用到这个文件去索引本地是否存在该镜像，没有镜像的话就自动去 pull 这个镜像。
-
-```json
-╭─root@sg-02 /var/lib/docker/image/overlay2
-╰─# jq "." repositories.json
-{
-  "Repositories": {
-    "debian": {
-      "debian:v1": "sha256:cfba37fd24f80f59e5d7c1f7735cae7a383e887d8cff7e2762fdd78c0d73568d",
-      "debian:v2": "sha256:e6e782a57a51d01168907938beb5cd5af24fcb7ebed8f0b32c203137ace6d3df"
-    },
-    "localhost:5000/library/debian": {
-      "localhost:5000/library/debian:v1": "sha256:cfba37fd24f80f59e5d7c1f7735cae7a383e887d8cff7e2762fdd78c0d73568d",
-      "localhost:5000/library/debian:v2": "sha256:e6e782a57a51d01168907938beb5cd5af24fcb7ebed8f0b32c203137ace6d3df",
-      "localhost:5000/library/debian@sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239": "sha256:cfba37fd24f80f59e5d7c1f7735cae7a383e887d8cff7e2762fdd78c0d73568d",
-      "localhost:5000/library/debian@sha256:c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bcf11": "sha256:e6e782a57a51d01168907938beb5cd5af24fcb7ebed8f0b32c203137ace6d3df"
-    },
-    "registry": {
-      "registry:latest": "sha256:708bc6af7e5e539bdb59707bbf1053cc2166622f5e1b17666f0ba5829ca6aaea",
-      "registry@sha256:7d081088e4bfd632a88e3f3bcd9e007ef44a796fddfe3261407a3f9f04abe1e7": "sha256:708bc6af7e5e539bdb59707bbf1053cc2166622f5e1b17666f0ba5829ca6aaea"
-    }
-  }
-}
-```
-
-
-
-```
-
-```
-
-
+## 镜像是怎么存放的 (二)
 
 #### /var/lib/docker/overlay2
 
