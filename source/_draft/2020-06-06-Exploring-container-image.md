@@ -34,7 +34,11 @@ comment: true
 
 其实 OCI 规范就是一堆 markdown 文件啦，内容也很容易理解，不像 RFC 和 ISO 那么高深莫测，所以汝想对容器镜像有个深入的了解还是推荐大家去读一下这些 markdown 文件😂。OCI 规范是免费的哦，不像大多数 ISO 规范还要交钱才能看（︶^︶）哼。
 
+OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/image-spec) 决定了我们的镜像按照什么标准来构建，以及构建完镜像之后如何存放，接着下文提到的 `Dockerfile` 则决定了镜像的 layer 内容以及镜像的一些元数据信息。一个镜像规范和一个 Dockerfile 指导着我们构建镜像。
+
 ### OCI image-spec
+
+
 
 #### layer
 
@@ -58,110 +62,11 @@ comment: true
 
 [index 文件](https://github.com/opencontainers/image-spec/blob/master/image-index.md)：可选的文件，指向不同平台的 manifest 文件，这个文件能保证一个镜像可以跨平台使用，每个平台拥有不同的 manifest 文件，使用 index 作为索引。
 
-#### example
-
-```json
-[
-    {
-        "Id": "sha256:30d9679b0b1ca7e56096eca0cdb7a6eedc29b63968f25156ef60dec27bc7d206",
-        "RepoTags": [
-            "webpsh/webps:latest"
-        ],
-        "RepoDigests": [
-       "webpsh/webps@sha256:8c00cbb0a78aa5ec0fc80c55cb765414800ebd86d2c8fc6c13b80a06a95a5b96"
-        ],
-        "Parent": "",
-        "Comment": "",
-        "Created": "2020-05-23T08:44:52.312682538Z",
-        "Container": "77832fa5c28c66ecfeddb819753c3d450fc1b8f4642bbcb4c139e5f4af4de8c6",
-        "ContainerConfig": {
-            "Hostname": "77832fa5c28c",
-            "Domainname": "",
-            "User": "",
-            "AttachStdin": false,
-            "AttachStdout": false,
-            "AttachStderr": false,
-            "Tty": false,
-            "OpenStdin": false,
-            "StdinOnce": false,
-            "Env": [
-                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-            ],
-            "Cmd": [
-                "/bin/sh",
-                "-c",
-                "#(nop) ",
-                "CMD [\"/usr/bin/webp-server\" \"--config\" \"/etc/config.json\"]"
-            ],
-            "ArgsEscaped": true,
-            "Image": "sha256:72890c3501685064e5ce6e955698d20c27171c721bd80f5cd022be9d3b489576",
-            "Volumes": {
-                "/opt/exhaust": {}
-            },
-            "WorkingDir": "/opt",
-            "Entrypoint": null,
-            "OnBuild": null,
-            "Labels": {}
-        },
-        "DockerVersion": "18.03.1-ee-3",
-        "Author": "",
-        "Config": {
-            "Hostname": "",
-            "Domainname": "",
-            "User": "",
-            "AttachStdin": false,
-            "AttachStdout": false,
-            "AttachStderr": false,
-            "Tty": false,
-            "OpenStdin": false,
-            "StdinOnce": false,
-            "Env": [
-                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-            ],
-            "Cmd": [
-                "/usr/bin/webp-server",
-                "--config",
-                "/etc/config.json"
-            ],
-            "ArgsEscaped": true,
-            "Image": "sha256:72890c3501685064e5ce6e955698d20c27171c721bd80f5cd022be9d3b489576",
-            "Volumes": {
-                "/opt/exhaust": {}
-            },
-            "WorkingDir": "/opt",
-            "Entrypoint": null,
-            "OnBuild": null,
-            "Labels": null
-        },
-        "Architecture": "amd64",
-        "Os": "linux",
-        "Size": 20549472,
-        "VirtualSize": 20549472,
-        "GraphDriver": {
-            "Data": {
-                "LowerDir": "/opt/docker/overlay2/e31dcab3fed6b1a16ca60e9bdb26be0dcd2be253f2ab0cc7f3b0220e98caab2a/diff:/opt/docker/overlay2/259cf6934509a674b1158f0a6c90c60c133fd11189f98945c7c3a524784509ff/diff",
-                "MergedDir": "/opt/docker/overlay2/35366b925242eea6e7fbd3e51946062531ee00e2b4032c6be5e62a44e13c1bbb/merged",
-                "UpperDir": "/opt/docker/overlay2/35366b925242eea6e7fbd3e51946062531ee00e2b4032c6be5e62a44e13c1bbb/diff",
-                "WorkDir": "/opt/docker/overlay2/35366b925242eea6e7fbd3e51946062531ee00e2b4032c6be5e62a44e13c1bbb/work"
-            },
-            "Name": "overlay2"
-        },
-        "RootFS": {
-            "Type": "layers",
-            "Layers": [
-                "sha256:3e207b409db364b595ba862cdc12be96dcdad8e36c59a03b7b3b61c946a5741a",
-                "sha256:e8896357b09d7f18aa7959ec3156b46f1051e101436533c9df28d2d5c9868f1a",
-                "sha256:7fa7d2998ee02838dab0997606b8f78103bb688a5fab67eaa26297bcca04bd78"
-            ]
-        },
-        "Metadata": {
-            "LastTagTime": "0001-01-01T00:00:00Z"
-        }
-    }
-]
-```
-
 ### Dockerfile
+
+众所周知 docker 镜像需要一个 Dockerfile 来构建而成，追根溯源，所有的镜像都起源于一个基础镜像和一个 Dockerfile文件，本文不再细讲 Dockerfile 的详细书写和技巧，网上也有很多众所周知的关于写好 Dockerfile 的技巧在此就不赘述了。
+
+下面就是 [webp server go](https://webp.sh) Dockerfile 的例子： 
 
 ```dockerfile
 FROM golang:alpine as builder
@@ -176,6 +81,7 @@ RUN apk update ;\
     sed -i 's/127.0.0.1/0.0.0.0/g' config.json
 WORKDIR /build
 RUN go build -o webp-server .
+
 FROM alpine
 COPY --from=builder /build/webp-server  /usr/bin/webp-server
 COPY --from=builder /build/config.json /etc/config.json
@@ -184,9 +90,54 @@ VOLUME /opt/exhaust
 CMD ["/usr/bin/webp-server", "--config", "/etc/config.json"]
 ```
 
-需要注意的是，在 RUN 指令的每行结尾我使用的是 `;\` 来接下一行 shell ，另一种写法是 `&&` 。二者有本质的区别，比如 COMMAND 1;COMMAND 2 ，当 `COMMAND 1` 运行失败时也继续运行 `COMMAND2`。而 COMMAND 1&& COMMAND 2，时 `COMMAND 1` 运行成功时才接着运行 `COMMAND 2` ， `COMMAND 1`运行失败会退出。不过建议用 `&&` ，如果是老司机的话建议用 `;` ，docker hub 官方镜像中用 `;` 较多一些，因为 `;` 比 `&&` 要美观一些（大雾😂
+需要注意的是，在 RUN 指令的每行结尾我使用的是 `;\` 来接下一行 shell ，另一种写法是 `&&` 。二者有本质的区别，比如 COMMAND 1;COMMAND 2 ，当 `COMMAND 1` 运行失败时会继续运行 `COMMAND2`，并不会退出。而 COMMAND 1&& COMMAND 2，时 `COMMAND 1` 运行成功时才接着运行 `COMMAND 2` ， `COMMAND 1`运行失败会退出。如果没有十足的把握保证每一行 shell 都能运行成功建议用 `&&` ，如果是老司机的话建议用 `;` ，逛了一圈 docker hub 官方镜像中用 `;` 较多一些，因为 `;` 比 `&&` 要美观一些（大雾😂
 
-### base image
+#### 镜像工厂🛠
+
+>   Docker 是一个典型的 C/S 架构的应用，分为 Docker 客户端（即平时敲的 docker 命令） Docker 服务端（dockerd 守护进程）。
+>
+>   Docker 客户端通过 REST API 和服务端进行交互，docker 客户端每发送一条指令，底层都会转化成 REST API 调用的形式发送给服务端，服务端处理客户端发送的请求并给出响应。
+>
+>   Docker 镜像的构建、容器创建、容器运行等工作都是 Docker 服务端来完成的，Docker 客户端只是承担发送指令的角色。
+>
+>   Docker 客户端和服务端可以在同一个宿主机，也可以在不同的宿主机，如果在同一个宿主机的话，Docker 客户端默认通过 UNIX 套接字(`/var/run/docker.sock`)和服务端通信。
+
+如果说炼制镜像需要个工厂的话，那么我们的 dockerd 守护进程进程就是个镜像工厂，docker 镜像都是在 dockerd 这个镜像工厂中炼成的。当我们使用 docker build 命令构建一个镜像的时候第一行日志就是 `Sending build context to Docker daemon  30.12MB`。这一步是 docker cli 这个命令行客户端将我们当前目录即构建上下文 `build context` 打包发送 `Docker daemon` 守护进程即 dockerd 。
+
+![img](img/docker-architecture.png)
+
+docker build 构建镜像的流程大概就是：
+
+-   执行 `docker build -t <imageName:imageTag> .`，可以使用 `-f`参数来指定 `Dockerfile` 文件；
+-   Docker 客户端会将构建命令后面指定的路径(`.`)下的所有文件打包成一个 tar 包，发送给 Docker 服务端;
+-   Docker 服务端收到客户端发送的 tar 包，然后解压，根据 Dockerfile 里面的指令进行镜像的分层构建；
+-   Docker 下载 FROM 语句中指定的基础镜像，然后将基础镜像的 layer 联合挂载为一层，并在上面创建一个空目录。
+-   接着在 chroot 中启动一个 bash，运行 `RUN` 语句中的命令：`RUN: chroot . /bin/bash -c "apt get update……"`。
+-   一行 `RUN` 命令结束后，会把上层目录压缩，形成新镜像中的新的一层。
+-   如果 Dockerfile 中包含其它命令，就以之前构建的层次为基础，从第二步开始重复创建新层，直到完成所有语句后退出。
+
+我们可以通过  `docker history <imageName:imageTag>` 命令来逆向 docker build 的过程。
+
+```shell
+╭─root@sg-02 ~/buster/slim
+╰─# docker history webpsh/webps
+IMAGE               CREATED             CREATED BY          SIZE                COMMENT
+30d9679b0b1c        2 weeks ago         /bin/sh -c #(nop)  CMD ["/usr/bin/webp-serve…   0B
+<missing>           2 weeks ago         /bin/sh -c #(nop)  VOLUME [/opt/exhaust]        0B
+<missing>           2 weeks ago         /bin/sh -c #(nop) WORKDIR /opt                  0B
+<missing>           2 weeks ago         /bin/sh -c #(nop) COPY file:1497d882aeef5f77…   168B
+<missing>           2 weeks ago         /bin/sh -c #(nop) COPY file:327020918e4dc998…   14.9MB
+<missing>           6 weeks ago         /bin/sh -c #(nop)  CMD ["/bin/sh"]              0B
+<missing>           6 weeks ago         /bin/sh -c #(nop) ADD file:b91adb67b670d3a6f…   5.61MB
+
+╭─root@sg-02 ~/buster/slim
+╰─# docker history debian:v2
+IMAGE               CREATED             CREATED BY           SIZE                COMMENT
+e6e782a57a51        38 hours ago        /bin/sh -c #(nop)  CMD ["bash"]                 0B
+ba8f577813c7        38 hours ago        /bin/sh -c #(nop) ADD file:a82014afc29e7b364…   69.2MB
+```
+
+#### base image
 
 当我们在写 `Dockerfile` 的时候都需要一个 `FROM` 语句来指定一个基础镜像，这些基础镜像并不是无中生有，也许需要一个 `Dockerfile` 来炼制成镜像。下面我们拿来 [debian:buster](https://hub.docker.com/_/debian) 这个基础镜像的 [Dockerfile](https://github.com/debuerreotype/docker-debian-artifacts/blob/18cb4d0418be1c80fb19141b69ac2e0600b2d601/buster/Dockerfile) 来看一下基础镜像是如何练成的。
 
@@ -1484,4 +1435,5 @@ overlay2
 -   [Docker 镜像内有啥，存哪？](http://open.daocloud.io/docker-jing-xiang-nei-you-sha-cun-na-ntitled/)
 -   [理解 Docker 镜像大小](http://open.daocloud.io/allen-tan-docker-xi-lie-zhi-shen-ke-li-jie-docker-jing-xiang-da-xiao/)
 -   [看尽 docker 容器文件系统](http://open.daocloud.io/allen-tan-docker-xi-lie-zhi-tu-kan-jin-docker-rong-qi-wen-jian-xi-tong/)
+-   [深入理解 Docker 构建上下文](https://qhh.me/2019/02/17/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-Docker-%E6%9E%84%E5%BB%BA%E4%B8%8A%E4%B8%8B%E6%96%87/)
 
