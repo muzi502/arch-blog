@@ -800,6 +800,90 @@ repositories.json 就是存储镜像元数据信息，主要是 image name 和 i
 }
 ```
 
+#### /var/lib/docker/overlay2
+
+下面是一段从 [StackOverflow](https://stackoverflow.com/questions/56550890/docker-image-merged-diff-work-lowerdir-components-of-graphdriver) 上搬运过来的解释。
+
+>   **LowerDir**: these are the read-only layers of an overlay filesystem. For docker, these are the image layers assembled in order.
+>
+>   **UpperDir**: this is the read-write layer of an overlay filesystem. For docker, that is the equivalent of the container specific layer that contains changes made by that container.
+>
+>   **WorkDir**: this is a required directory for overlay, it needs an empty directory for internal use.
+>
+>   **MergedDir**: this is the result of the overlay filesystem. Docker effectively chroot's into this directory when running the container.
+
+如果想对 overlayfs 文件系统有详细的了解，可以参考 Linux 内核官网上的这篇文档 [overlayfs.txt](https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt) 。
+
+从 docker 官方文档 [Use the OverlayFS storage driver](https://docs.docker.com/storage/storagedriver/overlayfs-driver/) 里偷来的一张图片
+
+![overlayfs lowerdir, upperdir, merged](img/overlay_constructs.jpg)
+
+```shell
+overlay2
+├── 259cf6934509a674b1158f0a6c90c60c133fd11189f98945c7c3a524784509ff
+│   └── diff
+│       ├── bin
+│       ├── dev
+│       ├── etc
+│       ├── home
+│       ├── lib
+│       ├── media
+│       ├── mnt
+│       ├── opt
+│       ├── proc
+│       ├── root
+│       ├── run
+│       ├── sbin
+│       ├── srv
+│       ├── sys
+│       ├── tmp
+│       ├── usr
+│       └── var
+├── 27f9e9b74a88a269121b4e77330a665d6cca4719cb9a58bfc96a2b88a07af805
+│   ├── diff
+│   └── work
+├── a0df3cc902cfbdee180e8bfa399d946f9022529d12dba3bc0b13fb7534120015
+│   ├── diff
+│   │   └── bin
+│   └── work
+├── b2fbebb39522cb6f1f5ecbc22b7bec5e9bc6ecc25ac942d9e26f8f94a028baec
+│   ├── diff
+│   │   ├── etc
+│   │   ├── lib
+│   │   ├── usr
+│   │   └── var
+│   └── work
+├── be8c12f63bebacb3d7d78a09990dce2a5837d86643f674a8fd80e187d8877db9
+│   ├── diff
+│   │   └── etc
+│   └── work
+├── e8f6e78aa1afeb96039c56f652bb6cd4bbd3daad172324c2172bad9b6c0a968d
+│   └── diff
+│       ├── bin
+│       ├── dev
+│       ├── etc
+│       ├── home
+│       ├── lib
+│       ├── media
+│       ├── mnt
+│       ├── proc
+│       ├── root
+│       ├── run
+│       ├── sbin
+│       ├── srv
+│       ├── sys
+│       ├── tmp
+│       ├── usr
+│       └── var
+└── l
+    ├── 526XCHXRJMZXRIHN4YWJH2QLPY -> ../b2fbebb39522cb6f1f5ecbc22b7bec5e9bc6ecc25ac942d9e26f8f94a028baec/diff
+    ├── 5RZOXYR35NSGAWTI36CVUIRW7U -> ../be8c12f63bebacb3d7d78a09990dce2a5837d86643f674a8fd80e187d8877db9/diff
+    ├── LBWRL4ZXGBWOTN5JDCDZVNOY7H -> ../a0df3cc902cfbdee180e8bfa399d946f9022529d12dba3bc0b13fb7534120015/diff
+    ├── MYRYBGZRI4I76MJWQHN7VLZXLW -> ../27f9e9b74a88a269121b4e77330a665d6cca4719cb9a58bfc96a2b88a07af805/diff
+    ├── PCIS4FYUJP4X2D4RWB7ETFL6K2 -> ../259cf6934509a674b1158f0a6c90c60c133fd11189f98945c7c3a524784509ff/diff
+    └── XK5IA4BWQ2CIS667J3SXPXGQK5 -> ../e8f6e78aa1afeb96039c56f652bb6cd4bbd3daad172324c2172bad9b6c0a968d/diff
+```
+
 ## 镜像是怎么搬运的🤣
 
 当我们在本地构建完成一个镜像之后，如何传递给他人呢？这就涉及到镜像是怎么搬运的一些知识，搬运镜像就像我们在 GitHub 上搬运代码一样，docker 也有类似于 git clone 和 git push 的搬运方式。
@@ -937,96 +1021,7 @@ root@deploy:/root # skopeo inspect docker://index.docker.io/webpsh/webps:latest 
 }
 ```
 
-### containerd
-
-
 ## 镜像是怎么存放的 (二)
-
-#### /var/lib/docker/overlay2
-
-下面是一段从 [StackOverflow](https://stackoverflow.com/questions/56550890/docker-image-merged-diff-work-lowerdir-components-of-graphdriver) 上搬运过来的解释，
-
->   **LowerDir**: these are the read-only layers of an overlay filesystem. For docker, these are the image layers assembled in order.
->
->   **UpperDir**: this is the read-write layer of an overlay filesystem. For docker, that is the equivalent of the container specific layer that contains changes made by that container.
->
->   **WorkDir**: this is a required directory for overlay, it needs an empty directory for internal use.
->
->   **MergedDir**: this is the result of the overlay filesystem. Docker effectively chroot's into this directory when running the container.
-
-如果想对 overlayfs 文件系统有详细的了解，可以参考 Linux 内核官网上的这篇文档 [overlayfs.txt](https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt) 。
-
-从 docker 官方文档 [Use the OverlayFS storage driver](https://docs.docker.com/storage/storagedriver/overlayfs-driver/) 里偷来的一张图片
-
-![overlayfs lowerdir, upperdir, merged](img/overlay_constructs.jpg)
-
-```shell
-overlay2
-├── 259cf6934509a674b1158f0a6c90c60c133fd11189f98945c7c3a524784509ff
-│   └── diff
-│       ├── bin
-│       ├── dev
-│       ├── etc
-│       ├── home
-│       ├── lib
-│       ├── media
-│       ├── mnt
-│       ├── opt
-│       ├── proc
-│       ├── root
-│       ├── run
-│       ├── sbin
-│       ├── srv
-│       ├── sys
-│       ├── tmp
-│       ├── usr
-│       └── var
-├── 27f9e9b74a88a269121b4e77330a665d6cca4719cb9a58bfc96a2b88a07af805
-│   ├── diff
-│   └── work
-├── a0df3cc902cfbdee180e8bfa399d946f9022529d12dba3bc0b13fb7534120015
-│   ├── diff
-│   │   └── bin
-│   └── work
-├── b2fbebb39522cb6f1f5ecbc22b7bec5e9bc6ecc25ac942d9e26f8f94a028baec
-│   ├── diff
-│   │   ├── etc
-│   │   ├── lib
-│   │   ├── usr
-│   │   └── var
-│   └── work
-├── be8c12f63bebacb3d7d78a09990dce2a5837d86643f674a8fd80e187d8877db9
-│   ├── diff
-│   │   └── etc
-│   └── work
-├── e8f6e78aa1afeb96039c56f652bb6cd4bbd3daad172324c2172bad9b6c0a968d
-│   └── diff
-│       ├── bin
-│       ├── dev
-│       ├── etc
-│       ├── home
-│       ├── lib
-│       ├── media
-│       ├── mnt
-│       ├── proc
-│       ├── root
-│       ├── run
-│       ├── sbin
-│       ├── srv
-│       ├── sys
-│       ├── tmp
-│       ├── usr
-│       └── var
-└── l
-    ├── 526XCHXRJMZXRIHN4YWJH2QLPY -> ../b2fbebb39522cb6f1f5ecbc22b7bec5e9bc6ecc25ac942d9e26f8f94a028baec/diff
-    ├── 5RZOXYR35NSGAWTI36CVUIRW7U -> ../be8c12f63bebacb3d7d78a09990dce2a5837d86643f674a8fd80e187d8877db9/diff
-    ├── LBWRL4ZXGBWOTN5JDCDZVNOY7H -> ../a0df3cc902cfbdee180e8bfa399d946f9022529d12dba3bc0b13fb7534120015/diff
-    ├── MYRYBGZRI4I76MJWQHN7VLZXLW -> ../27f9e9b74a88a269121b4e77330a665d6cca4719cb9a58bfc96a2b88a07af805/diff
-    ├── PCIS4FYUJP4X2D4RWB7ETFL6K2 -> ../259cf6934509a674b1158f0a6c90c60c133fd11189f98945c7c3a524784509ff/diff
-    └── XK5IA4BWQ2CIS667J3SXPXGQK5 -> ../e8f6e78aa1afeb96039c56f652bb6cd4bbd3daad172324c2172bad9b6c0a968d/diff
-
-62 directories
-```
 
 ### registry (/registry/docker/v2)
 
@@ -1037,6 +1032,8 @@ overlay2
 ╰─# docker run -d --name registry -p 5000:5000 -v /var/lib/registry:/var/lib/registry registry
 335ea763a2fa4508ebf3ec6f8b11f3b620a11bdcaa0ab43176b781427e0beee6
 ```
+
+启动完 registry 容器之后我们给之前已经构建好的镜像重新打上改 registry 的 tag 方便后续 push 到 registry 上。
 
 ```shell
 ╭─root@sg-02 ~/buster/slim
@@ -1166,7 +1163,7 @@ v2: digest: sha256:c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bc
 │       │       └── [ 26M]  data
 ```
 
-**manifest 文件**就是一个普通的 json 文件啦😂
+**manifest 文件**就是一个普通的 json 文件啦😂，记录了一个镜像所包含的 layer 信息，当我们 pull 镜像的时候会使用到这个文件。
 
 ```json
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2/blobs/sha256/b9/b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239
@@ -1406,15 +1403,26 @@ sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239
 >   -   两个镜像仓库中相同镜像的 manifest 信息的存储路径和内容完全相同。
 >   -   两个镜像仓库中相同镜像的 blob 信息的存储路径和内容完全相同。
 
+从上面这三个结论中我们可以推断出 registry 存储目录里并不会存储与该 registry 相关的信息，比我们 push 镜像的时候需要给镜像加上 `localhost:5000` 这个前缀，这个前缀并不会存储在 registry 存储中。加入我要迁移一个很大的 registry 镜像仓库，镜像的数量在 5k 以上。最便捷的办法就是打包这个 registry 存储目录，将这个 tar 包 rsync 到另一台机器即可。需要强调一点，打包 registry 存储目录的时候不需要进行压缩，直接 `tar -cvf` 即可。因为 registry 存储的镜像 layer 已经是个 `tar.gzip` 格式的文件，再进行压缩的话效果甚微而且还浪费 CPU 时间得不偿失。
+
 ### docker-archive
 
 本来我想着 docker save 出来的并不是一个镜像，而是一个 `.tar` 文件，但我想了又想，还是觉着它是一个镜像，只不过存在的方式不同而已。于在 docker 和 registry 中存放的方式不同，使用 docker save 出来的镜像是一个孤立的存在。就像是从蛋糕店里拿出来的蛋糕，外面肯定要有个精美的包装是吧，你总没见过。放在哪里都可以，使用的时候我们使用 docker load 拆开外包装(`.tar`)就可。
 
 ## 镜像是怎么食用的😋
 
+当我们拿到一个镜像之后，如果用它来启动一个容器呢？这里就涉及到了 OCI 规范中的另一个规范即运行时规范 [runtime-spec](https://github.com/opencontainers/runtime-spec) 。容器运行时通过一个叫 [ OCI runtime filesytem bundle](https://github.com/opencontainers/runtime-spec/blob/master/bundle.md) 的标准格式将 OCI 镜像通过工具转换为 bundle ，然后 OCI 容器引擎能够识别这个 bundle 来运行容器。
+
+>   filesystem bundle 是个目录，用于给 runtime 提供启动容器必备的配置文件和文件系统。标准的容器 bundle 包含以下内容：
+>
+>   -   config.json: 该文件包含了容器运行的配置信息，该文件必须存在 bundle 的根目录，且名字必须为 config.json 
+>   -   容器的根目录，可以由 config.json 中的 root.path 指定
+
+![img](img/006tNc79gy1fl7l7qihpmj30vi0lj756.jpg)
+
 ### docker
 
-当我们启动一个容器之后我们使用 tree 命令来分析一下 overlay2 就会发现，在
+当我们启动一个容器之后我们使用 tree 命令来分析一下 overlay2 就会发现，较之前的目录，容器启动之后 overlay2 目录下多了一个 `merged` 的文件夹，该文件夹就是容器内看到的。
 
 ```shell
 ╭─root@sg-02 /var/lib/docker
@@ -1457,6 +1465,14 @@ overlay2
 │   └── work
 │       └── work
 ```
+
+
+
+```shell
+overlay on / type overlay (rw,relatime,lowerdir=/opt/docker/overlay2/l/4EPD2X5VF62FH5PZOZHZDKAKGL:/opt/docker/overlay2/l/MYRYBGZRI4I76MJWQHN7VLZXLW:/opt/docker/overlay2/l/5RZOXYR35NSGAWTI36CVUIRW7U:/opt/docker/overlay2/l/LBWRL4ZXGBWOTN5JDCDZVNOY7H:/opt/docker/overlay2/l/526XCHXRJMZXRIHN4YWJH2QLPY:/opt/docker/overlay2/l/XK5IA4BWQ2CIS667J3SXPXGQK5,upperdir=/opt/docker/overlay2/f913d81219134e23eb0827a1c27668494dfaea2f1b5d1d0c70382366eabed629/diff,workdir=/opt/docker/overlay2/f913d81219134e23eb0827a1c27668494dfaea2f1b5d1d0c70382366eabed629/work)
+```
+
+
 
 ## 镜像是怎么焚毁的
 
@@ -1508,4 +1524,5 @@ overlay2
 -   [理解 Docker 镜像大小](http://open.daocloud.io/allen-tan-docker-xi-lie-zhi-shen-ke-li-jie-docker-jing-xiang-da-xiao/)
 -   [看尽 docker 容器文件系统](http://open.daocloud.io/allen-tan-docker-xi-lie-zhi-tu-kan-jin-docker-rong-qi-wen-jian-xi-tong/)
 -   [深入理解 Docker 构建上下文](https://qhh.me/2019/02/17/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-Docker-%E6%9E%84%E5%BB%BA%E4%B8%8A%E4%B8%8B%E6%96%87/)
+-     [OCI 和 runc：容器标准化和 docker](https://cizixs.com/2017/11/05/oci-and-runc/)
 
