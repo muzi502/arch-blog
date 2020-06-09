@@ -34,11 +34,37 @@ comment: true
 
 其实 OCI 规范就是一堆 markdown 文件啦，内容也很容易理解，不像 RFC 和 ISO 那么高深莫测，所以汝想对容器镜像有个深入的了解还是推荐大家去读一下这些 markdown 文件😂。OCI 规范是免费的哦，不像大多数 ISO 规范还要交钱才能看（︶^︶）哼。
 
-OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/image-spec) 决定了我们的镜像按照什么标准来构建，以及构建完镜像之后如何存放，接着下文提到的 `Dockerfile` 则决定了镜像的 layer 内容以及镜像的一些元数据信息。一个镜像规范和一个 Dockerfile 指导着我们构建镜像。
+OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/image-spec) 决定了我们的镜像按照什么标准来构建，以及构建完镜像之后如何存放，接着下文提到的 Dockerfile 则决定了镜像的 layer 内容以及镜像的一些元数据信息。一个镜像规范和一个 Dockerfile 指导着我们构建镜像，那么接下来我们就简单了解一下这个镜像规范，看看镜像是长什么样子的😂
 
 ### OCI image-spec
 
+根据官方文档的描述，OCI 镜像规范的主要由以下几个 markdown 文件组成：
 
+>   -   [Image Manifest](https://github.com/opencontainers/image-spec/blob/master/manifest.md) - a document describing the components that make up a container image
+>   -   [Image Index](https://github.com/opencontainers/image-spec/blob/master/image-index.md) - an annotated index of image manifests
+>   -   [Image Layout](https://github.com/opencontainers/image-spec/blob/master/image-layout.md) - a filesystem layout representing the contents of an image
+>   -   [Filesystem Layer](https://github.com/opencontainers/image-spec/blob/master/layer.md) - a changeset that describes a container's filesystem
+>   -   [Image Configuration](https://github.com/opencontainers/image-spec/blob/master/config.md) - a document determining layer ordering and configuration of the image suitable for translation into a [runtime bundle](https://github.com/opencontainers/runtime-spec)
+>   -   [Conversion](https://github.com/opencontainers/image-spec/blob/master/conversion.md) - a document describing how this translation should occur
+>   -   [Descriptor](https://github.com/opencontainers/image-spec/blob/master/descriptor.md) - a reference that describes the type, metadata and content address of referenced content
+
+```shell
+├── annotations.md         # 注解规范
+├── config.md              # image config 文件规范
+├── considerations.md      # 注意事项
+├── conversion.md          # 转换为 OCI 运行时
+├── descriptor.md          # OCI Content Descriptors 内容描述
+├── image-index.md         # 高层次的镜像元数据信息
+├── image-layout.md        # 镜像的布局
+├── implementations.md     # 使用 OCI 规范的项目
+├── layer.md               # 镜像层 layer 规范
+├── manifest.md            # manifest 规范
+├── media-types.md         # 文件类型
+├── README.md              # README 文档
+├── spec.md                # OCI 镜像规范的概览
+```
+
+总结以上内容 OCI 容器镜像规范主要包括以下几块内容：
 
 #### layer
 
@@ -46,7 +72,7 @@ OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/i
 
 #### config
 
-[config 文件](https://github.com/opencontainers/image-spec/blob/master/config.md)：保存了文件系统的层级信息（每个层级的 hash 值，以及历史信息），以及容器运行时需要的一些信息（比如环境变量、工作目录、命令参数、mount 列表），指定了镜像在某个特定平台和系统的配置。比较接近我们使用 `docker inspect <image_id>` 看到的内容
+[image config 文件](https://github.com/opencontainers/image-spec/blob/master/config.md)：保存了文件系统的层级信息（每个层级的 hash 值，以及历史信息），以及容器运行时需要的一些信息（比如环境变量、工作目录、命令参数、mount 列表），指定了镜像在某个特定平台和系统的配置。比较接近我们使用 `docker inspect <image_id>` 看到的内容。
 
 #### manifest
 
@@ -60,11 +86,11 @@ OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/i
 
 #### index
 
-[index 文件](https://github.com/opencontainers/image-spec/blob/master/image-index.md)：可选的文件，指向不同平台的 manifest 文件，这个文件能保证一个镜像可以跨平台使用，每个平台拥有不同的 manifest 文件，使用 index 作为索引。
+[index 文件](https://github.com/opencontainers/image-spec/blob/master/image-index.md)：可选的文件，指向不同平台的 manifest 文件，这个文件能保证一个镜像可以跨平台使用，每个平台拥有不同的 manifest 文件，使用 index 作为索引。当我们使用 arm64 架构的处理器时要额外注意，在拉取镜像的时候要拉取 arm 架构的镜像，一把处理器的架构都接在镜像的 tag 后面，默认 latest tag 的镜像是 x86 的，在 arm 处理器上是跑不起来的。
 
 ### Dockerfile
 
-众所周知 docker 镜像需要一个 Dockerfile 来构建而成，追根溯源，所有的镜像都起源于一个基础镜像和一个 Dockerfile文件，本文不再细讲 Dockerfile 的详细书写和技巧，网上也有很多众所周知的关于写好 Dockerfile 的技巧在此就不赘述了。
+当我们对 OCI 镜像规范有了个大致的了解之后，我们接下来就拿着 Dockerfile 这个”图纸“去一步步构建镜像。众所周知 docker 镜像需要一个 Dockerfile 来构建而成，本文不再细讲 Dockerfile 的详细书写和技巧，网上也有很多众所周知的关于写好 Dockerfile 的技巧，比如我之前水过的一篇 [Dockerfile 搓镜像的小技巧](https://blog.k8s.li/dockerfile-tips.html) 😂
 
 下面就是 [webp server go](https://webp.sh) Dockerfile 的例子： 
 
@@ -90,7 +116,53 @@ VOLUME /opt/exhaust
 CMD ["/usr/bin/webp-server", "--config", "/etc/config.json"]
 ```
 
-需要注意的是，在 RUN 指令的每行结尾我使用的是 `;\` 来接下一行 shell ，另一种写法是 `&&` 。二者有本质的区别，比如 COMMAND 1;COMMAND 2 ，当 `COMMAND 1` 运行失败时会继续运行 `COMMAND2`，并不会退出。而 COMMAND 1&& COMMAND 2，时 `COMMAND 1` 运行成功时才接着运行 `COMMAND 2` ， `COMMAND 1`运行失败会退出。如果没有十足的把握保证每一行 shell 都能运行成功建议用 `&&` ，如果是老司机的话建议用 `;` ，逛了一圈 docker hub 官方镜像中用 `;` 较多一些，因为 `;` 比 `&&` 要美观一些（大雾😂
+需要注意的是，在 RUN 指令的每行结尾我使用的是 `;\` 来接下一行 shell ，另一种写法是 `&&` 。二者有本质的区别，比如 COMMAND 1;COMMAND 2 ，当 `COMMAND 1` 运行失败时会继续运行 `COMMAND2`，并不会退出。而 COMMAND 1&& COMMAND 2，时 `COMMAND 1` 运行成功时才接着运行 `COMMAND 2` ， `COMMAND 1`运行失败会退出。如果没有十足的把握保证每一行 shell 都能运行成功建议用 `&&` ，如果是老司机的话建议用 `;` ，逛了一圈 docker hub 官方镜像中用 `;` 较多一些，因为 `;` 比 `&&` 要美观一些（大雾😂。
+
+-   风格一：比如 [nginx](https://github.com/nginxinc/docker-nginx/blob/master/stable/buster/Dockerfile) 官方镜像是用的 `&&`，貌似也混入了 `;`🤣
+
+```shell
+RUN set -x \
+# create nginx user/group first, to be consistent throughout docker variants
+    && addgroup --system --gid 101 nginx \
+    && adduser --system --disabled-login --ingroup nginx --no-create-home --home /nonexistent --gecos "nginx user" --shell /bin/false --uid 101 nginx \
+    && apt-get update \
+    && apt-get install --no-install-recommends --no-install-suggests -y gnupg1 ca-certificates \
+    && \
+    NGINX_GPGKEY=573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62; \
+    found=''; \
+    for server in \
+        ha.pool.sks-keyservers.net \
+        hkp://keyserver.ubuntu.com:80 \
+        hkp://p80.pool.sks-keyservers.net:80 \
+        pgp.mit.edu \
+    ; do \
+```
+
+-   风格二：比如 [redis](https://github.com/docker-library/redis/blob/23af5b6adb271bcebbcebc93308884438512a4af/6.0/Dockerfile) 官方镜像就是使用的 `;`
+
+```shell
+RUN set -eux; \
+	savedAptMark="$(apt-mark showmanual)"; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends ca-certificates dirmngr gnupg wget; \
+	rm -rf /var/lib/apt/lists/*; \
+	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
+	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
+	wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
+	export GNUPGHOME="$(mktemp -d)"; \
+	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+	gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
+	gpgconf --kill all; \
+	rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc; \
+	apt-mark auto '.*' > /dev/null; \
+	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; \
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	chmod +x /usr/local/bin/gosu; \
+	gosu --version; \
+	gosu nobody true
+```
+
+汝喜欢哪种风格呢？快在评论区留言吧😋
 
 #### 镜像工厂🛠
 
@@ -102,18 +174,18 @@ CMD ["/usr/bin/webp-server", "--config", "/etc/config.json"]
 >
 >   Docker 客户端和服务端可以在同一个宿主机，也可以在不同的宿主机，如果在同一个宿主机的话，Docker 客户端默认通过 UNIX 套接字(`/var/run/docker.sock`)和服务端通信。
 
-如果说炼制镜像需要个工厂的话，那么我们的 dockerd 守护进程进程就是个镜像工厂，docker 镜像都是在 dockerd 这个镜像工厂中炼成的。当我们使用 docker build 命令构建一个镜像的时候第一行日志就是 `Sending build context to Docker daemon  30.12MB`。这一步是 docker cli 这个命令行客户端将我们当前目录即构建上下文 `build context` 打包发送 `Docker daemon` 守护进程即 dockerd 。
+类比于钢铁是怎样炼成的，如果说炼制镜像也需要个工厂的话，那么我们的 dockerd 守护进程进程就是个镜像工厂，docker 镜像都是在 dockerd 这个镜像工厂中炼成的。当我们使用 docker build 命令构建一个镜像的时候第一行日志就是 `Sending build context to Docker daemon  30.12MB`。这一步是 docker cli 这个命令行客户端将我们当前目录即构建上下文 `build context` 打包发送 `Docker daemon` 守护进程即 dockerd 。
 
 ![img](img/docker-architecture.png)
 
 docker build 构建镜像的流程大概就是：
 
--   执行 `docker build -t <imageName:imageTag> .`，可以使用 `-f`参数来指定 `Dockerfile` 文件；
+-   执行 `docker build -t <imageName:imageTag> .`，可以使用 `-f`参数来指定 Dockerfile 文件；
 -   Docker 客户端会将构建命令后面指定的路径(`.`)下的所有文件打包成一个 tar 包，发送给 Docker 服务端;
 -   Docker 服务端收到客户端发送的 tar 包，然后解压，根据 Dockerfile 里面的指令进行镜像的分层构建；
 -   Docker 下载 FROM 语句中指定的基础镜像，然后将基础镜像的 layer 联合挂载为一层，并在上面创建一个空目录。
 -   接着在 chroot 中启动一个 bash，运行 `RUN` 语句中的命令：`RUN: chroot . /bin/bash -c "apt get update……"`。
--   一行 `RUN` 命令结束后，会把上层目录压缩，形成新镜像中的新的一层。
+-   一条 `RUN` 命令结束后，会把上层目录压缩，形成新镜像中的新的一层。
 -   如果 Dockerfile 中包含其它命令，就以之前构建的层次为基础，从第二步开始重复创建新层，直到完成所有语句后退出。
 
 我们可以通过  `docker history <imageName:imageTag>` 命令来逆向 docker build 的过程。
@@ -139,7 +211,7 @@ ba8f577813c7        38 hours ago        /bin/sh -c #(nop) ADD file:a82014afc29e7
 
 #### base image
 
-当我们在写 `Dockerfile` 的时候都需要一个 `FROM` 语句来指定一个基础镜像，这些基础镜像并不是无中生有，也许需要一个 `Dockerfile` 来炼制成镜像。下面我们拿来 [debian:buster](https://hub.docker.com/_/debian) 这个基础镜像的 [Dockerfile](https://github.com/debuerreotype/docker-debian-artifacts/blob/18cb4d0418be1c80fb19141b69ac2e0600b2d601/buster/Dockerfile) 来看一下基础镜像是如何练成的。
+当我们在写 Dockerfile 的时候都需要一个 `FROM` 语句来指定一个基础镜像，这些基础镜像并不是无中生有，也许需要一个 Dockerfile 来炼制成镜像。下面我们拿来 [debian:buster](https://hub.docker.com/_/debian) 这个基础镜像的 [Dockerfile](https://github.com/debuerreotype/docker-debian-artifacts/blob/18cb4d0418be1c80fb19141b69ac2e0600b2d601/buster/Dockerfile) 来看一下基础镜像是如何练成的。
 
 ```dockerfile
 FROM scratch
@@ -147,11 +219,11 @@ ADD rootfs.tar.xz /
 CMD ["bash"]
 ```
 
-你没看错，一个基础镜像的 `Dockerfile` 一般仅有三行。第一行 `FROM scratch` 中的`scratch` 这个镜像并不真实的存在。当你使用 `docker pull scratch` 命令来拉取这个镜像的时候会翻车哦，提示 `Error response from daemon: 'scratch' is a reserved name`。这是因为自从 docker 1.5 版本开始，在 Dockerfile 中 `FROM scratch` 指令并不进行任何操作，也就是不会创建一个镜像层。接着第二行的 `ADD rootfs.tar.xz /` 产生的一层镜像就是最终构建的镜像。第三行 `CMD ["bash"]` 指定这镜像在启动容器的时候执行的应用程序。
+一个基础镜像的 Dockerfile 一般仅有三行。第一行 `FROM scratch` 中的`scratch` 这个镜像并不真实的存在。当你使用 `docker pull scratch` 命令来拉取这个镜像的时候会翻车哦😂，提示 `Error response from daemon: 'scratch' is a reserved name`。这是因为自从 docker 1.5 版本开始，在 Dockerfile 中 `FROM scratch` 指令并不进行任何操作，也就是不会创建一个镜像层。接着第二行的 `ADD rootfs.tar.xz /` 产生的一层镜像就是最终构建的镜像。第三行 `CMD ["bash"]` 指定这镜像在启动容器的时候执行的应用程序。
 
->   As of Docker 1.5.0 (specifically, [`docker/docker#8827`](https://github.com/docker/docker/pull/8827)), `FROM scratch` is a no-op in the `Dockerfile`, and will not create an extra layer in your image (so a previously 2-layer image will be a 1-layer image instead).
+>   As of Docker 1.5.0 (specifically, [`docker/docker#8827`](https://github.com/docker/docker/pull/8827)), `FROM scratch` is a no-op in the Dockerfile , and will not create an extra layer in your image (so a previously 2-layer image will be a 1-layer image instead).
 
-`ADD rootfs.tar.xz /` 中，这个 `rootfs.tar.xz` 就是我们经过一系列骚操作搓出来的根文件系统，这个操作比较复杂，木子太菜了就不在这里瞎掰掰了🤣，所以感兴趣的可以去看一下构建 debian 基础镜像的 Jenkins 流水线任务 [debuerreotype](https://doi-janky.infosiftr.net/job/tianon/job/debuerreotype/)，上面有构建这个 `rootfs.tar.xz` 完整过程，或者参考 Debian 官方的 [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts) 这个 repo 里的 shell 脚本。其实基础镜像通过一系列操作，比如源码构建，搓出来一个 `rootfs.tar.xz` 就可以啦。
+`ADD rootfs.tar.xz /` 中，这个 `rootfs.tar.xz` 就是我们经过一系列骚操作（一般是源码构建）搓出来的根文件系统，这个操作比较复杂，木子太菜了就不在这里瞎掰掰了🙃，如感兴趣的可以去看一下构建 debian 基础镜像的 Jenkins 流水线任务 [debuerreotype](https://doi-janky.infosiftr.net/job/tianon/job/debuerreotype/)，上面有构建这个 `rootfs.tar.xz` 完整过程，或者参考 Debian 官方的 [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts) 这个 repo 里的 shell 脚本。
 
 需要额外注意一点，在这里往镜像里添加 `rootfs.tar.xz` 时使用的时 `ADD` 而不是 `COPY` ，因为在 Dockerfile 中的 ADD 指令 src 文件如果是个 tar 包，在构建的时候 docker 会帮我们把 tar 包解开到指定目录，使用 copy 指令则不会解开 tar 包。另外一点区别就是  ADD 指令是添加一个文件，这个文件可以是构建上下文环境中的文件，也可以是个 URL，而 COPY 只能添加构建上下文中的文件。所谓的构建上下文就是我们构建镜像的时候最后一个参数啦。
 
@@ -224,12 +296,12 @@ Successfully tagged debian:buster
 
 大家思考下面这两个问题
 
--   问题1：使用相同的 `Dockerfile` 和 `rootfs.tar.xz` 构建出来的镜像相同嘛？
--   问题2：对于应用镜像比如 [webp_server_go]() 使用相同的源码，相同的 `Dockerfile` 搓出来的镜像相同嘛？
+-   问题1：使用相同的 Dockerfile 和 `rootfs.tar.xz` 构建出来的镜像相同嘛？
+-   问题2：对于应用镜像比如 [webp_server_go]() 使用相同的源码，相同的 Dockerfile 搓出来的镜像相同嘛？
 
 要弄懂这两个问题首先要明白**相同**是指的什么相同？回到我们的起点镜像是怎炼成的，我们可以得知，既然一个镜像是由 layer 和元数据组成的。那么这里的相同就是指的两个镜像的 layer 相同，元数据相同。
 
-呜呜呜，我哭了。我把 debian 官方的镜像 pull 后发现我搓的镜像和 docker hub 官方的镜像不一样，为什么有同样的 `Dockerfile` 和 `rootfs.tar.xz` 以及镜像，搓出来的基础镜像不一样呢（掀桌儿！
+呜呜呜，我哭了。我把 debian 官方的镜像 pull 后发现我搓的镜像和 docker hub 官方的镜像不一样，为什么有同样的 Dockerfile 和 `rootfs.tar.xz` 以及镜像，搓出来的基础镜像不一样呢（掀桌儿！
 
 ```shell
 ╭─root@sg-02 ~/docker-debian-artifacts/buster ‹dist-amd64›
