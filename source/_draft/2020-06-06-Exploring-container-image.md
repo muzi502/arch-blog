@@ -70,13 +70,93 @@ OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/i
 
 [文件系统](https://github.com/opencontainers/image-spec/blob/master/layer.md)：以 layer 保存的文件系统，每个 layer 保存了和上层之间变化的部分，layer 应该保存哪些文件，怎么表示增加、修改和删除的文件等。
 
-#### config
+#### image config
 
-[image config 文件](https://github.com/opencontainers/image-spec/blob/master/config.md)：保存了文件系统的层级信息（每个层级的 hash 值，以及历史信息），以及容器运行时需要的一些信息（比如环境变量、工作目录、命令参数、mount 列表），指定了镜像在某个特定平台和系统的配置。比较接近我们使用 `docker inspect <image_id>` 看到的内容。
+[image config 文件](https://github.com/opencontainers/image-spec/blob/master/config.md)：保存了文件系统的层级信息（每个层级的 hash 值，以及历史信息），以及容器运行时需要的一些信息（比如环境变量、工作目录、命令参数、mount 列表），指定了镜像在某个特定平台和系统的配置，比较接近我们使用 `docker inspect <image_id>` 看到的内容。
+
+-   example
+
+```json
+{
+  "architecture": "amd64",
+  "config": {
+    "Hostname": "",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "Cmd": [
+      "bash"
+    ],
+    "Image": "sha256:ba8f577813c7bdf6b737f638dffbc688aa1df2ff28a826a6c46bae722977b549",
+    "Volumes": null,
+    "WorkingDir": "",
+    "Entrypoint": null,
+    "OnBuild": null,
+    "Labels": null
+  },
+  "container": "38501d5aa48c080884f4dc6fd4b1b6590ff1607d9e7a12e1cef1d86a3fdc32df",
+  "container_config": {
+    "Hostname": "38501d5aa48c",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "Cmd": [
+      "/bin/sh",
+      "-c",
+      "#(nop) ",
+      "CMD [\"bash\"]"
+    ],
+    "Image": "sha256:ba8f577813c7bdf6b737f638dffbc688aa1df2ff28a826a6c46bae722977b549",
+    "Volumes": null,
+    "WorkingDir": "",
+    "Entrypoint": null,
+    "OnBuild": null,
+    "Labels": {}
+  },
+  "created": "2020-06-07T01:59:47.348924716Z",
+  "docker_version": "19.03.5",
+  "history": [
+    {
+      "created": "2020-06-07T01:59:46.877600299Z",
+      "created_by": "/bin/sh -c #(nop) ADD file:a82014afc29e7b364ac95223b22ebafad46cc9318951a85027a49f9ce1a99461 in / "
+    },
+    {
+      "created": "2020-06-07T01:59:47.348924716Z",
+      "created_by": "/bin/sh -c #(nop)  CMD [\"bash\"]",
+      "empty_layer": true
+    }
+  ],
+  "os": "linux",
+  "rootfs": {
+    "type": "layers",
+    "diff_ids": [
+      "sha256:d1b85e6186f67d9925c622a7a6e66faa447e767f90f65ae47cdc817c629fa956"
+    ]
+  }
+}
+```
+
+
 
 #### manifest
 
-[manifest 文件](https://github.com/opencontainers/image-spec/blob/master/manifest.md)：镜像的 config 文件索引，有哪些 layer，额外的 annotation 信息，manifest 文件中保存了很多和当前平台有关的信息。切记 manifest 中的 layer 和 config 中的 layer 表达的虽然都是镜像的 layer ，但二者代表的意义不太一样，稍后会讲到。根据 OCI image-spec 规范中 [OCI Image Manifest Specification](https://github.com/opencontainers/image-spec/blob/master/manifest.md) 的定义可以得知，镜像的 manifest 文件主要有以下三个目标：
+[manifest 文件](https://github.com/opencontainers/image-spec/blob/master/manifest.md)：镜像的 config 文件索引，有哪些 layer，额外的 annotation 信息，manifest 文件中保存了很多和当前平台有关的信息。切记 manifest 中的 layer 和 config 中的 layer 表达的虽然都是镜像的 layer ，但二者代表的意义不太一样，稍后会讲到。manifest 文件是存放在 registry 中，当我们拉取镜像的时候，会根据该文件拉取相应的 layer 。根据 OCI image-spec 规范中 [OCI Image Manifest Specification](https://github.com/opencontainers/image-spec/blob/master/manifest.md) 的定义可以得知，镜像的 manifest 文件主要有以下三个目标：（英语不好就不翻译了😥
 
 >   There are three main goals of the Image Manifest Specification.
 >
@@ -84,13 +164,80 @@ OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/i
 >   -   The second goal is to allow multi-architecture images, through a "fat manifest" which references image manifests for platform-specific versions of an image. In OCI, this is codified in an [image index](https://github.com/opencontainers/image-spec/blob/master/image-index.md). 
 >   -   The third goal is to be [translatable](https://github.com/opencontainers/image-spec/blob/master/conversion.md) to the [OCI Runtime Specification](https://github.com/opencontainers/runtime-spec).
 
-#### index
+manifest 也分好几个版本，目前主流的版本是  `Manifest Version 2, Schema 2`，可以参考 docker 的官方文档 [Image Manifest Version 2, Schema 2](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-2.md) 。
 
-[index 文件](https://github.com/opencontainers/image-spec/blob/master/image-index.md)：可选的文件，指向不同平台的 manifest 文件，这个文件能保证一个镜像可以跨平台使用，每个平台拥有不同的 manifest 文件，使用 index 作为索引。当我们使用 arm64 架构的处理器时要额外注意，在拉取镜像的时候要拉取 arm 架构的镜像，一把处理器的架构都接在镜像的 tag 后面，默认 latest tag 的镜像是 x86 的，在 arm 处理器上是跑不起来的。
+registry 中也会有个 Manifest List 文件的存在，该文件是针对不同处理器体系架构而设计的，通过该文件指向与该处理器体系架构相对应的 Image Manifest ，这一点不要搞混😂
+
+-   Example Manifest List
+
+```json
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.docker.distribution.manifest.list.v2+json",
+  "manifests": [
+    {
+      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "size": 7143,
+      "digest": "sha256:e692418e4cbaf90ca69d05a66403747baa33ee08806650b51fab815ad7fc331f",
+      "platform": {
+        "architecture": "ppc64le",
+        "os": "linux",
+      }
+    },
+    {
+      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "size": 7682,
+      "digest": "sha256:5b0bcabd1ed22e9fb1310cf6c2dec7cdef19f0ad69efa1f392e94a4333501270",
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux",
+        "features": [
+          "sse4"
+        ]
+      }
+    }
+  ]
+}
+```
+
+-   Image Manifest
+
+```shell
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+  "config": {
+    "mediaType": "application/vnd.docker.container.image.v1+json",
+    "size": 1509,
+    "digest": "sha256:a24bb4013296f61e89ba57005a7b3e52274d8edd3ae2077d04395f806b63d83e"
+  },
+  "layers": [
+    {
+      "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+      "size": 5844992,
+      "digest": "sha256:50644c29ef5a27c9a40c393a73ece2479de78325cae7d762ef3cdc19bf42dd0a"
+    }
+  ]
+}
+```
+
+最后再补充一段高策大佬的 [解释](http://gaocegege.com/Blog/ormb) ：
+
+>   Manifest 是一个 JSON 文件，其定义包括两个部分，分别是 [Config](https://github.com/opencontainers/image-spec/blob/master/config.md) 和 [Layers](https://github.com/opencontainers/image-spec/blob/master/layer.md)。Config 是一个 JSON 对象，Layers 是一个由 JSON 对象组成的数组。可以看到，Config 与 Layers 中的每一个对象的结构相同，都包括三个字段，分别是 digest、mediaType 和 size。其中 digest 可以理解为是这一对象的 ID。mediaType 表明了这一内容的类型。size 是这一内容的大小。
+>
+>   容器镜像的 Config 有着固定的 mediaType `application/vnd.oci.image.config.v1+json`。一个 Config 的示例配置如下，它记录了关于容器镜像的配置，可以理解为是镜像的元数据。通常它会被镜像仓库用来在 UI 中展示信息，以及区分不同操作系统的构建等。
+>
+>   而容器镜像的 Layers 是由多层 mediaType 为 `application/vnd.oci.image.layer.v1.*`（其中最常见的是 `application/vnd.oci.image.layer.v1.tar+gzip`) 的内容组成的。众所周知，容器镜像是分层构建的，每一层就对应着 Layers 中的一个对象。
+>
+>   容器镜像的 Config，和 Layers 中的每一层，都是以 Blob 的方式存储在镜像仓库中的，它们的 digest 作为 Key 存在。因此，在请求到镜像的 Manifest 后，Docker 会利用 digest 并行下载所有的 Blobs，其中就包括 Config 和所有的 Layers。
+
+#### image manifest index
+
+[index 文件](https://github.com/opencontainers/image-spec/blob/master/image-index.md)：其实就是我们上面提到的 Manifest List 啦。在 docker 的 [distribution](https://github.com/docker/distribution) 中称之为 Manifest List 在 OCI 中就叫 [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/master/image-index.md) 其实两者是指的同一个文件，甚至两者给的 example 都一一模样🤣，应该是 OCI 复制粘贴的 Docker 😂。 这可选的文件，指向不同平台的 manifest 文件，这个文件能保证一个镜像可以跨平台使用，每个平台拥有不同的 manifest 文件，使用 index 作为索引。当我们使用 arm64 架构的处理器时要额外注意，在拉取镜像的时候要拉取 arm 架构的镜像，一把处理器的架构都接在镜像的 tag 后面，默认 latest tag 的镜像是 x86 的，在 arm 处理器上是跑不起来的。
 
 ### Dockerfile
 
-当我们对 OCI 镜像规范有了个大致的了解之后，我们接下来就拿着 Dockerfile 这个”图纸“去一步步构建镜像。众所周知 docker 镜像需要一个 Dockerfile 来构建而成，本文不再细讲 Dockerfile 的详细书写和技巧，网上也有很多众所周知的关于写好 Dockerfile 的技巧，比如我之前水过的一篇 [Dockerfile 搓镜像的小技巧](https://blog.k8s.li/dockerfile-tips.html) 😂
+众所周知 docker 镜像需要一个 Dockerfile 来构建而成，当我们对 OCI 镜像规范有了个大致的了解之后，我们接下来就拿着 Dockerfile 这个”图纸“去一步步构建镜像。本文不再细讲 Dockerfile 的详细书写和技巧，网上也有很多众所周知的关于写好 Dockerfile 的技巧，比如我之前水过的一篇 [Dockerfile 搓镜像的小技巧](https://blog.k8s.li/dockerfile-tips.html) 😂
 
 下面就是 [webp server go](https://webp.sh) Dockerfile 的例子： 
 
@@ -180,15 +327,15 @@ RUN set -eux; \
 
 docker build 构建镜像的流程大概就是：
 
--   执行 `docker build -t <imageName:imageTag> .`，可以使用 `-f`参数来指定 Dockerfile 文件；
+-   执行 `docker build -t <imageName:Tag> .`，可以使用 `-f`参数来指定 Dockerfile 文件；
 -   Docker 客户端会将构建命令后面指定的路径(`.`)下的所有文件打包成一个 tar 包，发送给 Docker 服务端;
--   Docker 服务端收到客户端发送的 tar 包，然后解压，根据 Dockerfile 里面的指令进行镜像的分层构建；
--   Docker 下载 FROM 语句中指定的基础镜像，然后将基础镜像的 layer 联合挂载为一层，并在上面创建一个空目录。
--   接着在 chroot 中启动一个 bash，运行 `RUN` 语句中的命令：`RUN: chroot . /bin/bash -c "apt get update……"`。
--   一条 `RUN` 命令结束后，会把上层目录压缩，形成新镜像中的新的一层。
--   如果 Dockerfile 中包含其它命令，就以之前构建的层次为基础，从第二步开始重复创建新层，直到完成所有语句后退出。
+-   Docker 服务端收到客户端发送的 tar 包，然后解压，接下来根据 Dockerfile 里面的指令进行镜像的分层构建；
+-   Docker 下载 FROM 语句中指定的基础镜像，然后将基础镜像的 layer 联合挂载为一层，并在上面创建一个空目录；
+-   接着在 chroot 中启动一个 bash，运行 `RUN` 语句中的命令：`RUN: chroot . /bin/bash -c "apt get update……"`；
+-   一条 `RUN` 命令结束后，会把上层目录压缩，形成新镜像中的新的一层；
+-   如果 Dockerfile 中包含其它命令，就以之前构建的层次为基础，从第二步开始重复创建新层，直到完成所有语句后退出；
 
-我们可以通过  `docker history <imageName:imageTag>` 命令来逆向 docker build 的过程。
+以上就是构建镜像的大致流程，我们也可以通过  `docker history <imageName:Tag>` 命令来逆向推算出 docker build 的过程。
 
 ```shell
 ╭─root@sg-02 ~/buster/slim
@@ -292,351 +439,6 @@ Successfully built 04948daa3c2e
 Successfully tagged debian:buster
 ```
 
-### 世界上有两个完全相同的镜像嘛？
-
-大家思考下面这两个问题
-
--   问题1：使用相同的 Dockerfile 和 `rootfs.tar.xz` 构建出来的镜像相同嘛？
--   问题2：对于应用镜像比如 [webp_server_go]() 使用相同的源码，相同的 Dockerfile 搓出来的镜像相同嘛？
-
-要弄懂这两个问题首先要明白**相同**是指的什么相同？回到我们的起点镜像是怎炼成的，我们可以得知，既然一个镜像是由 layer 和元数据组成的。那么这里的相同就是指的两个镜像的 layer 相同，元数据相同。
-
-呜呜呜，我哭了。我把 debian 官方的镜像 pull 后发现我搓的镜像和 docker hub 官方的镜像不一样，为什么有同样的 Dockerfile 和 `rootfs.tar.xz` 以及镜像，搓出来的基础镜像不一样呢（掀桌儿！
-
-```shell
-╭─root@sg-02 ~/docker-debian-artifacts/buster ‹dist-amd64›
-╰─# docker build -t debian:buster-build . 
-Sending build context to Docker daemon  30.12MB
-Step 1/3 : FROM scratch
- --->
-Step 2/3 : ADD rootfs.tar.xz /
- ---> 20a2231921a6
-Step 3/3 : CMD ["bash"]
- ---> Running in 9e623b5a86ee
-Removing intermediate container 9e623b5a86ee
- ---> e5b0631f4c3a
-Successfully built e5b0631f4c3a
-Successfully tagged debian:buster-build
-╭─root@sg-02 ~/docker-debian-artifacts/buster ‹dist-amd64›
-╰─# docker pull debian:buster
-buster: Pulling from library/debian
-376057ac6fa1: Pull complete
-Digest: sha256:4ab3309ba955211d1db92f405be609942b595a720de789286376f030502ffd6f
-Status: Downloaded newer image for debian:buster
-docker.io/library/debian:buster
-╭─root@sg-02 ~/docker-debian-artifacts/buster ‹dist-amd64›
-╰─# docker images
-REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-debian              buster-build        e5b0631f4c3a        30 seconds ago      114MB
-debian              buster              5971ee6076a0        3 weeks ago         114MB
-registry            2                   708bc6af7e5e        4 months ago        25.8MB
-registry            latest              708bc6af7e5e        4 months ago        25.8MB
-```
-
-使用 docker history 命令查看一下镜像构建的历史信息，可以发现，其实这两个镜像的 `rootfs.tar.xz` 并不一样。
-
-```shell
-╭─root@sg-02 ~/docker-debian-artifacts/buster ‹dist-amd64›
-╰─# docker history debian:buster-build
-IMAGE               CREATED             CREATED BY                                      SIZE 
-e5b0631f4c3a        6 minutes ago       /bin/sh -c #(nop)  CMD ["bash"]                 0B
-20a2231921a6        6 minutes ago       /bin/sh -c #(nop) ADD file:2a331dd613d7d20bf…   114MB
-╭─root@sg-02 ~/docker-debian-artifacts/buster ‹dist-amd64›
-╰─# docker history debian:buster
-IMAGE               CREATED             CREATED BY                                      SIZE 
-5971ee6076a0        3 weeks ago         /bin/sh -c #(nop)  CMD ["bash"]                 0B
-<missing>           3 weeks ago         /bin/sh -c #(nop) ADD file:fb54c709daa205bf9…   114MB
-```
-
-docker history debian:v1
-
-```shell
-╭─root@sg-02 ~/buster/slim
-╰─# docker history debian:v1
-IMAGE               CREATED              CREATED BY                                      SIZE
-17dae480645a        About a minute ago   /bin/sh -c #(nop)  CMD ["bash"]                 0B
-7388695dc441        About a minute ago   /bin/sh -c #(nop) ADD file:a82014afc29e7b364…   69.2MB
-```
-
-debian_v1.json
-
-```json
-[
-    {
-        "Id": "sha256:17dae480645a19672c762da5041bc54c4cfe9400aadb331b7fd24de807640e2f",
-        "RepoTags": [
-            "debian:v1"
-        ],
-        "RepoDigests": [],
-        "Parent": "sha256:7388695dc4416674b1848b44822b4f91ee5d00a0f95e48349f8eca983dd3674d",
-        "Comment": "",
-        "Created": "2020-06-07T00:45:57.238044195Z",
-        "Container": "58c2d6e203c60c9c5d38af43dcdbc8ad9a44ab6d6df6d3a232d63c3eb4d9b64e",
-        "ContainerConfig": {
-            "Hostname": "58c2d6e203c6",
-            "Domainname": "",
-            "User": "",
-            "AttachStdin": false,
-            "AttachStdout": false,
-            "AttachStderr": false,
-            "Tty": false,
-            "OpenStdin": false,
-            "StdinOnce": false,
-            "Env": [
-                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-            ],
-            "Cmd": [
-                "/bin/sh",
-                "-c",
-                "#(nop) ",
-                "CMD [\"bash\"]"
-            ],
-            "Image": "sha256:7388695dc4416674b1848b44822b4f91ee5d00a0f95e48349f8eca983dd3674d",
-            "Volumes": null,
-            "WorkingDir": "",
-            "Entrypoint": null,
-            "OnBuild": null,
-            "Labels": {}
-        },
-        "DockerVersion": "19.03.5",
-        "Author": "",
-        "Config": {
-            "Hostname": "",
-            "Domainname": "",
-            "User": "",
-            "AttachStdin": false,
-            "AttachStdout": false,
-            "AttachStderr": false,
-            "Tty": false,
-            "OpenStdin": false,
-            "StdinOnce": false,
-            "Env": [
-                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-            ],
-            "Cmd": [
-                "bash"
-            ],
-            "Image": "sha256:7388695dc4416674b1848b44822b4f91ee5d00a0f95e48349f8eca983dd3674d",
-            "Volumes": null,
-            "WorkingDir": "",
-            "Entrypoint": null,
-            "OnBuild": null,
-            "Labels": null
-        },
-        "Architecture": "amd64",
-        "Os": "linux",
-        "Size": 69212698,
-        "VirtualSize": 69212698,
-        "GraphDriver": {
-            "Data": {
-                "MergedDir": "/opt/docker/overlay2/f48c49095a0d9411f7c180641437ad9528166ffd073183c5df55056ba090f94c/merged",
-                "UpperDir": "/opt/docker/overlay2/f48c49095a0d9411f7c180641437ad9528166ffd073183c5df55056ba090f94c/diff",
-                "WorkDir": "/opt/docker/overlay2/f48c49095a0d9411f7c180641437ad9528166ffd073183c5df55056ba090f94c/work"
-            },
-            "Name": "overlay2"
-        },
-        "RootFS": {
-            "Type": "layers",
-            "Layers": [
-                "sha256:d1b85e6186f67d9925c622a7a6e66faa447e767f90f65ae47cdc817c629fa956"
-            ]
-        },
-        "Metadata": {
-            "LastTagTime": "2020-06-07T00:45:57.302756165Z"
-        }
-    }
-]
-```
-
-`docker history debian:v2`
-
-```shell
-╭─root@sg-02 ~/buster/slim
-╰─# docker history debian:v2
-IMAGE               CREATED              CREATED BY                                      SIZE 
-4beee5244f85        About a minute ago   /bin/sh -c #(nop)  CMD ["bash"]                 0B
-d82f3623bb12        About a minute ago   /bin/sh -c #(nop) ADD file:a82014afc29e7b364…   69.2MB
-```
-
-`debian_v2.json`
-
-```json
-[
-    {
-        "Id": "sha256:4beee5244f85a4b8d1aea573561a038456f1ca7432a61e82b9c51e389ee81d01",
-        "RepoTags": [
-            "debian:v2"
-        ],
-        "RepoDigests": [],
-        "Parent": "sha256:d82f3623bb12d1baa2ccdc820507e197c6810a080a7054a02699569fbefa6de0",
-        "Comment": "",
-        "Created": "2020-06-07T00:48:35.313229294Z",
-        "Container": "f45ebb6d876e79c97a0b68990aeae22de1d00f9b7b00324186bc3a4f6b399032",
-        "ContainerConfig": {
-            "Hostname": "f45ebb6d876e",
-            "Domainname": "",
-            "User": "",
-            "AttachStdin": false,
-            "AttachStdout": false,
-            "AttachStderr": false,
-            "Tty": false,
-            "OpenStdin": false,
-            "StdinOnce": false,
-            "Env": [
-                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-            ],
-            "Cmd": [
-                "/bin/sh",
-                "-c",
-                "#(nop) ",
-                "CMD [\"bash\"]"
-            ],
-            "Image": "sha256:d82f3623bb12d1baa2ccdc820507e197c6810a080a7054a02699569fbefa6de0",
-            "Volumes": null,
-            "WorkingDir": "",
-            "Entrypoint": null,
-            "OnBuild": null,
-            "Labels": {}
-        },
-        "DockerVersion": "19.03.5",
-        "Author": "",
-        "Config": {
-            "Hostname": "",
-            "Domainname": "",
-            "User": "",
-            "AttachStdin": false,
-            "AttachStdout": false,
-            "AttachStderr": false,
-            "Tty": false,
-            "OpenStdin": false,
-            "StdinOnce": false,
-            "Env": [
-                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-            ],
-            "Cmd": [
-                "bash"
-            ],
-            "Image": "sha256:d82f3623bb12d1baa2ccdc820507e197c6810a080a7054a02699569fbefa6de0",
-            "Volumes": null,
-            "WorkingDir": "",
-            "Entrypoint": null,
-            "OnBuild": null,
-            "Labels": null
-        },
-        "Architecture": "amd64",
-        "Os": "linux",
-        "Size": 69212698,
-        "VirtualSize": 69212698,
-        "GraphDriver": {
-            "Data": {
-                "MergedDir": "/opt/docker/overlay2/cd5edcb6235ce3d7387b42164d4b996e35565bb0adf32f34e181e7e0fd9d9a47/merged",
-                "UpperDir": "/opt/docker/overlay2/cd5edcb6235ce3d7387b42164d4b996e35565bb0adf32f34e181e7e0fd9d9a47/diff",
-                "WorkDir": "/opt/docker/overlay2/cd5edcb6235ce3d7387b42164d4b996e35565bb0adf32f34e181e7e0fd9d9a47/work"
-            },
-            "Name": "overlay2"
-        },
-        "RootFS": {
-            "Type": "layers",
-            "Layers": [
-                "sha256:d1b85e6186f67d9925c622a7a6e66faa447e767f90f65ae47cdc817c629fa956"
-            ]
-        },
-        "Metadata": {
-            "LastTagTime": "2020-06-07T00:48:35.384439283Z"
-        }
-    }
-]
-```
-
-`diff debian_v1.json debian_v2.json`
-
-```diff
-3c3
-<         "Id": "sha256:17dae480645a19672c762da5041bc54c4cfe9400aadb331b7fd24de807640e2f",
----
->         "Id": "sha256:4beee5244f85a4b8d1aea573561a038456f1ca7432a61e82b9c51e389ee81d01",
-5c5
-<             "debian:v1"
----
->             "debian:v2"
-8c8
-<         "Parent": "sha256:7388695dc4416674b1848b44822b4f91ee5d00a0f95e48349f8eca983dd3674d",
----
->         "Parent": "sha256:d82f3623bb12d1baa2ccdc820507e197c6810a080a7054a02699569fbefa6de0",
-10,11c10,11
-<         "Created": "2020-06-07T00:45:57.238044195Z",
-<         "Container": "58c2d6e203c60c9c5d38af43dcdbc8ad9a44ab6d6df6d3a232d63c3eb4d9b64e",
----
->         "Created": "2020-06-07T00:48:35.313229294Z",
->         "Container": "f45ebb6d876e79c97a0b68990aeae22de1d00f9b7b00324186bc3a4f6b399032",
-13c13
-<             "Hostname": "58c2d6e203c6",
----
->             "Hostname": "f45ebb6d876e",
-31c31
-<             "Image": "sha256:7388695dc4416674b1848b44822b4f91ee5d00a0f95e48349f8eca983dd3674d",
----
->             "Image": "sha256:d82f3623bb12d1baa2ccdc820507e197c6810a080a7054a02699569fbefa6de0",
-56c56
-<             "Image": "sha256:7388695dc4416674b1848b44822b4f91ee5d00a0f95e48349f8eca983dd3674d",
----
->             "Image": "sha256:d82f3623bb12d1baa2ccdc820507e197c6810a080a7054a02699569fbefa6de0",
-69,71c69,71
-<                 "MergedDir": "/opt/docker/overlay2/f48c49095a0d9411f7c180641437ad9528166ffd073183c5df55056ba090f94c/merged",
-<                 "UpperDir": "/opt/docker/overlay2/f48c49095a0d9411f7c180641437ad9528166ffd073183c5df55056ba090f94c/diff",
-<                 "WorkDir": "/opt/docker/overlay2/f48c49095a0d9411f7c180641437ad9528166ffd073183c5df55056ba090f94c/work"
----
->                 "MergedDir": "/opt/docker/overlay2/cd5edcb6235ce3d7387b42164d4b996e35565bb0adf32f34e181e7e0fd9d9a47/merged",
->                 "UpperDir": "/opt/docker/overlay2/cd5edcb6235ce3d7387b42164d4b996e35565bb0adf32f34e181e7e0fd9d9a47/diff",
->                 "WorkDir": "/opt/docker/overlay2/cd5edcb6235ce3d7387b42164d4b996e35565bb0adf32f34e181e7e0fd9d9a47/work"
-82c82
-<             "LastTagTime": "2020-06-07T00:45:57.302756165Z"
----
->             "LastTagTime": "2020-06-07T00:48:35.384439283Z"
-```
-
-结论，根据 docker build 的原理我们可以大胆地论断，**世界上两台机器上不可能构建出完全相同镜像！**
-
-```json
-╭─root@sg-02 ~/buster/slim
-╰─# skopeo inspect docker-daemon:debian:v1 --raw | jq "."
-{
-  "schemaVersion": 2,
-  "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-  "config": {
-    "mediaType": "application/vnd.docker.container.image.v1+json",
-    "size": 1462,
-    "digest": "sha256:cfba37fd24f80f59e5d7c1f7735cae7a383e887d8cff7e2762fdd78c0d73568d"
-  },
-  "layers": [
-    {
-      "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
-      "size": 72485376,
-      "digest": "sha256:d1b85e6186f67d9925c622a7a6e66faa447e767f90f65ae47cdc817c629fa956"
-    }
-  ]
-}
-```
-
-```json
-{
-  "schemaVersion": 2,
-  "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-  "config": {
-    "mediaType": "application/vnd.docker.container.image.v1+json",
-    "size": 1462,
-    "digest": "sha256:e6e782a57a51d01168907938beb5cd5af24fcb7ebed8f0b32c203137ace6d3df"
-  },
-  "layers": [
-    {
-      "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
-      "size": 72485376,
-      "digest": "sha256:d1b85e6186f67d9925c622a7a6e66faa447e767f90f65ae47cdc817c629fa956"
-    }
-  ]
-}
-```
-
 ## 镜像是怎样存放的 （一） 🙄
 
 当我们构建完一个镜像之后，镜像就存储在了我们 docker 本地存储目录，默认情况下为 `/var/lib/docker`，下面就探寻一下镜像是以什么样的目录结构存放的。在开始 hack 之前我们先统一一下环境信息，我使用的机器是 Ubuntu 1804，`docker info` 信息如下：
@@ -730,9 +532,13 @@ debian           v1          cfba37fd24f8        22 hours ago        69.2MB
 12 directories
 ```
 
-根据目录的名字我们可以大致推断出关于容器镜像的存储，我们只关心 image 和 overlay2 这两个文件夹即可，容器的元数据存放在 image 目录下，容器的 layer 数据存放在 overlay2 目录下。
+根据目录的名字我们可以大致推断出关于容器镜像的存储，我们只关心 image 和 overlay2 这两个文件夹即可，容器的元数据存放在 image 目录下，容器的 layer 数据则存放在 overlay2 目录下。
 
-#### /var/lib/docker/image
+#### /var/lib/docker/image 目录结构
+
+overlay2 代表着本地 docker 存储使用的是 overlay2 该存储驱动，目前最新版本的 docker 默认优先采用 **overlay2** 作为存储驱动，对于已支持该驱动的 Linux 发行版，不需要任何进行任何额外的配置，可使用 lsmod 命令查看当前系统内核是否支持 overlay2 。
+
+另外值得一提的是`devicemapper` 存储驱动已经在 docker 18.09 版本中被废弃，docker 官方推荐使用 `overlay2` 替代`devicemapper`。（之前我老东家用的 docker 1.13 版本，`devicemapper`的存储驱动在生产环境翻过车😂。所以呢，都 2020 年了，当你使用 baidu 这种垃圾搜素引擎去搜索 “CentOS 安装 docker” 时它会给你一堆垃圾的教程，叫你去安装 `device-mapper-persistent-data lvm2`，对于这种抄来抄去的博客平台，离得越远越好。
 
 ```shell
 image
@@ -884,6 +690,8 @@ overlay2
     └── XK5IA4BWQ2CIS667J3SXPXGQK5 -> ../e8f6e78aa1afeb96039c56f652bb6cd4bbd3daad172324c2172bad9b6c0a968d/diff
 ```
 
+在 `/var/lib/docker/overlay2` 目录下，
+
 ## 镜像是怎么搬运的🤣
 
 当我们在本地构建完成一个镜像之后，如何传递给他人呢？这就涉及到镜像是怎么搬运的一些知识，搬运镜像就像我们在 GitHub 上搬运代码一样，docker 也有类似于 git clone 和 git push 的搬运方式。
@@ -896,19 +704,21 @@ docker push 就和我们使用 git push 一样，将本地的镜像推送到一�
 
 #### docker pull
 
+理解 docker pull 一个镜像的流程最好的办法是查看这篇文档 [pulling-an-image](https://github.com/opencontainers/distribution-spec/blob/master/spec.md#pulling-an-image) ，在这里我结合大佬的博客简单梳理一下 pull 一个镜像的大致流程。下面这张图是从 [浅谈docker中镜像和容器在本地的存储)](https://github.com/helios741/myblog/blob/new/learn_go/src/2019/20191206_docker_disk_storage/README.md) 借来的😂
+
 ![image](https://user-images.githubusercontent.com/12036324/70367494-646d2380-18db-11ea-992a-d2bca4cbfeb0.png)
 
-docker pull 就和我们使用 git clone 一样效果，将远程的镜像仓库
+docker pull 就和我们使用 git clone 一样效果，将远程的镜像仓库拉取到本地来使用，结合上图大致的流程如下：
 
-1.  由镜像名请求Manifest Schema v2
+1.  由镜像名 + tag 请求 Manifest Schema v2 文件，registry 中一个镜像有多个 tag ，则根据这个 tag 来返回给客户端与之对应的  manifest 文件；
 
-2.  解析Manifest获取镜像Configuration
+2.  docker 守护进程解析这个 Manifest 获取镜像的 image Configuration ；
 
-3.  下载各Layer gzip压缩文件
+3.  下载各 layer ，dockerd 起一个单独的进程 docker-untar 来 gzip 压缩 layer 文件；
 
-4.  验证Configuration中的RootFS.DiffIDs是否与下载（解压后）hash相同
+4.  验证 image config 中的 RootFS.DiffIDs 是否与下载（解压后）hash 相同；
 
-5.  解析Manifest获取镜像Configuration
+5.  解析 Manifest 获取镜像 Configuration；
 
 #### docker save
 
@@ -1489,6 +1299,7 @@ overlay on / type overlay (rw,relatime,lowerdir=/opt/docker/overlay2/l/4EPD2X5VF
 -   [Create a base image](https://docs.docker.com/develop/develop-images/baseimages/)
 -   [FROM scratch](https://hub.docker.com/_/scratch)
 -   [Docker Registry](https://docs.docker.com/registry/)
+-   [Image Manifest Version 2, Schema 2](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-2.md)
 -   [Docker Registry HTTP API V2](https://docs.docker.com/registry/spec/api/)
 -   [image](https://github.com/containers/image)
 -   [OCI Image Manifest Specification](https://github.com/opencontainers/image-spec)
@@ -1508,6 +1319,7 @@ overlay on / type overlay (rw,relatime,lowerdir=/opt/docker/overlay2/l/4EPD2X5VF
 ### 博客
 
 -   [镜像仓库中镜像存储的原理解析](https://supereagle.github.io/2018/04/24/docker-registry/)
+-   [ormb：像管理 Docker 容器镜像一样管理机器学习模型](http://gaocegege.com/Blog/ormb)
 -   [镜像是怎样炼成的](https://blog.fleeto.us/post/how-are-docker-images-built/)
 -   [docker pull分析](https://duyanghao.github.io/docker-registry-pull-manifest-v2/)
 -   [浅谈docker中镜像和容器在本地的存储](https://github.com/helios741/myblog/blob/new/learn_go/src/2019/20191206_docker_disk_storage/README.md)
