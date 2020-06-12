@@ -1,7 +1,7 @@
 ---
-title: 深入浅出容器镜像的一生
+title: 深入浅出容器镜像的一生🤔
 date: 2020-06-06
-updated: 2020-06-06
+updated: 2020-06-12
 slug:
 categories: 技术
 tag:
@@ -12,41 +12,39 @@ copyright: true
 comment: true
 ---
 
-上周在写[《镜像搬运工 skopeo 》](https://blog.k8s.li/skopeo.html)的时候看了很多关于容器镜像相关的博客，从大佬们那里偷偷学了不少知识，对容器镜像有了一点点深入的了解。这周末一个人闲着宅在家里没事就把最近所学的知识整理一下分享出来，供大家一起来食用。同是也为自己查漏补缺，加深对这些基础知识的理解。
-
->   PS：木子花了一天的时间亲自~~指挥~~写完的这篇博客，内容比较多，耐心看完的话，还是能收获一些~~没用的~~知识滴😂
+上周在写[《镜像搬运工 skopeo 》](https://blog.k8s.li/skopeo.html) 的时候看了很多关于容器镜像相关的博客，从大佬们那里偷偷学了不少知识，对容器镜像有了一点点深入的了解。这周末一个人闲着宅在家里没事就把最近所学的知识整理一下分享出来，供大家一起来食用。内容比较多，耐心看完的话，还是能收获一些~~没用的~~知识滴😂。
 
 ## 镜像是怎样炼成的🤔
 
 所谓炼成像就是构建镜像啦，下面用到的**搓**和**炼制**都是指的构建镜像啦，只是个人习惯用语而已😂。
 
-提到容器镜像就不得不提一下 OCI ，即 Open Container Initiative 旨在围绕容器格式和运行时制定一个开放的工业化标准。目前 OCI 主要有三个规范： 运行时规范 [runtime-spec](https://github.com/opencontainers/runtime-spec) ，镜像规范 [image-spec](http://www.github.com/opencontainers/image-spec) 以及不常见的镜像仓库规范 [distribution-spec](https://github.com/opencontainers/distribution-spec) 。下面这些大白话从 [容器开放接口规范（CRI OCI）](https://wilhelmguo.cn/blog/post/william/%E5%AE%B9%E5%99%A8%E5%BC%80%E6%94%BE%E6%8E%A5%E5%8F%A3%E8%A7%84%E8%8C%83%EF%BC%88CRI-OCI%EF%BC%89-2) 复制过来的，我也就懒得自己组织语言灌水了😂（凑字数
+提到容器镜像就不得不提一下 OCI ，即 Open Container Initiative 旨在围绕容器格式和运行时制定一个开放的工业化标准。目前 OCI 主要有三个规范：运行时规范 [runtime-spec](https://github.com/opencontainers/runtime-spec) ，镜像规范 [image-spec](http://www.github.com/opencontainers/image-spec) 以及不常见的镜像仓库规范 [distribution-spec](https://github.com/opencontainers/distribution-spec) 。关于 OCI 这些规范的作用的作用，就引用一下 [容器开放接口规范（CRI OCI）](https://wilhelmguo.cn/blog/post/william/%E5%AE%B9%E5%99%A8%E5%BC%80%E6%94%BE%E6%8E%A5%E5%8F%A3%E8%A7%84%E8%8C%83%EF%BC%88CRI-OCI%EF%BC%89-2) 中的内容，我也就懒得自己组织语言灌水了😂（凑字数
 
->   制定容器格式标准的宗旨概括来说就是不受上层结构的绑定，如特定的客户端、编排栈等，同时也不受特定的供应商或项目的绑定，即不限于某种特定操作系统、硬件、CPU架构、公有云等。
+> 制定容器格式标准的宗旨概括来说就是不受上层结构的绑定，如特定的客户端、编排栈等，同时也不受特定的供应商或项目的绑定，即不限于某种特定操作系统、硬件、CPU架构、公有云等。
 >
->   这两个协议通过 OCI runtime filesytem bundle 的标准格式连接在一起，OCI 镜像可以通过工具转换成 bundle，然后 OCI 容器引擎能够识别这个 bundle 来运行容器
+> 这两个协议通过 OCI runtime filesytem bundle 的标准格式连接在一起，OCI 镜像可以通过工具转换成 bundle，然后 OCI 容器引擎能够识别这个 bundle 来运行容器
 >
->   -   操作标准化：容器的标准化操作包括使用标准容器创建、启动、停止容器，使用标准文件系统工具复制和创建容器快照，使用标准化网络工具进行下载和上传。
->   -   内容无关：内容无关指不管针对的具体容器内容是什么，容器标准操作执行后都能产生同样的效果。如容器可以用同样的方式上传、启动，不管是PHP应用还是MySQL数据库服务。
->   -   基础设施无关：无论是个人的笔记本电脑还是AWS S3，亦或是OpenStack，或者其它基础设施，都应该对支持容器的各项操作。
->   -   为自动化量身定制：制定容器统一标准，是的操作内容无关化、平台无关化的根本目的之一，就是为了可以使容器操作全平台自动化。
->   -   工业级交付：制定容器标准一大目标，就是使软件分发可以达到工业级交付成为现实
+> - 操作标准化：容器的标准化操作包括使用标准容器创建、启动、停止容器，使用标准文件系统工具复制和创建容器快照，使用标准化网络工具进行下载和上传。
+> - 内容无关：内容无关指不管针对的具体容器内容是什么，容器标准操作执行后都能产生同样的效果。如容器可以用同样的方式上传、启动，不管是PHP应用还是MySQL数据库服务。
+> - 基础设施无关：无论是个人的笔记本电脑还是AWS S3，亦或是OpenStack，或者其它基础设施，都应该对支持容器的各项操作。
+> - 为自动化量身定制：制定容器统一标准，是的操作内容无关化、平台无关化的根本目的之一，就是为了可以使容器操作全平台自动化。
+> - 工业级交付：制定容器标准一大目标，就是使软件分发可以达到工业级交付成为现实
 
 其实 OCI 规范就是一堆 markdown 文件啦，内容也很容易理解，不像 RFC 和 ISO 那么高深莫测，所以汝想对容器镜像有个深入的了解还是推荐大家去读一下这些 markdown 文件😂。OCI 规范是免费的哦，不像大多数 ISO 规范还要交钱才能看（︶^︶）哼。
 
-OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/image-spec) 决定了我们的镜像按照什么标准来构建，以及构建完镜像之后如何存放，接着下文提到的 Dockerfile 则决定了镜像的 layer 内容以及镜像的一些元数据信息。一个镜像规范和一个 Dockerfile 指导着我们构建镜像，那么接下来我们就简单了解一下这个镜像规范，看看镜像是长什么样子的😂
-
 ### OCI image-spec
+
+OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/image-spec) 决定了我们的镜像按照什么标准来构建，以及构建完镜像之后如何存放，接着下文提到的 Dockerfile 则决定了镜像的 layer 内容以及镜像的一些元数据信息。一个镜像规范 image-spec 和一个 Dockerfile 就指导着我们构建一个镜像，那么接下来我们就简单了解一下这个镜像规范，看看镜像是长什么样子的，对镜像有个大体的主观认识。
 
 根据官方文档的描述，OCI 镜像规范的主要由以下几个 markdown 文件组成：
 
->   -   [Image Manifest](https://github.com/opencontainers/image-spec/blob/master/manifest.md) - a document describing the components that make up a container image
->   -   [Image Index](https://github.com/opencontainers/image-spec/blob/master/image-index.md) - an annotated index of image manifests
->   -   [Image Layout](https://github.com/opencontainers/image-spec/blob/master/image-layout.md) - a filesystem layout representing the contents of an image
->   -   [Filesystem Layer](https://github.com/opencontainers/image-spec/blob/master/layer.md) - a changeset that describes a container's filesystem
->   -   [Image Configuration](https://github.com/opencontainers/image-spec/blob/master/config.md) - a document determining layer ordering and configuration of the image suitable for translation into a [runtime bundle](https://github.com/opencontainers/runtime-spec)
->   -   [Conversion](https://github.com/opencontainers/image-spec/blob/master/conversion.md) - a document describing how this translation should occur
->   -   [Descriptor](https://github.com/opencontainers/image-spec/blob/master/descriptor.md) - a reference that describes the type, metadata and content address of referenced content
+> - [Image Manifest](https://github.com/opencontainers/image-spec/blob/master/manifest.md) - a document describing the components that make up a container image
+> - [Image Index](https://github.com/opencontainers/image-spec/blob/master/image-index.md) - an annotated index of image manifests
+> - [Image Layout](https://github.com/opencontainers/image-spec/blob/master/image-layout.md) - a filesystem layout representing the contents of an image
+> - [Filesystem Layer](https://github.com/opencontainers/image-spec/blob/master/layer.md) - a changeset that describes a container's filesystem
+> - [Image Configuration](https://github.com/opencontainers/image-spec/blob/master/config.md) - a document determining layer ordering and configuration of the image suitable for translation into a [runtime bundle](https://github.com/opencontainers/runtime-spec)
+> - [Conversion](https://github.com/opencontainers/image-spec/blob/master/conversion.md) - a document describing how this translation should occur
+> - [Descriptor](https://github.com/opencontainers/image-spec/blob/master/descriptor.md) - a reference that describes the type, metadata and content address of referenced content
 
 ```shell
 ├── annotations.md         # 注解规范
@@ -54,7 +52,7 @@ OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/i
 ├── considerations.md      # 注意事项
 ├── conversion.md          # 转换为 OCI 运行时
 ├── descriptor.md          # OCI Content Descriptors 内容描述
-├── image-index.md         # 高层次的镜像元数据信息
+├── image-index.md         # manifest list 文件
 ├── image-layout.md        # 镜像的布局
 ├── implementations.md     # 使用 OCI 规范的项目
 ├── layer.md               # 镜像层 layer 规范
@@ -68,13 +66,13 @@ OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/i
 
 #### layer
 
-[文件系统](https://github.com/opencontainers/image-spec/blob/master/layer.md)：以 layer 保存的文件系统，每个 layer 保存了和上层之间变化的部分，layer 应该保存哪些文件，怎么表示增加、修改和删除的文件等。
+[文件系统](https://github.com/opencontainers/image-spec/blob/master/layer.md)：以 layer （镜像层）保存的文件系统，每个 layer 保存了和上层之间变化的部分，layer 应该保存哪些文件，怎么表示增加、修改和删除的文件等。
 
 #### image config
 
 [image config 文件](https://github.com/opencontainers/image-spec/blob/master/config.md)：保存了文件系统的层级信息（每个层级的 hash 值，以及历史信息），以及容器运行时需要的一些信息（比如环境变量、工作目录、命令参数、mount 列表），指定了镜像在某个特定平台和系统的配置，比较接近我们使用 `docker inspect <image_id>` 看到的内容。
 
--   example
+- example
 
 ```json
 {
@@ -152,23 +150,19 @@ OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/i
 }
 ```
 
-
-
 #### manifest
 
-[manifest 文件](https://github.com/opencontainers/image-spec/blob/master/manifest.md)：镜像的 config 文件索引，有哪些 layer，额外的 annotation 信息，manifest 文件中保存了很多和当前平台有关的信息。切记 manifest 中的 layer 和 config 中的 layer 表达的虽然都是镜像的 layer ，但二者代表的意义不太一样，稍后会讲到。manifest 文件是存放在 registry 中，当我们拉取镜像的时候，会根据该文件拉取相应的 layer 。根据 OCI image-spec 规范中 [OCI Image Manifest Specification](https://github.com/opencontainers/image-spec/blob/master/manifest.md) 的定义可以得知，镜像的 manifest 文件主要有以下三个目标：（英语不好就不翻译了😥
+[manifest 文件](https://github.com/opencontainers/image-spec/blob/master/manifest.md) ：镜像的 config 文件索引，有哪些 layer，额外的 annotation 信息，manifest 文件中保存了很多和当前平台有关的信息。另外 manifest 中的 layer 和 config 中的 layer 表达的虽然都是镜像的 layer ，但二者代表的意义不太一样，稍后会讲到。manifest 文件是存放在 registry 中，当我们拉取镜像的时候，会根据该文件拉取相应的 layer 。根据 OCI image-spec 规范中 [OCI Image Manifest Specification](https://github.com/opencontainers/image-spec/blob/master/manifest.md) 的定义可以得知，镜像的 manifest 文件主要有以下三个目标：（英语不好就不翻译了😥
 
->   There are three main goals of the Image Manifest Specification.
+> There are three main goals of the Image Manifest Specification.
 >
->   -   The first goal is content-addressable images, by supporting an image model where the image's configuration can be hashed to generate a unique ID for the image and its components. 
->   -   The second goal is to allow multi-architecture images, through a "fat manifest" which references image manifests for platform-specific versions of an image. In OCI, this is codified in an [image index](https://github.com/opencontainers/image-spec/blob/master/image-index.md). 
->   -   The third goal is to be [translatable](https://github.com/opencontainers/image-spec/blob/master/conversion.md) to the [OCI Runtime Specification](https://github.com/opencontainers/runtime-spec).
+> - The first goal is content-addressable images, by supporting an image model where the image's configuration can be hashed to generate a unique ID for the image and its components.
+> - The second goal is to allow multi-architecture images, through a "fat manifest" which references image manifests for platform-specific versions of an image. In OCI, this is codified in an [image index](https://github.com/opencontainers/image-spec/blob/master/image-index.md).
+> - The third goal is to be [translatable](https://github.com/opencontainers/image-spec/blob/master/conversion.md) to the [OCI Runtime Specification](https://github.com/opencontainers/runtime-spec).
 
-manifest 也分好几个版本，目前主流的版本是  `Manifest Version 2, Schema 2`，可以参考 docker 的官方文档 [Image Manifest Version 2, Schema 2](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-2.md) 。
+另外 manifest 也分好几个版本，目前主流的版本是  `Manifest Version 2, Schema 2` ，可以参考 docker 的官方文档 [Image Manifest Version 2, Schema 2](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-2.md) 。registry 中会有个 `Manifest List ` 文件，该文件是为不同处理器体系架构而设计的，通过该文件指向与该处理器体系架构相对应的 Image Manifest ，这一点不要搞混。
 
-registry 中也会有个 Manifest List 文件的存在，该文件是针对不同处理器体系架构而设计的，通过该文件指向与该处理器体系架构相对应的 Image Manifest ，这一点不要搞混😂
-
--   Example Manifest List
+- Example Manifest List
 
 ```json
 {
@@ -200,7 +194,7 @@ registry 中也会有个 Manifest List 文件的存在，该文件是针对不�
 }
 ```
 
--   Image Manifest
+- Image Manifest
 
 ```shell
 {
@@ -223,23 +217,23 @@ registry 中也会有个 Manifest List 文件的存在，该文件是针对不�
 
 最后再补充一段高策大佬的 [解释](http://gaocegege.com/Blog/ormb) ：
 
->   Manifest 是一个 JSON 文件，其定义包括两个部分，分别是 [Config](https://github.com/opencontainers/image-spec/blob/master/config.md) 和 [Layers](https://github.com/opencontainers/image-spec/blob/master/layer.md)。Config 是一个 JSON 对象，Layers 是一个由 JSON 对象组成的数组。可以看到，Config 与 Layers 中的每一个对象的结构相同，都包括三个字段，分别是 digest、mediaType 和 size。其中 digest 可以理解为是这一对象的 ID。mediaType 表明了这一内容的类型。size 是这一内容的大小。
+> Manifest 是一个 JSON 文件，其定义包括两个部分，分别是 [Config](https://github.com/opencontainers/image-spec/blob/master/config.md) 和 [Layers](https://github.com/opencontainers/image-spec/blob/master/layer.md)。Config 是一个 JSON 对象，Layers 是一个由 JSON 对象组成的数组。可以看到，Config 与 Layers 中的每一个对象的结构相同，都包括三个字段，分别是 digest、mediaType 和 size。其中 digest 可以理解为是这一对象的 ID。mediaType 表明了这一内容的类型。size 是这一内容的大小。
 >
->   容器镜像的 Config 有着固定的 mediaType `application/vnd.oci.image.config.v1+json`。一个 Config 的示例配置如下，它记录了关于容器镜像的配置，可以理解为是镜像的元数据。通常它会被镜像仓库用来在 UI 中展示信息，以及区分不同操作系统的构建等。
+> 容器镜像的 Config 有着固定的 mediaType `application/vnd.oci.image.config.v1+json`。一个 Config 的示例配置如下，它记录了关于容器镜像的配置，可以理解为是镜像的元数据。通常它会被镜像仓库用来在 UI 中展示信息，以及区分不同操作系统的构建等。
 >
->   而容器镜像的 Layers 是由多层 mediaType 为 `application/vnd.oci.image.layer.v1.*`（其中最常见的是 `application/vnd.oci.image.layer.v1.tar+gzip`) 的内容组成的。众所周知，容器镜像是分层构建的，每一层就对应着 Layers 中的一个对象。
+> 而容器镜像的 Layers 是由多层 mediaType 为 `application/vnd.oci.image.layer.v1.*`（其中最常见的是 `application/vnd.oci.image.layer.v1.tar+gzip`) 的内容组成的。众所周知，容器镜像是分层构建的，每一层就对应着 Layers 中的一个对象。
 >
->   容器镜像的 Config，和 Layers 中的每一层，都是以 Blob 的方式存储在镜像仓库中的，它们的 digest 作为 Key 存在。因此，在请求到镜像的 Manifest 后，Docker 会利用 digest 并行下载所有的 Blobs，其中就包括 Config 和所有的 Layers。
+> 容器镜像的 Config，和 Layers 中的每一层，都是以 Blob 的方式存储在镜像仓库中的，它们的 digest 作为 Key 存在。因此，在请求到镜像的 Manifest 后，Docker 会利用 digest 并行下载所有的 Blobs，其中就包括 Config 和所有的 Layers。
 
 #### image manifest index
 
-[index 文件](https://github.com/opencontainers/image-spec/blob/master/image-index.md)：其实就是我们上面提到的 Manifest List 啦。在 docker 的 [distribution](https://github.com/docker/distribution) 中称之为 Manifest List 在 OCI 中就叫 [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/master/image-index.md) 其实两者是指的同一个文件，甚至两者给的 example 都一一模样🤣，应该是 OCI 复制粘贴的 Docker 😂。 这可选的文件，指向不同平台的 manifest 文件，这个文件能保证一个镜像可以跨平台使用，每个平台拥有不同的 manifest 文件，使用 index 作为索引。当我们使用 arm64 架构的处理器时要额外注意，在拉取镜像的时候要拉取 arm 架构的镜像，一把处理器的架构都接在镜像的 tag 后面，默认 latest tag 的镜像是 x86 的，在 arm 处理器上是跑不起来的。
+[index 文件](https://github.com/opencontainers/image-spec/blob/master/image-index.md) ：其实就是我们上面提到的 Manifest List 啦。在 docker 的 [distribution](https://github.com/docker/distribution) 中称之为 `Manifest List` 在 OCI 中就叫 [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/master/image-index.md) 。其实两者是指的同一个文件，甚至两者 GitHub 上文档给的 example 都一一模样🤣，应该是 OCI 复制粘贴 Docker 的文档😂。这可选的文件，指向不同平台的 manifest 文件，这个文件能保证一个镜像可以跨平台使用，每个平台拥有不同的 manifest 文件，使用 index 作为索引。当我们使用 arm64 架构的处理器时要额外注意，在拉取镜像的时候要拉取 arm 架构的镜像，一把处理器的架构都接在镜像的 tag 后面，默认 latest tag 的镜像是 x86 的，在 arm 处理器上是跑不起来的。
 
 ### Dockerfile
 
-众所周知 docker 镜像需要一个 Dockerfile 来构建而成，当我们对 OCI 镜像规范有了个大致的了解之后，我们接下来就拿着 Dockerfile 这个”图纸“去一步步构建镜像。本文不再细讲 Dockerfile 的详细书写和技巧，网上也有很多众所周知的关于写好 Dockerfile 的技巧，比如我之前水过的一篇 [Dockerfile 搓镜像的小技巧](https://blog.k8s.li/dockerfile-tips.html) 😂
+众所周知 docker 镜像需要一个 Dockerfile 来构建而成，当我们对 OCI 镜像规范有了个大致的了解之后，我们接下来就拿着 Dockerfile 这个 ”图纸“ 去一步步构建镜像。本文不再细讲 Dockerfile 的详细书写和技巧，网上也有很多众所周知的关于写好 Dockerfile 的技巧，比如我之前水过的一篇 [Dockerfile 搓镜像的小技巧](https://blog.k8s.li/dockerfile-tips.html) 。
 
-下面就是 [webp server go](https://webp.sh) Dockerfile 的例子： 
+下面就是 [webp server go](https://webp.sh) Dockerfile 的例子：
 
 ```dockerfile
 FROM golang:alpine as builder
@@ -263,9 +257,9 @@ VOLUME /opt/exhaust
 CMD ["/usr/bin/webp-server", "--config", "/etc/config.json"]
 ```
 
-需要注意的是，在 RUN 指令的每行结尾我使用的是 `;\` 来接下一行 shell ，另一种写法是 `&&` 。二者有本质的区别，比如 COMMAND 1;COMMAND 2 ，当 `COMMAND 1` 运行失败时会继续运行 `COMMAND2`，并不会退出。而 COMMAND 1&& COMMAND 2，时 `COMMAND 1` 运行成功时才接着运行 `COMMAND 2` ， `COMMAND 1`运行失败会退出。如果没有十足的把握保证每一行 shell 都能运行成功建议用 `&&` ，如果是老司机的话建议用 `;` ，逛了一圈 docker hub 官方镜像中用 `;` 较多一些，因为 `;` 比 `&&` 要美观一些（大雾😂。
+需要注意的是，在 RUN 指令的每行结尾我使用的是 `;\` 来接下一行 shell ，另一种写法是 `&&` 。二者有本质的区别，比如 COMMAND 1;COMMAND 2 ，当 COMMAND 1 运行失败时会继续运行 COMMAND2 ，并不会退出。而 COMMAND 1&& COMMAND 2，时 COMMAND 1 运行成功时才接着运行 COMMAND 2 ，COMMAND 1 运行失败会退出。如果没有十足的把握保证每一行 shell 都能每次运行成功建议用 `&&` ，这样失败了就退出构建镜像，不然构建出来的镜像会有问题。如果是老司机🚗 的话建议用 `;` ，逛了一圈 docker hub 官方镜像中用 `;` 较多一些，因为 `;` 比 `&&` 要美观一些（大雾😂。
 
--   风格一：比如 [nginx](https://github.com/nginxinc/docker-nginx/blob/master/stable/buster/Dockerfile) 官方镜像是用的 `&&`，貌似也混入了 `;`🤣
+- 风格一：比如 [nginx](https://github.com/nginxinc/docker-nginx/blob/master/stable/buster/Dockerfile) 官方镜像是用的 `&&`，貌似也混入了 `;`🤣
 
 ```shell
 RUN set -x \
@@ -285,7 +279,7 @@ RUN set -x \
     ; do \
 ```
 
--   风格二：比如 [redis](https://github.com/docker-library/redis/blob/23af5b6adb271bcebbcebc93308884438512a4af/6.0/Dockerfile) 官方镜像就是使用的 `;`
+- 风格二：比如 [redis](https://github.com/docker-library/redis/blob/23af5b6adb271bcebbcebc93308884438512a4af/6.0/Dockerfile) 官方镜像就清一色使用的 `;`
 
 ```shell
 RUN set -eux; \
@@ -313,29 +307,33 @@ RUN set -eux; \
 
 #### 镜像工厂🛠
 
->   Docker 是一个典型的 C/S 架构的应用，分为 Docker 客户端（即平时敲的 docker 命令） Docker 服务端（dockerd 守护进程）。
+> Docker 是一个典型的 C/S 架构的应用，分为 Docker 客户端（即平时敲的 docker 命令） Docker 服务端（dockerd 守护进程）。
 >
->   Docker 客户端通过 REST API 和服务端进行交互，docker 客户端每发送一条指令，底层都会转化成 REST API 调用的形式发送给服务端，服务端处理客户端发送的请求并给出响应。
+> Docker 客户端通过 REST API 和服务端进行交互，docker 客户端每发送一条指令，底层都会转化成 REST API 调用的形式发送给服务端，服务端处理客户端发送的请求并给出响应。
 >
->   Docker 镜像的构建、容器创建、容器运行等工作都是 Docker 服务端来完成的，Docker 客户端只是承担发送指令的角色。
+> Docker 镜像的构建、容器创建、容器运行等工作都是 Docker 服务端来完成的，Docker 客户端只是承担发送指令的角色。
 >
->   Docker 客户端和服务端可以在同一个宿主机，也可以在不同的宿主机，如果在同一个宿主机的话，Docker 客户端默认通过 UNIX 套接字(`/var/run/docker.sock`)和服务端通信。
+> Docker 客户端和服务端可以在同一个宿主机，也可以在不同的宿主机，如果在同一个宿主机的话，Docker 客户端默认通过 UNIX 套接字(`/var/run/docker.sock`)和服务端通信。
 
-类比于钢铁是怎样炼成的，如果说炼制镜像也需要个工厂的话，那么我们的 dockerd 守护进程进程就是个镜像工厂，docker 镜像都是在 dockerd 这个镜像工厂中炼成的。当我们使用 docker build 命令构建一个镜像的时候第一行日志就是 `Sending build context to Docker daemon  30.12MB`。这一步是 docker cli 这个命令行客户端将我们当前目录即构建上下文 `build context` 打包发送 `Docker daemon` 守护进程即 dockerd 。
+类比于钢铁是怎样炼成的，如果说炼制镜像也需要个工厂的话，那么我们的 dockerd 这个守护进程就是个生产镜像的工厂。当然能生产镜像的不止 docker 一家，红帽子家的 [buildah](https://buildah.io/) 也能生产镜像，不过用的人并不多。二者的最大区别在于 buildah 可以不用 root 权限来构建镜像，而使用 docker 构建镜像时需要用到 root 权限。
+
+> Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock:
+
+不过 buildah 构建出来的镜像有一堆堆的兼容性问题，所以我们还是使用 docker 来构建镜像吧。当我们使用 docker build 命令构建一个镜像的时候第一行日志就是 `Sending build context to Docker daemon xx MB`。这一步是 docker cli 这个命令行客户端将我们当前目录即构建上下文 `build context` 打包发送 `Docker daemon` 守护进程即 dockerd 。
 
 ![img](img/docker-architecture.png)
 
 docker build 构建镜像的流程大概就是：
 
--   执行 `docker build -t <imageName:Tag> .`，可以使用 `-f`参数来指定 Dockerfile 文件；
--   Docker 客户端会将构建命令后面指定的路径(`.`)下的所有文件打包成一个 tar 包，发送给 Docker 服务端;
--   Docker 服务端收到客户端发送的 tar 包，然后解压，接下来根据 Dockerfile 里面的指令进行镜像的分层构建；
--   Docker 下载 FROM 语句中指定的基础镜像，然后将基础镜像的 layer 联合挂载为一层，并在上面创建一个空目录；
--   接着在 chroot 中启动一个 bash，运行 `RUN` 语句中的命令：`RUN: chroot . /bin/bash -c "apt get update……"`；
--   一条 `RUN` 命令结束后，会把上层目录压缩，形成新镜像中的新的一层；
--   如果 Dockerfile 中包含其它命令，就以之前构建的层次为基础，从第二步开始重复创建新层，直到完成所有语句后退出；
+- 执行 `docker build -t <imageName:Tag> .`，可以使用 `-f`参数来指定 Dockerfile 文件；
+- Docker 客户端会将构建命令后面指定的路径(`.`)下的所有文件打包成一个 tar 包，发送给 Docker 服务端;
+- Docker 服务端收到客户端发送的 tar 包，然后解压，接下来根据 Dockerfile 里面的指令进行镜像的分层构建；
+- Docker 下载 FROM 语句中指定的基础镜像，然后将基础镜像的 layer 联合挂载为一层，并在上面创建一个空目录；
+- 接着在 chroot 中启动一个 bash，运行 `RUN` 语句中的命令：`RUN: chroot . /bin/bash -c "apt get update……"`；
+- 一条 `RUN` 命令结束后，会把上层目录压缩，形成新镜像中的新的一层；
+- 如果 Dockerfile 中包含其它命令，就以之前构建的层次为基础，从第二步开始重复创建新层，直到完成所有语句后退出；
 
-以上就是构建镜像的大致流程，我们也可以通过  `docker history <imageName:Tag>` 命令来逆向推算出 docker build 的过程。
+以上就是构建镜像的大致流程，我们也可以通过 `docker history <imageName:Tag>` 命令来逆向推算出 docker build 的过程。
 
 ```shell
 ╭─root@sg-02 ~/buster/slim
@@ -366,17 +364,17 @@ ADD rootfs.tar.xz /
 CMD ["bash"]
 ```
 
-一个基础镜像的 Dockerfile 一般仅有三行。第一行 `FROM scratch` 中的`scratch` 这个镜像并不真实的存在。当你使用 `docker pull scratch` 命令来拉取这个镜像的时候会翻车哦😂，提示 `Error response from daemon: 'scratch' is a reserved name`。这是因为自从 docker 1.5 版本开始，在 Dockerfile 中 `FROM scratch` 指令并不进行任何操作，也就是不会创建一个镜像层。接着第二行的 `ADD rootfs.tar.xz /` 产生的一层镜像就是最终构建的镜像。第三行 `CMD ["bash"]` 指定这镜像在启动容器的时候执行的应用程序。
+一个基础镜像的 Dockerfile 一般仅有三行。第一行 `FROM scratch` 中的`scratch` 这个镜像并不真实的存在。当你使用 `docker pull scratch` 命令来拉取这个镜像的时候会翻车哦，提示 `Error response from daemon: 'scratch' is a reserved name`。这是因为自从 docker 1.5 版本开始，在 Dockerfile 中 `FROM scratch` 指令并不进行任何操作，也就是不会创建一个镜像层；接着第二行的 `ADD rootfs.tar.xz /` 产生的一层镜像就是最终构建的镜像真实的 layer 内容；第三行 `CMD ["bash"]` 指定这镜像在启动容器的时候执行的应用程序。
 
->   As of Docker 1.5.0 (specifically, [`docker/docker#8827`](https://github.com/docker/docker/pull/8827)), `FROM scratch` is a no-op in the Dockerfile , and will not create an extra layer in your image (so a previously 2-layer image will be a 1-layer image instead).
+> As of Docker 1.5.0 (specifically, [`docker/docker#8827`](https://github.com/docker/docker/pull/8827)), `FROM scratch` is a no-op in the Dockerfile , and will not create an extra layer in your image (so a previously 2-layer image will be a 1-layer image instead).
 
-`ADD rootfs.tar.xz /` 中，这个 `rootfs.tar.xz` 就是我们经过一系列骚操作（一般是源码构建）搓出来的根文件系统，这个操作比较复杂，木子太菜了就不在这里瞎掰掰了🙃，如感兴趣的可以去看一下构建 debian 基础镜像的 Jenkins 流水线任务 [debuerreotype](https://doi-janky.infosiftr.net/job/tianon/job/debuerreotype/)，上面有构建这个 `rootfs.tar.xz` 完整过程，或者参考 Debian 官方的 [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts) 这个 repo 里的 shell 脚本。
+`ADD rootfs.tar.xz /` 中，这个 `rootfs.tar.xz` 就是我们经过一系列骚操作（一般是源码构建）搓出来的根文件系统，这个操作比较复杂，木子太菜了🥬就不在这里瞎掰掰了🙃，如果对源码构建 `rootfs.tar.xz` 感兴趣的可以去看一下构建 debian 基础镜像的 Jenkins 流水线任务 [debuerreotype](https://doi-janky.infosiftr.net/job/tianon/job/debuerreotype/)，上面有构建这个 `rootfs.tar.xz` 完整过程，或者参考 Debian 官方的 [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts) 这个 repo 里的 shell 脚本。
 
-需要额外注意一点，在这里往镜像里添加 `rootfs.tar.xz` 时使用的时 `ADD` 而不是 `COPY` ，因为在 Dockerfile 中的 ADD 指令 src 文件如果是个 tar 包，在构建的时候 docker 会帮我们把 tar 包解开到指定目录，使用 copy 指令则不会解开 tar 包。另外一点区别就是  ADD 指令是添加一个文件，这个文件可以是构建上下文环境中的文件，也可以是个 URL，而 COPY 只能添加构建上下文中的文件。所谓的构建上下文就是我们构建镜像的时候最后一个参数啦。
+需要额外注意一点，在这里往镜像里添加 `rootfs.tar.xz` 时使用的是 `ADD` 而不是 `COPY` ，因为在 Dockerfile 中的 ADD 指令 src 文件如果是个 tar 包，在构建的时候 docker 会帮我们把 tar 包解开到指定目录，使用 copy 指令则不会解开 tar 包。另外一点区别就是 ADD 指令是添加一个文件，这个文件可以是构建上下文环境中的文件，也可以是个 URL，而 COPY 则只能添加构建上下文中的文件，所谓的构建上下文就是我们构建镜像的时候最后一个参数啦。
 
->   PS：面试的时候经常被问 ADD 与 COPY 的区别；CMD 与 ENTRYPOINT 的区别😂。
+> PS：面试的时候经常被问 ADD 与 COPY 的区别；CMD 与 ENTRYPOINT 的区别😂。
 
-搓这个 `rootfs.tar.xz` 不同的发行版方法可能不太一样，Debian 发行版的  `rootfs.tar.xz` 可以在 [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts) 这个 repo 上找到，根据不同处理器 arch 选择相应的 branch ，然后这个 branch 下的目录就对应着该发行版的不同的版本的代号。发现 Debian 官方是将所有 arch 和所有版本的 `rootfs.tar.xz` 都放在这个 repo 里的，以至于这个 repo 的大小接近 2.88 GiB 😨，当网盘来用的嘛🤣（：手动滑稽
+搓这个 `rootfs.tar.xz` 不同的发行版方法可能不太一样，Debian 发行版的 `rootfs.tar.xz` 可以在 [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts) 这个 repo 上找到，根据不同处理器 arch 选择相应的 branch ，然后这个 branch 下的目录就对应着该发行版的不同的版本的代号。意外发现 Debian 官方是将所有 arch 和所有版本的 `rootfs.tar.xz` 都放在这个 repo 里的，以至于这个 repo 的大小接近 2.88 GiB 😨，当网盘来用的嘛🤣（：手动滑稽
 
 ```shell
 ╭─root@sg-02 ~
@@ -610,13 +608,13 @@ repositories.json 就是存储镜像元数据信息，主要是 image name 和 i
 
 下面是一段从 [StackOverflow](https://stackoverflow.com/questions/56550890/docker-image-merged-diff-work-lowerdir-components-of-graphdriver) 上搬运过来的解释。
 
->   **LowerDir**: these are the read-only layers of an overlay filesystem. For docker, these are the image layers assembled in order.
+> **LowerDir**: these are the read-only layers of an overlay filesystem. For docker, these are the image layers assembled in order.
 >
->   **UpperDir**: this is the read-write layer of an overlay filesystem. For docker, that is the equivalent of the container specific layer that contains changes made by that container.
+> **UpperDir**: this is the read-write layer of an overlay filesystem. For docker, that is the equivalent of the container specific layer that contains changes made by that container.
 >
->   **WorkDir**: this is a required directory for overlay, it needs an empty directory for internal use.
+> **WorkDir**: this is a required directory for overlay, it needs an empty directory for internal use.
 >
->   **MergedDir**: this is the result of the overlay filesystem. Docker effectively chroot's into this directory when running the container.
+> **MergedDir**: this is the result of the overlay filesystem. Docker effectively chroot's into this directory when running the container.
 
 如果想对 overlayfs 文件系统有详细的了解，可以参考 Linux 内核官网上的这篇文档 [overlayfs.txt](https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt) 。
 
@@ -710,15 +708,15 @@ docker push 就和我们使用 git push 一样，将本地的镜像推送到一�
 
 docker pull 就和我们使用 git clone 一样效果，将远程的镜像仓库拉取到本地来使用，结合上图大致的流程如下：
 
-1.  由镜像名 + tag 请求 Manifest Schema v2 文件，registry 中一个镜像有多个 tag ，则根据这个 tag 来返回给客户端与之对应的  manifest 文件；
+1. 由镜像名 + tag 请求 Manifest Schema v2 文件，registry 中一个镜像有多个 tag ，则根据这个 tag 来返回给客户端与之对应的  manifest 文件；
 
-2.  docker 守护进程解析这个 Manifest 获取镜像的 image Configuration ；
+2. docker 守护进程解析这个 Manifest 获取镜像的 image Configuration ；
 
-3.  下载各 layer ，dockerd 起一个单独的进程 docker-untar 来 gzip 压缩 layer 文件；
+3. 下载各 layer ，dockerd 起一个单独的进程 docker-untar 来 gzip 压缩 layer 文件；
 
-4.  验证 image config 中的 RootFS.DiffIDs 是否与下载（解压后）hash 相同；
+4. 验证 image config 中的 RootFS.DiffIDs 是否与下载（解压后）hash 相同；
 
-5.  解析 Manifest 获取镜像 Configuration；
+5. 解析 Manifest 获取镜像 Configuration；
 
 #### docker save
 
@@ -799,7 +797,7 @@ Storing signatures
 
 #### skopeo inspect
 
-用 skopeo inspect 命令可以很方方便地通过 registry 的 API 来查看镜像的 manifest 文件，以前我都是用 curl 命令的，要 token 还要加一堆参数，所以比较麻烦，所以后来就用上了  skopeo inspect😀。 
+用 skopeo inspect 命令可以很方方便地通过 registry 的 API 来查看镜像的 manifest 文件，以前我都是用 curl 命令的，要 token 还要加一堆参数，所以比较麻烦，所以后来就用上了  skopeo inspect😀。
 
 ```json
 root@deploy:/root # skopeo inspect docker://index.docker.io/webpsh/webps:latest --raw
@@ -934,7 +932,7 @@ v2: digest: sha256:c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bc
 
 树形的结构看着不太直观，木子就亲自~~指挥~~画了一张层级结构的图来：
 
-![](img/registry-arch.png)
+![img](img/registry-arch.png)
 
 #### blobs 目录
 
@@ -993,7 +991,7 @@ v2: digest: sha256:c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bc
          "digest": "sha256:aaae33815489895f602207ac5a583422b8a8755b3f67fc6286ca9484ba685bdb"
       }
    ]
-}#              
+}#
 ```
 
 #### image config 文件
@@ -1100,7 +1098,7 @@ _uploads
 6 directories, 6 files
 ```
 
--   上传完镜像之后，`_uploads` 文件夹就会被清空，正常情况下这个文件夹是空的。但也有异常的时候😂，比如网络抖动导致上传意外中断，该文件夹就可能不为空。
+- 上传完镜像之后，`_uploads` 文件夹就会被清空，正常情况下这个文件夹是空的。但也有异常的时候😂，比如网络抖动导致上传意外中断，该文件夹就可能不为空。
 
 ```shell
 _uploads
@@ -1209,9 +1207,9 @@ sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239
 
 最后再补充一点就是，同一个镜像在 registry 中存储的位置是相同的，具体的分析可以参考 [镜像仓库中镜像存储的原理解析](https://supereagle.github.io/2018/04/24/docker-registry/) 这篇博客。
 
->   -   通过 Registry API 获得的两个镜像仓库中相同镜像的 manifest 信息完全相同。
->   -   两个镜像仓库中相同镜像的 manifest 信息的存储路径和内容完全相同。
->   -   两个镜像仓库中相同镜像的 blob 信息的存储路径和内容完全相同。
+> - 通过 Registry API 获得的两个镜像仓库中相同镜像的 manifest 信息完全相同。
+> - 两个镜像仓库中相同镜像的 manifest 信息的存储路径和内容完全相同。
+> - 两个镜像仓库中相同镜像的 blob 信息的存储路径和内容完全相同。
 
 从上面这三个结论中我们可以推断出 registry 存储目录里并不会存储与该 registry 相关的信息，比我们 push 镜像的时候需要给镜像加上 `localhost:5000` 这个前缀，这个前缀并不会存储在 registry 存储中。加入我要迁移一个很大的 registry 镜像仓库，镜像的数量在 5k 以上。最便捷的办法就是打包这个 registry 存储目录，将这个 tar 包 rsync 到另一台机器即可。需要强调一点，打包 registry 存储目录的时候不需要进行压缩，直接 `tar -cvf` 即可。因为 registry 存储的镜像 layer 已经是个 `tar.gzip` 格式的文件，再进行压缩的话效果甚微而且还浪费 CPU 时间得不偿失。
 
@@ -1223,10 +1221,10 @@ sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239
 
 当我们拿到一个镜像之后，如果用它来启动一个容器呢？这里就涉及到了 OCI 规范中的另一个规范即运行时规范 [runtime-spec](https://github.com/opencontainers/runtime-spec) 。容器运行时通过一个叫 [ OCI runtime filesytem bundle](https://github.com/opencontainers/runtime-spec/blob/master/bundle.md) 的标准格式将 OCI 镜像通过工具转换为 bundle ，然后 OCI 容器引擎能够识别这个 bundle 来运行容器。
 
->   filesystem bundle 是个目录，用于给 runtime 提供启动容器必备的配置文件和文件系统。标准的容器 bundle 包含以下内容：
+> filesystem bundle 是个目录，用于给 runtime 提供启动容器必备的配置文件和文件系统。标准的容器 bundle 包含以下内容：
 >
->   -   config.json: 该文件包含了容器运行的配置信息，该文件必须存在 bundle 的根目录，且名字必须为 config.json 
->   -   容器的根目录，可以由 config.json 中的 root.path 指定
+> - config.json: 该文件包含了容器运行的配置信息，该文件必须存在 bundle 的根目录，且名字必须为 config.json
+> - 容器的根目录，可以由 config.json 中的 root.path 指定
 
 ![img](img/006tNc79gy1fl7l7qihpmj30vi0lj756.jpg)
 
@@ -1276,13 +1274,9 @@ overlay2
 │       └── work
 ```
 
-
-
 ```shell
 overlay on / type overlay (rw,relatime,lowerdir=/opt/docker/overlay2/l/4EPD2X5VF62FH5PZOZHZDKAKGL:/opt/docker/overlay2/l/MYRYBGZRI4I76MJWQHN7VLZXLW:/opt/docker/overlay2/l/5RZOXYR35NSGAWTI36CVUIRW7U:/opt/docker/overlay2/l/LBWRL4ZXGBWOTN5JDCDZVNOY7H:/opt/docker/overlay2/l/526XCHXRJMZXRIHN4YWJH2QLPY:/opt/docker/overlay2/l/XK5IA4BWQ2CIS667J3SXPXGQK5,upperdir=/opt/docker/overlay2/f913d81219134e23eb0827a1c27668494dfaea2f1b5d1d0c70382366eabed629/diff,workdir=/opt/docker/overlay2/f913d81219134e23eb0827a1c27668494dfaea2f1b5d1d0c70382366eabed629/work)
 ```
-
-
 
 ## 镜像是怎么焚毁的
 
@@ -1296,45 +1290,44 @@ overlay on / type overlay (rw,relatime,lowerdir=/opt/docker/overlay2/l/4EPD2X5VF
 
 ### 官方文档
 
--   [Create a base image](https://docs.docker.com/develop/develop-images/baseimages/)
--   [FROM scratch](https://hub.docker.com/_/scratch)
--   [Docker Registry](https://docs.docker.com/registry/)
--   [Image Manifest Version 2, Schema 2](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-2.md)
--   [Docker Registry HTTP API V2](https://docs.docker.com/registry/spec/api/)
--   [image](https://github.com/containers/image)
--   [OCI Image Manifest Specification](https://github.com/opencontainers/image-spec)
--   [distribution-spec](https://github.com/opencontainers/distribution-spec)
--   [debuerreotype/](https://doi-janky.infosiftr.net/job/tianon/job/debuerreotype/)
--    [overlayfs.txt](https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt) 
+- [Create a base image](https://docs.docker.com/develop/develop-images/baseimages/)
+- [FROM scratch](https://hub.docker.com/_/scratch)
+- [Docker Registry](https://docs.docker.com/registry/)
+- [Image Manifest Version 2, Schema 2](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-2.md)
+- [Docker Registry HTTP API V2](https://docs.docker.com/registry/spec/api/)
+- [image](https://github.com/containers/image)
+- [OCI Image Manifest Specification](https://github.com/opencontainers/image-spec)
+- [distribution-spec](https://github.com/opencontainers/distribution-spec)
+- [debuerreotype/](https://doi-janky.infosiftr.net/job/tianon/job/debuerreotype/)
+- [overlayfs.txt](https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt)
 
 ### 源码
 
--   [oi-janky-groovy](https://github.com/docker-library/oi-janky-groovy)
--   [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts)
--   [docker-drag](https://github.com/NotGlop/docker-drag)
--   [oras](https://github.com/deislabs/oras)
--   [skopeo](https://github.com/containers/skopeo)
--   [tar-split](https://github.com/vbatts/tar-split)
+- [oi-janky-groovy](https://github.com/docker-library/oi-janky-groovy)
+- [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts)
+- [docker-drag](https://github.com/NotGlop/docker-drag)
+- [oras](https://github.com/deislabs/oras)
+- [skopeo](https://github.com/containers/skopeo)
+- [tar-split](https://github.com/vbatts/tar-split)
 
 ### 博客
 
--   [镜像仓库中镜像存储的原理解析](https://supereagle.github.io/2018/04/24/docker-registry/)
--   [ormb：像管理 Docker 容器镜像一样管理机器学习模型](http://gaocegege.com/Blog/ormb)
--   [镜像是怎样炼成的](https://blog.fleeto.us/post/how-are-docker-images-built/)
--   [docker pull分析](https://duyanghao.github.io/docker-registry-pull-manifest-v2/)
--   [浅谈docker中镜像和容器在本地的存储](https://github.com/helios741/myblog/blob/new/learn_go/src/2019/20191206_docker_disk_storage/README.md)
--   [容器OCI规范 镜像规范](https://www.qedev.com/cloud/103860.html)
--   [开放容器标准(OCI) 内部分享](https://xuanwo.io/2019/08/06/oci-intro/)
--   [容器开放接口规范（CRI OCI）](https://wilhelmguo.cn/blog/post/william/%E5%AE%B9%E5%99%A8%E5%BC%80%E6%94%BE%E6%8E%A5%E5%8F%A3%E8%A7%84%E8%8C%83%EF%BC%88CRI-OCI%EF%BC%89-2)
--   [Docker镜像的存储机制](https://segmentfault.com/a/1190000014284289)
--   [Docker源码分析（十）：Docker镜像下载](http://open.daocloud.io/docker-source-code-analysis-part10/)
--   [Docker源码分析（九）：Docker镜像](http://open.daocloud.io/docker-source-code-analysis-part9/)
--   [docker push 過程 distribution源碼 分析](https://www.twblogs.net/a/5b8aab392b71775d1ce86eca)
--   [Allen 谈 Docker](http://open.daocloud.io/tag/allen-tan-docker/)
--   [深入理解 Docker 镜像 json 文件](http://open.daocloud.io/shen-ru-li-jie-dockerjing-xiang-jsonwen-jian-2/)
--   [Docker 镜像内有啥，存哪？](http://open.daocloud.io/docker-jing-xiang-nei-you-sha-cun-na-ntitled/)
--   [理解 Docker 镜像大小](http://open.daocloud.io/allen-tan-docker-xi-lie-zhi-shen-ke-li-jie-docker-jing-xiang-da-xiao/)
--   [看尽 docker 容器文件系统](http://open.daocloud.io/allen-tan-docker-xi-lie-zhi-tu-kan-jin-docker-rong-qi-wen-jian-xi-tong/)
--   [深入理解 Docker 构建上下文](https://qhh.me/2019/02/17/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-Docker-%E6%9E%84%E5%BB%BA%E4%B8%8A%E4%B8%8B%E6%96%87/)
--     [OCI 和 runc：容器标准化和 docker](https://cizixs.com/2017/11/05/oci-and-runc/)
-
+- [镜像仓库中镜像存储的原理解析](https://supereagle.github.io/2018/04/24/docker-registry/)
+- [ormb：像管理 Docker 容器镜像一样管理机器学习模型](http://gaocegege.com/Blog/ormb)
+- [镜像是怎样炼成的](https://blog.fleeto.us/post/how-are-docker-images-built/)
+- [docker pull分析](https://duyanghao.github.io/docker-registry-pull-manifest-v2/)
+- [浅谈docker中镜像和容器在本地的存储](https://github.com/helios741/myblog/blob/new/learn_go/src/2019/20191206_docker_disk_storage/README.md)
+- [容器OCI规范 镜像规范](https://www.qedev.com/cloud/103860.html)
+- [开放容器标准(OCI) 内部分享](https://xuanwo.io/2019/08/06/oci-intro/)
+- [容器开放接口规范（CRI OCI）](https://wilhelmguo.cn/blog/post/william/%E5%AE%B9%E5%99%A8%E5%BC%80%E6%94%BE%E6%8E%A5%E5%8F%A3%E8%A7%84%E8%8C%83%EF%BC%88CRI-OCI%EF%BC%89-2)
+- [Docker镜像的存储机制](https://segmentfault.com/a/1190000014284289)
+- [Docker源码分析（十）：Docker镜像下载](http://open.daocloud.io/docker-source-code-analysis-part10/)
+- [Docker源码分析（九）：Docker镜像](http://open.daocloud.io/docker-source-code-analysis-part9/)
+- [docker push 過程 distribution源碼 分析](https://www.twblogs.net/a/5b8aab392b71775d1ce86eca)
+- [Allen 谈 Docker](http://open.daocloud.io/tag/allen-tan-docker/)
+- [深入理解 Docker 镜像 json 文件](http://open.daocloud.io/shen-ru-li-jie-dockerjing-xiang-jsonwen-jian-2/)
+- [Docker 镜像内有啥，存哪？](http://open.daocloud.io/docker-jing-xiang-nei-you-sha-cun-na-ntitled/)
+- [理解 Docker 镜像大小](http://open.daocloud.io/allen-tan-docker-xi-lie-zhi-shen-ke-li-jie-docker-jing-xiang-da-xiao/)
+- [看尽 docker 容器文件系统](http://open.daocloud.io/allen-tan-docker-xi-lie-zhi-tu-kan-jin-docker-rong-qi-wen-jian-xi-tong/)
+- [深入理解 Docker 构建上下文](https://qhh.me/2019/02/17/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-Docker-%E6%9E%84%E5%BB%BA%E4%B8%8A%E4%B8%8B%E6%96%87/)
+- [OCI 和 runc：容器标准化和 docker](https://cizixs.com/2017/11/05/oci-and-runc/)
