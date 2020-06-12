@@ -227,7 +227,7 @@ OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/i
 
 #### image manifest index
 
-[index 文件](https://github.com/opencontainers/image-spec/blob/master/image-index.md) ：其实就是我们上面提到的 Manifest List 啦。在 docker 的 [distribution](https://github.com/docker/distribution) 中称之为 `Manifest List` 在 OCI 中就叫 [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/master/image-index.md) 。其实两者是指的同一个文件，甚至两者 GitHub 上文档给的 example 都一一模样🤣，应该是 OCI 复制粘贴 Docker 的文档😂。这可选的文件，指向不同平台的 manifest 文件，这个文件能保证一个镜像可以跨平台使用，每个平台拥有不同的 manifest 文件，使用 index 作为索引。当我们使用 arm64 架构的处理器时要额外注意，在拉取镜像的时候要拉取 arm 架构的镜像，一把处理器的架构都接在镜像的 tag 后面，默认 latest tag 的镜像是 x86 的，在 arm 处理器上是跑不起来的。
+[index 文件](https://github.com/opencontainers/image-spec/blob/master/image-index.md) ：其实就是我们上面提到的 Manifest List 啦。在 docker 的 [distribution](https://github.com/docker/distribution) 中称之为 `Manifest List` 在 OCI 中就叫 [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/master/image-index.md) 。其实两者是指的同一个文件，甚至两者 GitHub 上文档给的 example 都一一模样🤣，应该是 OCI 复制粘贴 Docker 的文档😂。index 文件是个可选的文件，包含着一个列表为同一个镜像不同的处理器 arch 指向不同平台的 manifest 文件，这个文件能保证一个镜像可以跨平台使用，每个处理器 arch 平台拥有不同的 manifest 文件，使用 index 作为索引。当我们使用 arm 架构的处理器时要额外注意，在拉取镜像的时候要拉取 arm 架构的镜像，一般处理器的架构都接在镜像的 tag 后面，默认 latest tag 的镜像是 x86 的，在 arm 处理器的机器这些镜像上是跑不起来的。
 
 ### Dockerfile
 
@@ -315,23 +315,26 @@ RUN set -eux; \
 >
 > Docker 客户端和服务端可以在同一个宿主机，也可以在不同的宿主机，如果在同一个宿主机的话，Docker 客户端默认通过 UNIX 套接字(`/var/run/docker.sock`)和服务端通信。
 
-类比于钢铁是怎样炼成的，如果说炼制镜像也需要个工厂的话，那么我们的 dockerd 这个守护进程就是个生产镜像的工厂。当然能生产镜像的不止 docker 一家，红帽子家的 [buildah](https://buildah.io/) 也能生产镜像，不过用的人并不多。二者的最大区别在于 buildah 可以不用 root 权限来构建镜像，而使用 docker 构建镜像时需要用到 root 权限。
+类比于钢铁是怎样炼成的，如果说炼制镜像也需要个工厂的话，那么我们的 dockerd 这个守护进程就是个生产镜像的工厂。能生产镜像的不止 docker 一家，红帽子家的 [buildah](https://buildah.io/) 也能生产镜像，不过用的人并不多。二者的最大区别在于 buildah 可以不用 root 权限来构建镜像，而使用 docker 构建镜像时需要用到 root 权限，没有 root 权限的用户构建镜像会当场翻车：
 
-> Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock:
+```shell
+Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock:
+```
 
-不过 buildah 构建出来的镜像有一堆堆的兼容性问题，所以我们还是使用 docker 来构建镜像吧。当我们使用 docker build 命令构建一个镜像的时候第一行日志就是 `Sending build context to Docker daemon xx MB`。这一步是 docker cli 这个命令行客户端将我们当前目录即构建上下文 `build context` 打包发送 `Docker daemon` 守护进程即 dockerd 。
+不过 buildah 构建出来的镜像有一堆堆的兼容性问题，所以我们还是使用 docker 来构建镜像吧。当我们使用 docker build 命令构建一个镜像的时候第一行日志就是 `Sending build context to Docker daemon xx MB`。这一步是 docker cli 这个命令行客户端将我们当前目录（即构建上下文） `build context` 打包发送 `Docker daemon` 守护进程 （即 dockerd）的过程。
 
 ![img](img/docker-architecture.png)
 
 docker build 构建镜像的流程大概就是：
 
 - 执行 `docker build -t <imageName:Tag> .`，可以使用 `-f`参数来指定 Dockerfile 文件；
-- Docker 客户端会将构建命令后面指定的路径(`.`)下的所有文件打包成一个 tar 包，发送给 Docker 服务端;
-- Docker 服务端收到客户端发送的 tar 包，然后解压，接下来根据 Dockerfile 里面的指令进行镜像的分层构建；
-- Docker 下载 FROM 语句中指定的基础镜像，然后将基础镜像的 layer 联合挂载为一层，并在上面创建一个空目录；
-- 接着在 chroot 中启动一个 bash，运行 `RUN` 语句中的命令：`RUN: chroot . /bin/bash -c "apt get update……"`；
+- docker 客户端会将构建命令后面指定的路径(`.`)下的所有文件打包成一个 tar 包，发送给 Docker 服务端;
+- docker 服务端收到客户端发送的 tar 包，然后解压，接下来根据 Dockerfile 里面的指令进行镜像的分层构建；
+- docker 下载 FROM 语句中指定的基础镜像，然后将基础镜像的 layer 联合挂载为一层，并在上面创建一个空目录；
+- 接着启动一个临时的容器并在 chroot 中启动一个 bash，运行 `RUN` 语句中的命令：`RUN: chroot . /bin/bash -c "apt get update……"`；
 - 一条 `RUN` 命令结束后，会把上层目录压缩，形成新镜像中的新的一层；
 - 如果 Dockerfile 中包含其它命令，就以之前构建的层次为基础，从第二步开始重复创建新层，直到完成所有语句后退出；
+- 构建完成之后为该镜像打上 tag；
 
 以上就是构建镜像的大致流程，我们也可以通过 `docker history <imageName:Tag>` 命令来逆向推算出 docker build 的过程。
 
@@ -356,7 +359,7 @@ ba8f577813c7        38 hours ago        /bin/sh -c #(nop) ADD file:a82014afc29e7
 
 #### base image
 
-当我们在写 Dockerfile 的时候都需要一个 `FROM` 语句来指定一个基础镜像，这些基础镜像并不是无中生有，也许需要一个 Dockerfile 来炼制成镜像。下面我们拿来 [debian:buster](https://hub.docker.com/_/debian) 这个基础镜像的 [Dockerfile](https://github.com/debuerreotype/docker-debian-artifacts/blob/18cb4d0418be1c80fb19141b69ac2e0600b2d601/buster/Dockerfile) 来看一下基础镜像是如何练成的。
+当我们在写 Dockerfile 的时候都需要用 `FROM` 语句来指定一个基础镜像，这些基础镜像并不是无中生有，也需要一个 Dockerfile 来构建成镜像。下面我们拿来 [debian:buster](https://hub.docker.com/_/debian) 这个基础镜像的 [Dockerfile](https://github.com/debuerreotype/docker-debian-artifacts/blob/18cb4d0418be1c80fb19141b69ac2e0600b2d601/buster/Dockerfile) 来看一下基础镜像是如何炼成的。
 
 ```dockerfile
 FROM scratch
@@ -364,11 +367,11 @@ ADD rootfs.tar.xz /
 CMD ["bash"]
 ```
 
-一个基础镜像的 Dockerfile 一般仅有三行。第一行 `FROM scratch` 中的`scratch` 这个镜像并不真实的存在。当你使用 `docker pull scratch` 命令来拉取这个镜像的时候会翻车哦，提示 `Error response from daemon: 'scratch' is a reserved name`。这是因为自从 docker 1.5 版本开始，在 Dockerfile 中 `FROM scratch` 指令并不进行任何操作，也就是不会创建一个镜像层；接着第二行的 `ADD rootfs.tar.xz /` 产生的一层镜像就是最终构建的镜像真实的 layer 内容；第三行 `CMD ["bash"]` 指定这镜像在启动容器的时候执行的应用程序。
+一个基础镜像的 Dockerfile 一般仅有三行。第一行 `FROM scratch` 中的`scratch` 这个镜像并不真实的存在。当你使用 `docker pull scratch` 命令来拉取这个镜像的时候会翻车哦，提示 `Error response from daemon: 'scratch' is a reserved name`。这是因为自从 docker 1.5 版本开始，在 Dockerfile 中 `FROM scratch` 指令并不进行任何操作，也就是不会创建一个镜像层；接着第二行的 `ADD rootfs.tar.xz /` 会自动把 `rootfs.tar.xz`  解压到 `/` 目录下，由此产生的一层镜像就是最终构建的镜像真实的 layer 内容；第三行 `CMD ["bash"]` 指定这镜像在启动容器的时候执行的应用程序，一般基础镜像的 CMD 默认为 bash 或者 sh 。
 
 > As of Docker 1.5.0 (specifically, [`docker/docker#8827`](https://github.com/docker/docker/pull/8827)), `FROM scratch` is a no-op in the Dockerfile , and will not create an extra layer in your image (so a previously 2-layer image will be a 1-layer image instead).
 
-`ADD rootfs.tar.xz /` 中，这个 `rootfs.tar.xz` 就是我们经过一系列骚操作（一般是源码构建）搓出来的根文件系统，这个操作比较复杂，木子太菜了🥬就不在这里瞎掰掰了🙃，如果对源码构建 `rootfs.tar.xz` 感兴趣的可以去看一下构建 debian 基础镜像的 Jenkins 流水线任务 [debuerreotype](https://doi-janky.infosiftr.net/job/tianon/job/debuerreotype/)，上面有构建这个 `rootfs.tar.xz` 完整过程，或者参考 Debian 官方的 [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts) 这个 repo 里的 shell 脚本。
+`ADD rootfs.tar.xz /` 中，这个 `rootfs.tar.xz` 就是我们经过一系列骚操作（一般是发行版源码编译）搓出来的根文件系统，这个操作比较复杂，木子太菜了🥬就不在这里瞎掰掰了🙃，如果汝对源码构建 `rootfs.tar.xz` 这个过程感兴趣可以去看一下构建 debian 基础镜像的 Jenkins 流水线任务 [debuerreotype](https://doi-janky.infosiftr.net/job/tianon/job/debuerreotype/)，上面有构建这个 `rootfs.tar.xz` 完整过程，或者参考 Debian 官方的 [docker-debian-artifacts](https://github.com/debuerreotype/docker-debian-artifacts) 这个 repo 里的 shell 脚本。
 
 需要额外注意一点，在这里往镜像里添加 `rootfs.tar.xz` 时使用的是 `ADD` 而不是 `COPY` ，因为在 Dockerfile 中的 ADD 指令 src 文件如果是个 tar 包，在构建的时候 docker 会帮我们把 tar 包解开到指定目录，使用 copy 指令则不会解开 tar 包。另外一点区别就是 ADD 指令是添加一个文件，这个文件可以是构建上下文环境中的文件，也可以是个 URL，而 COPY 则只能添加构建上下文中的文件，所谓的构建上下文就是我们构建镜像的时候最后一个参数啦。
 
@@ -388,7 +391,7 @@ Receiving objects: 100% (660/660), 2.88 GiB | 16.63 MiB/s, done.
 Resolving deltas: 100% (267/267), done.
 ```
 
-我们把这个 `rootfs.tar.xz` 解开就可以看到，这就是一个 Linux 的根文件系统，不同于我们使用 ISO 安装系统的那个根文件系统，这个根文件系统是经过一系列的裁剪，去掉了一些在容器运行中不必要的文件，使之更加轻量适用于容器运行的场景，整个根跟文件系统的大小为 125M，如果使用 slim 的`rootfs.tar.xz` 会更小一些，仅仅 76M。当然相比于仅仅几M 的 `alpine` ，这算是够大的了。
+我们把这个 `rootfs.tar.xz` 解开就可以看到，这就是一个 Linux 的根文件系统，不同于我们使用 ISO 安装系统的那个根文件系统，这个根文件系统是经过一系列的裁剪，去掉了一些在容器运行中不必要的文件，使之更加轻量适用于容器运行的场景，整个根文件系统的大小为 125M，如果使用 slim 的`rootfs.tar.xz` 会更小一些，仅仅 76M。当然相比于仅仅几 M 的 `alpine` ，这算是够大的了。
 
 ```shell
 ╭─root@sg-02 ~/docker-debian-artifacts/buster ‹dist-amd64*›
@@ -410,7 +413,7 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
 76M     slim/rootfs
 ```
 
-想要自己亲自~~指挥~~炼制一个 `debian:buster` 基础镜像其实很简单，就像下面这样一把梭操作下来就行😂：
+想要自己亲自~~指挥~~构建一个 `debian:buster` 基础镜像其实很简单，就像下面这样一把梭操作下来就行😂：
 
 ```shell
 git clone https://github.com/debuerreotype/docker-debian-artifacts debian
@@ -437,9 +440,9 @@ Successfully built 04948daa3c2e
 Successfully tagged debian:buster
 ```
 
-## 镜像是怎样存放的 （一） 🙄
+## 镜像是怎样存放的 （一）本地存储 🙄
 
-当我们构建完一个镜像之后，镜像就存储在了我们 docker 本地存储目录，默认情况下为 `/var/lib/docker`，下面就探寻一下镜像是以什么样的目录结构存放的。在开始 hack 之前我们先统一一下环境信息，我使用的机器是 Ubuntu 1804，`docker info` 信息如下：
+当我们构建完一个镜像之后，镜像就存储在了我们 docker 本地存储目录，默认情况下为 `/var/lib/docker` ，下面就探寻一下镜像是以什么样的目录结构存放的。在开始 hack 之前我们先统一一下环境信息，我使用的机器是 Ubuntu 1804，`docker info` 信息如下：
 
 ```yaml
 ╭─root@sg-02 /var/lib/docker
@@ -498,7 +501,7 @@ Server:
  Live Restore Enabled: false
 ```
 
-为了方便分析，我将其他的 docker image 全部清空掉，只保留 `debian:v1` 和 `debian:v2` 这两个镜像，这两个镜像足够帮助我们理解容器镜像是如何存放的，镜像多了多话分析下面存储目录的时候可能不太方便（＞﹏＜），这两个镜像是我们利用 `rootfs.tar.xz` 构建出来的基础镜像。
+为了方便分析，我将其他的 docker image 全部清空掉，只保留 `debian:v1` 和 `debian:v2` 这两个镜像，这两个镜像足够帮助我们理解容器镜像是如何存放的，镜像多了多话分析下面存储目录的时候可能不太方便（＞﹏＜），这两个镜像是我们之前使用 Debian 的 `rootfs.tar.xz` 构建出来的基础镜像。
 
 ```shell
 ╭─root@sg-02 /var/lib/docker
@@ -532,7 +535,7 @@ debian           v1          cfba37fd24f8        22 hours ago        69.2MB
 
 根据目录的名字我们可以大致推断出关于容器镜像的存储，我们只关心 image 和 overlay2 这两个文件夹即可，容器的元数据存放在 image 目录下，容器的 layer 数据则存放在 overlay2 目录下。
 
-#### /var/lib/docker/image 目录结构
+### /var/lib/docker/image 目录结构
 
 overlay2 代表着本地 docker 存储使用的是 overlay2 该存储驱动，目前最新版本的 docker 默认优先采用 **overlay2** 作为存储驱动，对于已支持该驱动的 Linux 发行版，不需要任何进行任何额外的配置，可使用 lsmod 命令查看当前系统内核是否支持 overlay2 。
 
@@ -577,7 +580,7 @@ image
 21 directories, 119 files
 ```
 
--   `repositories.json`
+- `repositories.json`
 
 repositories.json 就是存储镜像元数据信息，主要是 image name 和 image id 的对应，digest 和 image id 的对应。当 pull 完一个镜像的时候 docker 会更新这个文件。当我们 docker run 一个容器的时候也用到这个文件去索引本地是否存在该镜像，没有镜像的话就自动去 pull 这个镜像。
 
@@ -604,7 +607,7 @@ repositories.json 就是存储镜像元数据信息，主要是 image name 和 i
 }
 ```
 
-#### /var/lib/docker/overlay2
+### /var/lib/docker/overlay2
 
 下面是一段从 [StackOverflow](https://stackoverflow.com/questions/56550890/docker-image-merged-diff-work-lowerdir-components-of-graphdriver) 上搬运过来的解释。
 
@@ -829,11 +832,13 @@ root@deploy:/root # skopeo inspect docker://index.docker.io/webpsh/webps:latest 
 }
 ```
 
-## 镜像是怎么存放的 (二)
+## 镜像是怎么存放的 (二) registry 存储🙄
+
+文章的开头我们提到过 OCI 规范中的镜像仓库规范 [distribution-spec](https://github.com/opencontainers/distribution-spec)，该规范就定义着容器镜像如何存储在远端（即 registry）上。我们可以把 registry 看作镜像的仓库，使用该规范可以帮助我们把这些镜像按照约定俗成的格式来存放，目前实现该规范的 registry 就 docker 家的 registry 使用的多一些。其他的 registry 比如 harbor ，quay.io 使用的也比较多。
 
 ### registry (/registry/docker/v2)
 
-我们在本地使用 docker run 来起 registry 的容器，我们仅仅是来分析 registry 中镜像时如何存储的，这种场景下不太适合用 harbor 这种重量级的 registry 。
+想要分析一下镜像是如何存放在 registry 上的，我们在本地使用 docker run 来起 registry 的容器即可，我们仅仅是来分析 registry 中镜像时如何存储的，这种场景下不太适合用 harbor 这种重量级的 registry 。
 
 ```shell
 ╭─root@sg-02 /home/ubuntu
@@ -930,15 +935,15 @@ v2: digest: sha256:c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bc
 37 directories, 14 files
 ```
 
-树形的结构看着不太直观，木子就亲自~~指挥~~画了一张层级结构的图来：
+树形的结构看着不太直观，木子就亲自画了一张层级结构的图：
 
 ![img](img/registry-arch.png)
 
-#### blobs 目录
+### blobs 目录
 
 之前我们向 registry 种推送了两个镜像，这两个镜像的 layer 相同但不是用一个镜像，在我们之前 push image 的时候也看到了 `d1b85e6186f6: Layer already exists`。也就可以证明了，虽然两个镜像不同，但它们的 layer 在 registry 中存储的时候可能是相同的。
 
-在 `blobs/sha256` 目录下一共有 5 个名为 data 的文件，我们可以推测一下最大的那个 `[ 26M]` 应该是镜像的 layer ，最小的 `[ 529]` 那个应该是 image config ，剩下的那个 `[1.4K]` 应该就是 manifest 文件。
+在 `blobs/sha256` 目录下一共有 5 个名为 data 的文件，我们可以推测一下最大的那个 `[ 26M]` 应该是镜像的 layer ，最小的 `[ 529]` 那个应该是 manifest，剩下的那个 `[1.4K]` 应该就是 image config 文件。
 
 ```shell
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2/blobs/sha256
@@ -961,7 +966,7 @@ v2: digest: sha256:c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bc
         └── [1.4K]  data
 ```
 
-在 `registry` 的存储目录下，`blobs` 目录用来存放镜像的三种文件： layer 的真实数据，镜像的 manifest 文件，镜像的 image config 文件。这些文件都是以 `data` 为名的文件存放在于该文件 `sha256` 相对应的目录下。 使用 `sha256`散列存储方便索引文件，在 `blob digest` 目录下有一个名为 `data`的文件，对于 layer 来讲，这是个 `data` 文件的格式是 `vnd.docker.image.rootfs.diff.tar.gzip` ，我们可以使用 `tar -xvf` 命令将这个 layer 解开。当我们使用 docker pull 命令拉取镜像的时候，也是去下载这个 `data`文件，下载完成之后会有一个 `docker-untar`的进程将这个 `data`文件解开存放在`/var/lib/docker/overlay2/${digest}/diff` 目录下。
+在 `registry` 的存储目录下，`blobs` 目录用来存放镜像的三种文件： layer 的真实数据，镜像的 manifest 文件，镜像的 image config 文件。这些文件都是以 `data` 为名的文件存放在于该文件 `sha256` 相对应的目录下。 使用以内容寻址的 `sha256` 散列存储方便索引文件，在 `blob digest` 目录下有一个名为 `data`的文件，对于 layer 来讲，这是个 `data` 文件的格式是 `vnd.docker.image.rootfs.diff.tar.gzip` ，我们可以使用 `tar -xvf` 命令将这个 layer 解开。当我们使用 docker pull 命令拉取镜像的时候，也是去下载这个 `data`文件，下载完成之后会有一个 `docker-untar`的进程将这个 `data`文件解开存放在`/var/lib/docker/overlay2/${digest}/diff` 目录下。
 
 ```shell
 ├── [4.0K]  blobs
@@ -971,7 +976,9 @@ v2: digest: sha256:c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bc
 │       │       └── [ 26M]  data
 ```
 
-**manifest 文件**就是一个普通的 json 文件啦😂，记录了一个镜像所包含的 layer 信息，当我们 pull 镜像的时候会使用到这个文件。
+#### manifest 文件
+
+就是一个普通的 json 文件啦，记录了一个镜像所包含的 layer 信息，当我们 pull 镜像的时候会使用到这个文件。
 
 ```json
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2/blobs/sha256/b9/b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239
@@ -1080,6 +1087,8 @@ image config 文件里并没有包含镜像的 tag 信息。
 
 _uploads 文件夹是个临时的文件夹，主要用来存放 push 镜像过程中的文件数据，当镜像 `layer` 上传完成之后会清空该文件夹。其中的 `data` 文件上传完毕后会移动到 `blobs` 目录下，根据该文件的 `sha256` 值来进行散列存储到相应的目录下。
 
+上传过程中的目录结构：
+
 ```shell
 _uploads
 ├── [  53]  0d6c996e-638f-4436-b2b6-54fa7ad430d2
@@ -1124,7 +1133,7 @@ _uploads
 ./debian/_manifests/revisions/sha256/c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bcf11/link
 ```
 
-`_manifests` 文件夹下包含着镜像的 `tags` 和 `revisions` 信息，每一个镜像的每一个 tag 对应着于 tag 名相同的目录。镜像的 tag 并不存储在 image config 中，而是以目录的形式来形成镜像的 tag，这一点比较奇妙。
+`_manifests` 文件夹下包含着镜像的 `tags` 和 `revisions` 信息，每一个镜像的每一个 tag 对应着于 tag 名相同的目录。镜像的 tag 并不存储在 image config 中，而是以目录的形式来形成镜像的 tag，这一点比较奇妙，这和我们 Dockerfile 中并不包含镜像名和 tag 一个道理？
 
 ```shell
 .
