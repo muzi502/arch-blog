@@ -14,6 +14,11 @@ comment: true
 
 上周在写[《镜像搬运工 skopeo 》](https://blog.k8s.li/skopeo.html) 的时候看了很多关于容器镜像相关的博客，从大佬们那里偷偷学了不少知识，对容器镜像有了一点点深入的了解。这周末一个人闲着宅在家里没事就把最近所学的知识整理一下分享出来，供大家一起来食用。内容比较多，耐心看完的话，还是能收获一些~~没用的~~知识滴😂。
 
+## 更新记录
+
+-   2020-06-13：还有一些没有写完，提前发不出来吧。
+-   2020-06-06： 初稿
+
 ## 镜像是怎样炼成的🤔
 
 所谓炼成像就是构建镜像啦，下面用到的**搓**和**炼制**都是指的构建镜像啦，只是个人习惯用语而已😂。
@@ -62,7 +67,7 @@ OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/i
 ├── spec.md                # OCI 镜像规范的概览
 ```
 
-总结以上内容 OCI 容器镜像规范主要包括以下几块内容：
+总结以上几个 markdown 文件， OCI 容器镜像规范主要包括以下几块内容：
 
 #### layer
 
@@ -315,7 +320,7 @@ RUN set -eux; \
 >
 > Docker 客户端和服务端可以在同一个宿主机，也可以在不同的宿主机，如果在同一个宿主机的话，Docker 客户端默认通过 UNIX 套接字(`/var/run/docker.sock`)和服务端通信。
 
-类比于钢铁是怎样炼成的，如果说炼制镜像也需要个工厂的话，那么我们的 dockerd 这个守护进程就是个生产镜像的工厂。能生产镜像的不止 docker 一家，红帽子家的 [buildah](https://buildah.io/) 也能生产镜像，不过用的人并不多。二者的最大区别在于 buildah 可以不用 root 权限来构建镜像，而使用 docker 构建镜像时需要用到 root 权限，没有 root 权限的用户构建镜像会当场翻车：
+类比于钢铁是怎样炼成的，如果说炼制镜像也需要个工厂的话，那么我们的 dockerd 这个守护进程就是个生产镜像的工厂。能生产镜像的不止 docker 一家，红帽子家的 [buildah](https://buildah.io/) 也能生产镜像，不过用的人并不多。二者的最大区别在于 buildah 可以不用 root 权限来构建镜像，而使用 docker 构建镜像时需要用到 root 权限，没有 root 权限的用户构建镜像会当场翻车。这一点就像在 docker 这个镜像工厂里必须要让厂长亲自指挥亲自部署，而在 buildah 厂里普通的搬砖工人就能炼制镜像啦，不需要厂长来亲自指挥亲自部署🙃。
 
 ```shell
 Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock:
@@ -609,22 +614,6 @@ repositories.json 就是存储镜像元数据信息，主要是 image name 和 i
 
 ### /var/lib/docker/overlay2
 
-下面是一段从 [StackOverflow](https://stackoverflow.com/questions/56550890/docker-image-merged-diff-work-lowerdir-components-of-graphdriver) 上搬运过来的解释。
-
-> **LowerDir**: these are the read-only layers of an overlay filesystem. For docker, these are the image layers assembled in order.
->
-> **UpperDir**: this is the read-write layer of an overlay filesystem. For docker, that is the equivalent of the container specific layer that contains changes made by that container.
->
-> **WorkDir**: this is a required directory for overlay, it needs an empty directory for internal use.
->
-> **MergedDir**: this is the result of the overlay filesystem. Docker effectively chroot's into this directory when running the container.
-
-如果想对 overlayfs 文件系统有详细的了解，可以参考 Linux 内核官网上的这篇文档 [overlayfs.txt](https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt) 。
-
-从 docker 官方文档 [Use the OverlayFS storage driver](https://docs.docker.com/storage/storagedriver/overlayfs-driver/) 里偷来的一张图片
-
-![overlayfs lowerdir, upperdir, merged](img/overlay_constructs.jpg)
-
 ```shell
 overlay2
 ├── 259cf6934509a674b1158f0a6c90c60c133fd11189f98945c7c3a524784509ff
@@ -691,7 +680,7 @@ overlay2
     └── XK5IA4BWQ2CIS667J3SXPXGQK5 -> ../e8f6e78aa1afeb96039c56f652bb6cd4bbd3daad172324c2172bad9b6c0a968d/diff
 ```
 
-在 `/var/lib/docker/overlay2` 目录下，
+在 `/var/lib/docker/overlay2` 目录下，我们可以看到，镜像 layer 的内容都存放在一个 `diff` 的文件夹下，diff 的上级目录就是以镜像 layer 的 digest 为名的目录。其中还有个 `l` 文件夹，下面有一坨坨的硬链接文件指向上级目录的 layer 目录。这个 l 其实就是 link 的缩写，l 下的文件都是一些比 digest 文件夹名短一些的，方面不至于 mount 的参数过长。
 
 ## 镜像是怎么搬运的🤣
 
@@ -1239,7 +1228,7 @@ sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239
 
 ### docker
 
-当我们启动一个容器之后我们使用 tree 命令来分析一下 overlay2 就会发现，较之前的目录，容器启动之后 overlay2 目录下多了一个 `merged` 的文件夹，该文件夹就是容器内看到的。
+当我们启动一个容器之后我们使用 tree 命令来分析一下 overlay2 就会发现，较之前的目录，容器启动之后 overlay2 目录下多了一个 `merged` 的文件夹，该文件夹就是容器内看到的。docker 通过 overlayfs 联合挂载的技术将镜像的多层 layer 挂载为一层，这层的内容就是容器里所看到的，也就是 merged 文件夹。
 
 ```shell
 ╭─root@sg-02 /var/lib/docker
@@ -1287,13 +1276,21 @@ overlay2
 overlay on / type overlay (rw,relatime,lowerdir=/opt/docker/overlay2/l/4EPD2X5VF62FH5PZOZHZDKAKGL:/opt/docker/overlay2/l/MYRYBGZRI4I76MJWQHN7VLZXLW:/opt/docker/overlay2/l/5RZOXYR35NSGAWTI36CVUIRW7U:/opt/docker/overlay2/l/LBWRL4ZXGBWOTN5JDCDZVNOY7H:/opt/docker/overlay2/l/526XCHXRJMZXRIHN4YWJH2QLPY:/opt/docker/overlay2/l/XK5IA4BWQ2CIS667J3SXPXGQK5,upperdir=/opt/docker/overlay2/f913d81219134e23eb0827a1c27668494dfaea2f1b5d1d0c70382366eabed629/diff,workdir=/opt/docker/overlay2/f913d81219134e23eb0827a1c27668494dfaea2f1b5d1d0c70382366eabed629/work)
 ```
 
-## 镜像是怎么焚毁的
+从 docker 官方文档 [Use the OverlayFS storage driver](https://docs.docker.com/storage/storagedriver/overlayfs-driver/) 里偷来的一张图片
 
-当我们食用完一个镜像之后，如果今后不再需要它了，我们怎么从本地删除一个镜像呢，其实就是 `rm -rf /` 啦（才不是x
+![overlayfs lowerdir, upperdir, merged](img/overlay_constructs.jpg)
 
-## 镜像的一生
+关于上图中这些 Dir 的作用，下面是一段从 [StackOverflow](https://stackoverflow.com/questions/56550890/docker-image-merged-diff-work-lowerdir-components-of-graphdriver) 上搬运过来的解释。
 
-到此为止，走我们马观花式的看完了镜像的一生：它诞生于一个 Dockerfile，
+> **LowerDir**: these are the read-only layers of an overlay filesystem. For docker, these are the image layers assembled in order.
+>
+> **UpperDir**: this is the read-write layer of an overlay filesystem. For docker, that is the equivalent of the container specific layer that contains changes made by that container.
+>
+> **WorkDir**: this is a required directory for overlay, it needs an empty directory for internal use.
+>
+> **MergedDir**: this is the result of the overlay filesystem. Docker effectively chroot's into this directory when running the container.
+
+如果想对 overlayfs 文件系统有详细的了解，可以参考 Linux 内核官网上的这篇文档 [overlayfs.txt](https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt) 。
 
 ## 参考
 
