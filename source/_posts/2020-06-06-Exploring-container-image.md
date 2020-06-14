@@ -320,7 +320,7 @@ RUN set -eux; \
 >
 > Docker 客户端和服务端可以在同一个宿主机，也可以在不同的宿主机，如果在同一个宿主机的话，Docker 客户端默认通过 UNIX 套接字(`/var/run/docker.sock`)和服务端通信。
 
-类比于钢铁是怎样炼成的，如果说炼制镜像也需要个工厂的话，那么我们的 dockerd 这个守护进程就是个生产镜像的工厂。能生产镜像的不止 docker 一家，红帽子家的 [buildah](https://buildah.io/) 也能生产镜像，不过用的人并不多。二者的最大区别在于 buildah 可以不用 root 权限来构建镜像，而使用 docker 构建镜像时需要用到 root 权限，没有 root 权限的用户构建镜像会当场翻车。这一点就像在 docker 这个镜像工厂里必须要让厂长亲自指挥亲自部署，而在 buildah 厂里普通的搬砖工人就能炼制镜像啦，不需要厂长来亲自指挥亲自部署🙃。
+类比于钢铁是怎样炼成的，如果说炼制镜像也需要个工厂的话，那么我们的 dockerd 这个守护进程就是个生产镜像的工厂。能生产镜像的不止 docker 一家，红帽子家的 [buildah](https://buildah.io/) 也能生产镜像，不过用的人并不多。二者的最大区别在于 buildah 可以不用 root 权限来构建镜像，而使用 docker 构建镜像时需要用到 root 权限，没有 root 权限的用户构建镜像会当场翻车。
 
 ```shell
 Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock:
@@ -418,7 +418,7 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
 76M     slim/rootfs
 ```
 
-想要自己亲自~~指挥~~构建一个 `debian:buster` 基础镜像其实很简单，就像下面这样一把梭操作下来就行😂：
+想要自己构建一个 `debian:buster` 基础镜像其实很简单，就像下面这样一把梭操作下来就行😂：
 
 ```shell
 git clone https://github.com/debuerreotype/docker-debian-artifacts debian
@@ -1027,7 +1027,7 @@ v2: digest: sha256:c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bc
 37 directories, 14 files
 ```
 
-树形的结构看着不太直观，木子就亲自画了一张层级结构的图：
+树形的结构看着不太直观，木子就画了一张层级结构的图：
 
 ![img](img/registry-arch.png)
 
