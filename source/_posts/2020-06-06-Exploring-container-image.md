@@ -16,8 +16,8 @@ comment: true
 
 ## 更新记录
 
--   2020-06-13：还有一些没有写完，后续补充
--   2020-06-06： 初稿
+- 2020-06-13：还有一些没有写完，后续补充
+- 2020-06-06： 初稿
 
 ## 镜像是怎样炼成的🤔
 
@@ -684,43 +684,146 @@ overlay2
 
 ## 镜像是怎么搬运的🤣
 
-当我们在本地构建完成一个镜像之后，如何传递给他人呢？这就涉及到镜像是怎么搬运的一些知识，搬运镜像就像我们在 GitHub 上搬运代码一样，docker 也有类似于 git clone 和 git push 的搬运方式。
+当我们在本地构建完成一个镜像之后，如何传递给他人呢？这就涉及到镜像是怎么搬运的一些知识，搬运镜像就像我们在 GitHub 上搬运代码一样，docker 也有类似于 git clone 和 git push 的搬运方式。docker push 就和我们使用 git push 一样，将本地的镜像推送到一个称之为 registry 的镜像仓库，这个 registry 镜像仓库就像 GitHub 用来存放公共/私有的镜像，一个中心化的镜像仓库方便大家来进行交流和搬运镜像。docker pull 就像我们使用 git pull 一样，将远程的镜像拉拉取本地。
 
-### docker
+### docker pull
 
-#### docker push
-
-docker push 就和我们使用 git push 一样，将本地的镜像推送到一个称之为 registry 的镜像仓库，这个 registry 镜像仓库就像 GitHub 用来存放公共/私有的镜像，一个中心化的镜像仓库方便大家来进行交流和搬运镜像。这个 registry 稍后在镜像是怎样存放的章节详细讲一下。
-
-#### docker pull
-
-理解 docker pull 一个镜像的流程最好的办法是查看这篇文档 [pulling-an-image](https://github.com/opencontainers/distribution-spec/blob/master/spec.md#pulling-an-image) ，在这里我结合大佬的博客简单梳理一下 pull 一个镜像的大致流程。下面这张图是从 [浅谈docker中镜像和容器在本地的存储)](https://github.com/helios741/myblog/blob/new/learn_go/src/2019/20191206_docker_disk_storage/README.md) 借来的😂
+理解 docker pull 一个镜像的流程最好的办法是查看 OCI registry 规范中的这段文档 [pulling-an-image](https://github.com/opencontainers/distribution-spec/blob/master/spec.md#pulling-an-image) ，在这里我结合大佬的博客简单梳理一下 pull 一个镜像的大致流程。下面这张图是从 [浅谈docker中镜像和容器在本地的存储)](https://github.com/helios741/myblog/blob/new/learn_go/src/2019/20191206_docker_disk_storage/README.md) 借来的😂
 
 ![image](https://user-images.githubusercontent.com/12036324/70367494-646d2380-18db-11ea-992a-d2bca4cbfeb0.png)
 
-docker pull 就和我们使用 git clone 一样效果，将远程的镜像仓库拉取到本地来使用，结合上图大致的流程如下：
+docker pull 就和我们使用 git clone 一样效果，将远程的镜像仓库拉取到本地来给容器运行时使用，结合上图大致的流程如下：
 
-1. 由镜像名 + tag 请求 Manifest Schema v2 文件，registry 中一个镜像有多个 tag ，则根据这个 tag 来返回给客户端与之对应的  manifest 文件；
+-   第一步应该是使用`~/.docker/config.json` 中的 auth 认证信息在 registry 那里进行鉴权授权，拿到一个 token，后面的所有的 HTTP 请求中都要包含着该 token 才能有权限进行操作。
 
-2. docker 守护进程解析这个 Manifest 获取镜像的 image Configuration ；
+```json
+╭─root@sg-02 /home/ubuntu
+╰─# cat ~/.docker/config.json
+{
+        "auths": {
+                "https://registry.k8s.li/v2/": {
+                        "auth": "d2VicH855828WM7bSVsslJFpmQE43Sw=="
+                }
+        },
+        "HttpHeaders": {
+                "User-Agent": "Docker-Client/19.03.5 (linux)"
+        },
+        "experimental": "enabled"
+}
+```
 
-3. 下载各 layer ，dockerd 起一个单独的进程 docker-untar 来 gzip 压缩 layer 文件；
+-   dockerd 守护进程解析 docker 客户端参数，由镜像名 + tag 向 registry 请求 Manifest 文件，HTTP 请求为`GET /v2/<name>/manifests/<reference>`。registry 中一个镜像有多个 tag 或者多个处理器体系架构的镜像，则根据这个 tag 来返回给客户端与之对应的  manifest 文件；
 
-4. 验证 image config 中的 RootFS.DiffIDs 是否与下载（解压后）hash 相同；
+```json
+GET /v2/<name>/manifests/<reference>
+{
+   "annotations": {
+      "com.example.key1": "value1",
+      "com.example.key2": "value2"
+   },
+   "config": {
+      "digest": "sha256:6f4e69a5ff18d92e7315e3ee31c62165ebf25bfa05cad05c0d09d8f412dae401",
+      "mediaType": "application/vnd.oci.image.config.v1+json",
+      "size": 452
+   },
+   "layers": [
+      {
+         "digest": "sha256:6f4e69a5ff18d92e7315e3ee31c62165ebf25bfa05cad05c0d09d8f412dae401",
+         "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+         "size": 78343
+      }
+   ],
+   "schemaVersion": 2
+}
+```
 
-5. 解析 Manifest 获取镜像 Configuration；
+-   docker 守护进程解析这个 Manifest 文件获取镜像的 layer 的信息；
 
-#### docker save
+-   dockerd 守护进程并行下载各 layer ，HTTP 请求为`GET /v2/<name>/blobs/<digest>`。 
+-   dockerd 起一个单独的进程 `docker-untar` 来 gzip 解压缩已经下载完成的 layer 文件；对于有些比较大的镜像（比如几十 GB 的镜像），往往镜像的 layer 已经下载完成了，但还没有解压完😂。
 
-docker save
+```shell
+docker-untar /var/lib/docker/overlay2/a076db6567c7306f3cdab6040cd7d083ef6a39d125171353eedbb8bde7f203b4/diff
+```
 
-注意，docker save 只能导出来 tar 包，所以当你 docker save -o images.tar.gz 时，你得到的并不是个 gzip 压缩过的 tar 包。所以如果你想得到一个真正的 .tar.gz 格式的正确的搬运姿势就是 docker save -o image.tar && gzip image.tar
+-   验证 image config 中的 RootFS.DiffIDs 是否与下载（解压后）hash 相同；
 
-#### docker load
+-   解析 Manifest 获取镜像 Configuration，验证镜像是否正确。
 
-### Python
+### docker push
 
-#### [docker-drag](https://github.com/NotGlop/docker-drag)
+push 推送一个镜像到远程的 registry 流程恰好和 pull 拉取镜像到本地的流程相反。我们 pull 一个镜像的时候往往需要先获取包含着镜像 layer 信息的 Manifest 文件，然后根据这个文件中的 layer 信息取 pull 相应的 layer。push 一个镜像，需要先将镜像的各个 layer 推送到 registry ，当所有的镜像 layer 上传完毕之后最后再 push Image Manifest 到 registry。大体的流程如下：
+
+>   All layer uploads use two steps to manage the upload process. The first step starts the upload in the registry service, returning a url to carry out the second step. The second step uses the upload url to transfer the actual data. Uploads are started with a POST request which returns a url that can be used to push data and check upload status.
+
+-   第一步和 pull 一个镜像一样也是进行鉴权授权，拿到一个 token；
+
+-   向 registry 发送 `POST /v2/<name>/blobs/uploads/`请求，registry 返回一个上传镜像 layer 时要应到的 URL；
+
+-   客户端通过 `HEAD /v2/<name>/blobs/<digest>` 请求检查 registry 中是否已经存在镜像的 layer。
+
+-   客户端通过URL 使用 POST 方法来实时上传 layer 数据，上传镜像 layer 分为 `Monolithic Upload` （整体上传）和`Chunked Upload`（分块上传）两种方式。
+
+    -   Monolithic Upload 
+
+    ```http
+    PUT /v2/<name>/blobs/uploads/<session_id>?digest=<digest>
+    Content-Length: <size of layer>
+    Content-Type: application/octet-stream
+    
+    <Layer Binary Data>
+    ```
+
+    -   Chunked Upload
+
+    ```http
+    PATCH /v2/<name>/blobs/uploads/<session_id>
+    Content-Length: <size of chunk>
+    Content-Range: <start of range>-<end of range>
+    Content-Type: application/octet-stream
+    
+    <Layer Chunk Binary Data>
+    ```
+
+-   镜像的 layer 上传完成之后，客户端需要向 registry 发送一个 PUT HTTP 请求告知该 layer 已经上传完毕。
+
+```http
+PUT /v2/<name>/blobs/uploads/<session_id>?digest=<digest>
+Content-Length: <size of chunk>
+Content-Range: <start of range>-<end of range>
+Content-Type: application/octet-stream
+
+<Last Layer Chunk Binary Data>
+```
+
+-   最后当所有的 layer 上传完之后，客户端再讲 manifest 推送上去就完事儿了。
+
+```json
+PUT /v2/<name>/manifests/<reference>
+Content-Type: <manifest media type>
+
+{
+   "annotations": {
+      "com.example.key1": "value1",
+      "com.example.key2": "value2"
+   },
+   "config": {
+      "digest": "sha256:6f4e69a5ff18d92e7315e3ee31c62165ebf25bfa05cad05c0d09d8f412dae401",
+      "mediaType": "application/vnd.oci.image.config.v1+json",
+      "size": 452
+   },
+   "layers": [
+      {
+         "digest": "sha256:6f4e69a5ff18d92e7315e3ee31c62165ebf25bfa05cad05c0d09d8f412dae401",
+         "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+         "size": 78343
+      }
+   ],
+   "schemaVersion": 2
+}
+```
+
+### Python [docker-drag](https://github.com/NotGlop/docker-drag)
 
 这是一个很简单粗暴的 Python 脚本，使用 request 库请求 registry API 来从镜像仓库中拉取镜像，并保存为一个 tar 包，拉完之后使用 docker load 加载一下就能食用啦。该 python 脚本简单到去掉空行和注释不到 200 行，如果把这个脚本源码读一遍的话就能大概知道 docker pull 和 skopeo copy 的一些原理，他们都是去调用 registry 的 API ，所以还是推荐去读一下这个它的源码。
 
@@ -1213,7 +1316,7 @@ sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239
 
 ### docker-archive
 
-本来我想着 docker save 出来的并不是一个镜像，而是一个 `.tar` 文件，但我想了又想，还是觉着它是一个镜像，只不过存在的方式不同而已。于在 docker 和 registry 中存放的方式不同，使用 docker save 出来的镜像是一个孤立的存在。就像是从蛋糕店里拿出来的蛋糕，外面肯定要有个精美的包装是吧，你总没见过。放在哪里都可以，使用的时候我们使用 docker load 拆开外包装(`.tar`)就可。
+本来我想着 docker save 出来的并不是一个镜像，而是一个 `.tar` 文件，但我想了又想，还是觉着它是一个镜像，只不过存在的方式不同而已。于在 docker 和 registry 中存放的方式不同，使用 docker save 出来的镜像是一个孤立的存在。就像是从蛋糕店里拿出来的蛋糕，外面肯定要有个精美的包装是吧，你总没见过。放在哪里都可以，使用的时候我们使用 docker load 拆开外包装(`.tar`)就可。比如我们离线部署 harbor 的时候就是使用官方的镜像 tar 包来进行加载镜像启动容器的。
 
 ## 镜像是怎么食用的😋
 
@@ -1226,7 +1329,7 @@ sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239
 
 ![img](img/006tNc79gy1fl7l7qihpmj30vi0lj756.jpg)
 
-### docker
+### docker run
 
 当我们启动一个容器之后我们使用 tree 命令来分析一下 overlay2 就会发现，较之前的目录，容器启动之后 overlay2 目录下多了一个 `merged` 的文件夹，该文件夹就是容器内看到的。docker 通过 overlayfs 联合挂载的技术将镜像的多层 layer 挂载为一层，这层的内容就是容器里所看到的，也就是 merged 文件夹。
 
