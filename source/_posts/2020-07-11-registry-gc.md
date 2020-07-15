@@ -1,5 +1,5 @@
 ---
-title: docker registry 原理分析
+title: docker registry GC 原理分析
 date: 2020-07-11
 updated:
 slug:
