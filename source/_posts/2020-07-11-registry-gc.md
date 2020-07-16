@@ -528,6 +528,30 @@ marking 阶段是扫描所有的 manifest 文件，根据上文我们提到的 l
 		}
 ```
 
+这一阶段用 shell 脚本来实现的话大致可以这样来搞，使用 shell 去遍历这些 manifest ，然后再 grep 出所有的 sha256 值就能得到这个镜像所有的 blobs 目录下的 data 文件。
+
+```shell
+v2=${v2:="/var/lib/registry/docker/registry/v2"}
+
+cd ${v2}
+all_blobs=/tmp/all_blobs.list
+echo "" > ${all_blobs}
+# marking all the blob by all images manifest
+for project in $(ls repositories/)
+do
+    for image in $(ls repositories/${project})
+    do
+        for tag in $(ls repositories/${project}/${image}/_manifests/tags)
+        do
+            link=$(cat repositories/${project}/${image}/_manifests/tags/${tag}/current/link | cut -c8-71)
+            mfs=blobs/sha256/${link:0:2}/${link}/data
+            echo ${link} >> ${all_blobs}
+            grep sha256 ${mfs} >> ${all_blobs}
+        done
+    done
+done
+```
+
 #### sweep
 
 第二阶段就是删除操作啦，marking 完之后，没有标记 blob（ layer 和 config 文件）就会被清除掉。
@@ -553,8 +577,6 @@ marking 阶段是扫描所有的 manifest 文件，根据上文我们提到的 l
 		return nil
 	})
 ```
-
-
 
 ![](img/registry-gc.png)
 
@@ -649,6 +671,49 @@ INFO[0000] Deleting blob: /docker/registry/v2/blobs/sha256/21/21c83c5242199776c2
 ```
 
 根据 GC 后的 registry 存储目录我们可以看到，原本 blobs 目录下有 6 个 data 文件，现在已经变成了 3 个，alpine:3.10 这个镜像相关的 layer、config、manifest 这三个文件都已经被 GC 掉了。但是在 repositories 目录下，该镜像的 _layers 下的 link 文件依旧存在🤔。
+
+### shell 大法好！
+
+根据上面的 GC 原理和过程，实际上我们可以使用不到 30 行的 shell 脚本来实现一个粗暴的  GC 😂
+
+```SHELL
+#!/bin/bash
+set -x
+v2=${v2:="/var/lib/registry/docker/registry/v2"}
+cd ${v2}
+all_blobs=/tmp/all_blobs.list
+echo "" > ${all_blobs}
+# marking all the blob by all images manifest
+for project in $(ls repositories/)
+do
+    for image in $(ls repositories/${project})
+    do
+        for tag in $(ls repositories/${project}/${image}/_manifests/tags)
+        do
+            link=$(cat repositories/${project}/${image}/_manifests/tags/${tag}/current/link | cut -c8-71)
+            mfs=blobs/sha256/${link:0:2}/${link}/data
+            echo ${link} >> ${all_blobs}
+            grep sha256 ${mfs} >> ${all_blobs}
+        done
+    done
+done
+# delete blob if the blob doesn't exist in all_blobs.list
+for blob in $(find blobs -name "data" | cut -d "/" -f4)
+do
+    grep ${blob} ${all_blobs}
+    if [[ $? != 0 ]]; then
+    rm -rf blobs/sha256/${blob:0:2}/${blob}
+    fi
+done
+```
+
+1.  遍历所有镜像的 tag 下最新的 link 文件指向的 manifest
+
+2.  根据 manifest 文件 grep 出 sha256 值的 image config 和 layer 文件，保存到 `all_blobs.list` 文件中。
+3.  使用 `find` 和 `for` 循环遍历所有 blobs 下的的 data 文件，判断它是否在 `all_blobs.list` 中，不再的话直接 `rm -rf` 干掉它！
+4.  最后重启一下 registry 容器。
+
+就是这么简单粗暴！哈哈，`rm -rf` 用起来真爽（手动滑稽
 
 ## 踩坑！
 
