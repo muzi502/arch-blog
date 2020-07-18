@@ -20,9 +20,11 @@ comment: true
 
 ### 部署 registry 容器
 
-首先我们需要在本地部署一个 registry 容器，同时为了操作的方便还需要使用到 skopeo 这个工具来进行 copy 镜像和 delete 镜像。关于 skopeo 这个工具的安装和使用可以参考咱之前写过的[《镜像搬运工 skopeo 》](https://blog.k8s.li/skopeo.html)。
+首先我们需要在本地部署一个 registry 容器，同时为了操作的方便还需要使用到 skopeo 这个工具来替代 docker 命令行客户端进行 copy 镜像和 delete 镜像。关于 skopeo 这个工具的安装和使用可以参考咱之前写过的[《镜像搬运工 skopeo 》](https://blog.k8s.li/skopeo.html)。
 
 #### 自签 SSL 证书
+
+这一步为了方便在使用 skopeo 的时候不用加一堆额外的参数😂
 
 ```SHELL
 #!/bin/sh
@@ -36,11 +38,11 @@ prompt   = no
 encrypt_key  = no
 x509_extensions  = v3_ca
 [ req_distinguished_name ]
-CN         = $1
+CN         = localhost
 [ CA_default ]
 copy_extensions = copy
 [ alternate_names ]
-DNS.2=$1
+DNS.2=localhost
 [ v3_ca ]
 subjectAltName=@alternate_names
 subjectKeyIdentifier=hash
@@ -53,16 +55,27 @@ openssl req -days 365 -x509 -config ca.conf \
     -new -keyout certs/domain.key -out certs/domain.crt
 ```
 
-- 这一步为了方便在使用 skopeo 的时候不用加一堆额外的参数😂
+- 信任证书，根据不同的发行版选择相应的路径和命令行即可。
 
 ```shell
-cp certs/domain.crt /etc/ssl/certs/localhost.crt
+# CentOS
+update-ca-trust force-enable
+cp certs/domain.crt /etc/pki/ca-trust/source/anchors/localhost.crt
+update-ca-trust
+
+# Ubuntu
+cp certs/domain.crt /usr/local/share/ca-certificates/localhost.crt
+$ update-ca-certificates
+
+# Debian
+cp certs/domain.crt /usr/share/ca-certificates/localhost.crt
+echo localhost.crt >> /etc/ca-certificates.conf
 update-ca-certificates
 ```
 
 #### 创建密码 auth 认证  auth.htpasswd 文件
 
-由于 PUSH 镜像和 DELETE 镜像是通过 HTTP 请求 registry 的 API 完成的，每个请求都需要一个 token 才能完成操作，这个 token 需要使用这个 AUTH 文件来进行鉴权，使用 `htpasswd` 来生成一个明文账户/密码即可。
+由于 PUSH 镜像和 DELETE 镜像是通过 HTTP 请求 registry 的 API 完成的，每个请求都需要一个 token 才能完成操作，这个 token 需要使用这个 AUTH 文件来进行鉴权，使用 `htpasswd` 来生成一个明文的用户/密码即可。
 
 ```shell
 htpasswd -cB -b auth.htpasswd root 123456
@@ -132,9 +145,9 @@ Storing signatures
 
 ### registry 存储目录长什么样🤔
 
-![img](https://blog.k8s.li/img/registry-arch.png)
+![img](img/registry-storage.jpeg)
 
-registry 容器内的`/var/lib/registry/docker/registry/v2` 存储目录，通过 tree 目录我们可以清晰地看到，registry 存储目录下只有两种文件名的文件，一个是 `data` 文件，一个是 `link` 文件。其中 link 文件是普通的文本文件，存放在 `repositories` 目录下，其内容是指向 data 文件的 sha256 digest 值。link 文件是不是有点像 C 语言中的指针😂（大雾
+registry 容器内的`/var/lib/registry/docker/registry/v2` 存储目录，结合上面这张图，通过 tree 目录我们可以清晰地看到：registry 存储目录下只有两种文件名的文件，一个是 `data` 文件，一个是 `link` 文件。其中 link 文件是普通的文本文件，存放在 `repositories` 目录下，其内容是指向 data 文件的 sha256 digest 值。link 文件是不是有点像 C 语言中的指针😂（大雾。
 
 data 文件存放在 `blobs` 目录下文件又分为了三种文件，一个是镜像每一层的 `layer` 文件和镜像的 `config` 文件，以及镜像的 `manifest` 文件。
 
@@ -229,7 +242,7 @@ tags 目录下的文件夹名例如 3.10 ，就是该镜像的 tag ，在它的�
 }#
 ```
 
-- `image config` 文件，json 格式的。是构建时生成的，根据 `Dockerfile` 和宿主机的一些信息，以及一些构建过程中的容器可以生成 digest 唯一的 `image config` 文件。
+- `image config` 文件，json 格式的。是构建时生成的，根据 `Dockerfile` 和宿主机的一些信息，以及一些构建过程中的容器可以生成 digest 唯一的 `image config` 文件。仔细看这个 image config 文件是不是有点疑惑，无论是 manifest 还是 config 文件里面的内容压根就没有镜像的名称和 tag 。其实，镜像就好比一个文件，文件的内容和文件名毫无关系。在 registry 中，是通过路径名的方式来对一个镜像进行命名的。当我们往 registry 中 PUSH 一个镜像时，以`localhost/library/alpine:3.10`为例，`localhost`，就是该 registry 的域名或者 URL ，`library`就是 project ，`alpine:3.10`就是镜像名和镜像的 tag。registry 会根据 `localhost/library/alpine:3.10` 在`repositories` 目录下依次创建相应的目录。
 
 ```json
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2
@@ -409,7 +422,7 @@ DEBU[0000] GET https://localhost/v2/library/alpine/manifests/3.10
 DEBU[0000] DELETE https://localhost/v2/library/alpine/manifests/sha256:a143f3ba578f79e2c7b3022c488e6e12a35836cd4a6eb9e363d7f3a07d848590
 ```
 
-- 再看一下删除后的 registry 存储目录都少了哪些东东？
+- 再看一下删除后的 registry 存储目录下的 alpine 目录里都少了哪些东东？
 
 ```shell
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2
@@ -450,10 +463,9 @@ DEBU[0000] DELETE https://localhost/v2/library/alpine/manifests/sha256:a143f3ba5
         │   │   │       └── a143f3ba578f79e2c7b3022c488e6e12a35836cd4a6eb9e363d7f3a07d848590
         │   │   └── tags
         │   └── _uploads
-        └── debian
 ```
 
-我们可以看到，通过 skopeo delete 一个镜像的时候，只对 `_manifests` 下的 link 文件进行了操作，删除的都是对该 tag 镜像 manifest 文件夹下的 link 文件，实际上 manifest 文件并没有从 blobs 目录下删除，只是删除了该镜像的 manifest 文件的引用。删除一个镜像后，tags 目录下的 tag 名目录被删除了，_manifests/revisions 目录下的 link 文件也被删除了。实际上两者删除的是同一个内容，即 manifest 文件的 link 文件。
+我们可以看到，通过 skopeo delete 一个镜像的时候，只对 `_manifests` 下的 link 文件进行了操作，删除的都是对该 tag 镜像 manifest 文件夹下的 link 文件，实际上 manifest 文件并没有从 blobs 目录下删除，只是删除了该镜像的 manifest 文件的引用。删除一个镜像后，tags 目录下的 tag 名目录就被删除了，_manifests/revisions 目录下的 link 文件也被删除了。实际上两者删除的是同一个内容，即对该镜像 manifest 文件的 link 文件。
 
 ```ini
 DEBU[0000] DELETE https://localhost/v2/library/alpine/manifests/sha256:a143f3ba578f79e2c7b3022c488e6e12a35836cd4a6eb9e363d7f3a07d848590
@@ -477,7 +489,7 @@ A -----> a <----- B
          c <--/
 ```
 
--   通过 registry API 删除镜像 B 之后，layer c 并没有删掉，只是删掉了对它的引用，所以 c 时多余的。
+-   通过 registry API 删除镜像 B 之后，layer c 并没有删掉，只是删掉了对它的引用，所以 c 是多余的。
 
 ```shell
 A -----> a     B
@@ -531,24 +543,19 @@ marking 阶段是扫描所有的 manifest 文件，根据上文我们提到的 l
 这一阶段用 shell 脚本来实现的话大致可以这样来搞，使用 shell 去遍历这些 manifest ，然后再 grep 出所有的 sha256 值就能得到这个镜像所有的 blobs 目录下的 data 文件。
 
 ```shell
+#!/bin/bash
+set -x
 v2=${v2:="/var/lib/registry/docker/registry/v2"}
-
 cd ${v2}
 all_blobs=/tmp/all_blobs.list
 echo "" > ${all_blobs}
 # marking all the blob by all images manifest
-for project in $(ls repositories/)
+for tag in $(find repositories -name "link" | grep current)
 do
-    for image in $(ls repositories/${project})
-    do
-        for tag in $(ls repositories/${project}/${image}/_manifests/tags)
-        do
-            link=$(cat repositories/${project}/${image}/_manifests/tags/${tag}/current/link | cut -c8-71)
-            mfs=blobs/sha256/${link:0:2}/${link}/data
-            echo ${link} >> ${all_blobs}
-            grep sha256 ${mfs} >> ${all_blobs}
-        done
-    done
+    link=$(cat ${tag} | cut -c8-71)
+    mfs=blobs/sha256/${link:0:2}/${link}/data
+    echo ${link} >> ${all_blobs}
+    grep sha256 ${mfs} |cut -d "\"" -f4 | cut -c8-71 >> ${all_blobs}
 done
 ```
 
@@ -612,6 +619,8 @@ INFO[0000] Deleting blob: /docker/registry/v2/blobs/sha256/21/21c83c5242199776c2
 
 #### GC 之后的 registry 存储目录长什么样？
 
+
+
 ```shell
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2
 ╰─# tree                                                                                     
@@ -672,30 +681,41 @@ INFO[0000] Deleting blob: /docker/registry/v2/blobs/sha256/21/21c83c5242199776c2
 
 根据 GC 后的 registry 存储目录我们可以看到，原本 blobs 目录下有 6 个 data 文件，现在已经变成了 3 个，alpine:3.10 这个镜像相关的 layer、config、manifest 这三个文件都已经被 GC 掉了。但是在 repositories 目录下，该镜像的 _layers 下的 link 文件依旧存在🤔。
 
+### 总结
+
+总结以上，用下面这三张图片就能直观地理解这些过程啦。
+
+#### delete 镜像之前的 registry 存储目录结构
+
+![REGISTRY](img/registry-gc-1.jpeg)
+
+#### delete 镜像之后的 registry 存储目录结构
+
+![](img/registry-gc-2.jpeg)
+
+#### GC 之后的 registry 存储目录结构
+
+![](img/registry-gc-3.jpeg)
+
 ### shell 大法好！
 
-根据上面的 GC 原理和过程，实际上我们可以使用不到 30 行的 shell 脚本来实现一个粗暴的  GC 😂
+根据上面的 GC 原理和过程，实际上我们可以使用不到 25 行的 shell 脚本来实现一个粗暴的  GC 😂
 
 ```SHELL
 #!/bin/bash
 set -x
+v2=$1
 v2=${v2:="/var/lib/registry/docker/registry/v2"}
 cd ${v2}
 all_blobs=/tmp/all_blobs.list
 echo "" > ${all_blobs}
 # marking all the blob by all images manifest
-for project in $(ls repositories/)
+for tag in $(find repositories -name "link" | grep current)
 do
-    for image in $(ls repositories/${project})
-    do
-        for tag in $(ls repositories/${project}/${image}/_manifests/tags)
-        do
-            link=$(cat repositories/${project}/${image}/_manifests/tags/${tag}/current/link | cut -c8-71)
-            mfs=blobs/sha256/${link:0:2}/${link}/data
-            echo ${link} >> ${all_blobs}
-            grep sha256 ${mfs} >> ${all_blobs}
-        done
-    done
+    link=$(cat ${tag} | cut -c8-71)
+    mfs=blobs/sha256/${link:0:2}/${link}/data
+    echo ${link} >> ${all_blobs}
+    grep sha256 ${mfs} |cut -d "\"" -f4 | cut -c8-71 >> ${all_blobs}
 done
 # delete blob if the blob doesn't exist in all_blobs.list
 for blob in $(find blobs -name "data" | cut -d "/" -f4)
@@ -713,7 +733,7 @@ done
 3.  使用 `find` 和 `for` 循环遍历所有 blobs 下的的 data 文件，判断它是否在 `all_blobs.list` 中，不再的话直接 `rm -rf` 干掉它！
 4.  最后重启一下 registry 容器。
 
-就是这么简单粗暴！哈哈，`rm -rf` 用起来真爽（手动滑稽
+就是这么简单粗暴！哈哈，`rm -rf` 用起来真爽（手动滑稽 。如果还想把这个脚本再优化一下的话，可以将 所有的 blob 的 sha256 值截取前 12 位保存在一个变量中。通过 `=~` 来判断包含关系来替代 grep。
 
 ## 踩坑！
 
@@ -751,7 +771,6 @@ storage:
 
 ```shell
 #!/bin/bash
-
 cd /var/lib/registry/docker/registry/v2
 for link in $(find repositories -name "link" | grep -E "_layers")
 do
