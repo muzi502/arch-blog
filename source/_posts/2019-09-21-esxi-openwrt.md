@@ -117,3 +117,4 @@ uci del dhcp.cfg01411c.nonegcache
 ![1568878441039](./img/1568878441039.png)
 
 ## 初始化安装系统
+

@@ -708,7 +708,7 @@ v2=$1
 v2=${v2:="/var/lib/registry/docker/registry/v2"}
 cd ${v2}
 all_blobs=/tmp/all_blobs.list
-echo "" > ${all_blobs}
+: > ${all_blobs}
 # marking all the blob by all images manifest
 for tag in $(find repositories -name "link" | grep current)
 do

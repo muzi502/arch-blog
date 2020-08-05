@@ -46,12 +46,13 @@ EFF Member | 搬砖社畜 | 屁民一只 🤦‍♂️垃圾佬🛠️翻车王�
 - WTFPL © Do What the Fuck You Want to Public License
 - 这是我收藏的个人独立博客 [友链](https://blog.k8s.li/link)  以及 [RSS](https://t.me/c/1134301275/1398)，做了简单的分类，在这儿或许能找到你想要的
 
-
 ## hobby
+
+-   
 
 - 喜欢捡垃圾和折腾，这是我折腾过的 [垃圾](https://blog.k8s.li/phones-history.html) 和 [软件](https://blog.k8s.li/android-tools.html)
 - 有阅读的习惯，基本上全年每天都有阅读的是时间，每晚都会捧着 Kindle（催眠神器） 看书到困，这是我的 [书单](https://blog.k8s.li/booklist.html) 以及我的 kindle 读书笔记 [kindle.502.li](https://kindle.502.li)
-- 一般路过的二刺螈，喜欢看动漫和轻小说，这是我看过的 [动漫](https://bgm.tv/user/512178)，我只喜欢纸片人（死宅真恶心（小声
+- 一般路过的二刺螈，超喜欢灵梦！
 - 喜欢读别人的博客，收藏博客，也喜欢写博客。一些精彩的博客会制作成电子书在 Kindle 上认真阅读，欢迎给咱喂食一些不错滴博客。
 - 对生命科学/生命起源/地球起源/宇宙太空/等自然科学感兴趣，BBC 纪录片忠实粉丝
 

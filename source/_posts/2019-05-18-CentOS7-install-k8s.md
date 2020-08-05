@@ -109,7 +109,7 @@ systemctl daemon-reload
 [config/images] Pulled k8s.gcr.io/etcd:3.3.10
 [config/images] Pulled k8s.gcr.io/coredns:1.3.1
 # 导出镜像
-docker save -o k8s.tar $(docker images | grep B | cut -d ' ' -f1)
+docker save -o k8s.tar $(docker images | grep k8s.gcr.io | cut -d ' ' -f1)
 gzip k8s.tar k8s.tar.gz
 ```
 
