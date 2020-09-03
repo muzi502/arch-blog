@@ -18,6 +18,7 @@ comment: true
 
 - 2020-06-13：还有一些没有写完，后续补充
 - 2020-06-06： 初稿
+- 2020-09-02：补充
 
 ## 镜像是怎样炼成的🤔
 
@@ -233,6 +234,27 @@ OCI 规范中的镜像规范 [image-spec](http://www.github.com/opencontainers/i
 #### image manifest index
 
 [index 文件](https://github.com/opencontainers/image-spec/blob/master/image-index.md) ：其实就是我们上面提到的 Manifest List 啦。在 docker 的 [distribution](https://github.com/docker/distribution) 中称之为 `Manifest List` 在 OCI 中就叫 [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/master/image-index.md) 。其实两者是指的同一个文件，甚至两者 GitHub 上文档给的 example 都一一模样🤣，应该是 OCI 复制粘贴 Docker 的文档😂。index 文件是个可选的文件，包含着一个列表为同一个镜像不同的处理器 arch 指向不同平台的 manifest 文件，这个文件能保证一个镜像可以跨平台使用，每个处理器 arch 平台拥有不同的 manifest 文件，使用 index 作为索引。当我们使用 arm 架构的处理器时要额外注意，在拉取镜像的时候要拉取 arm 架构的镜像，一般处理器的架构都接在镜像的 tag 后面，默认 latest tag 的镜像是 x86 的，在 arm 处理器的机器这些镜像上是跑不起来的。
+
+### 各种 id 分不清？
+
+看完  [image-spec](http://www.github.com/opencontainers/image-spec) 里面提到的各种 id 相信你又很多疑惑，在此总结一下这些 id 的作用：
+
+|   image-id   | image config 的 sha256 哈希值，在本地镜像存储中由它唯一标识一个镜像 |
+| :----------: | ------------------------------------------------------------ |
+| image digest | 在 registry 中的 image manifest 的 sha256 哈希值，在 registry 中由它唯一标识一个镜像 |
+|   diff_ids   | 镜像每一层的 id ，是对 layer 的未压缩的 tar 包的 sha256 哈希值 |
+| layer digest | 镜像在 registry 存储中的 id ，是对 layer压缩后的 tar 包的 sha256 哈希值 |
+
+镜像的 image config 中的 `rootfs` 字段记录了每一层 layer 的 id，而镜像的 layer id 则是 layer tar 包的 sha256 值，如果镜像的 layer 改变，则这个 layer id 会改变，而记录它的 image config 内容也会改变，image config 内容变了，image config 文件的 sha256 值也就会改变，这样就可以由 image id 和 image digest 唯一标识一个镜像，达到防治篡改的安全目的。
+
+```json
+"rootfs": {
+    "type": "layers",
+    "diff_ids": [
+      "sha256:d1b85e6186f67d9925c622a7a6e66faa447e767f90f65ae47cdc817c629fa956"
+    ]
+  }
+```
 
 ### Dockerfile
 
@@ -540,7 +562,7 @@ debian           v1          cfba37fd24f8        22 hours ago        69.2MB
 
 根据目录的名字我们可以大致推断出关于容器镜像的存储，我们只关心 image 和 overlay2 这两个文件夹即可，容器的元数据存放在 image 目录下，容器的 layer 数据则存放在 overlay2 目录下。
 
-### /var/lib/docker/image 目录结构
+### /var/lib/docker/image
 
 overlay2 代表着本地 docker 存储使用的是 overlay2 该存储驱动，目前最新版本的 docker 默认优先采用 **overlay2** 作为存储驱动，对于已支持该驱动的 Linux 发行版，不需要任何进行任何额外的配置，可使用 lsmod 命令查看当前系统内核是否支持 overlay2 。
 
@@ -611,6 +633,54 @@ repositories.json 就是存储镜像元数据信息，主要是 image name 和 i
   }
 }
 ```
+
+-   distribution 目录下
+
+存放着 layer 的 diff_id 和 digest 的对应关系
+
+diffid-by-digest :存放 `digest` 到 `diffid` 的对应关系
+
+v2metadata-by-diffid : 存放 `diffid` 到 `digest` 的对应关系
+
+```
+    ├── distribution
+    │   ├── diffid-by-digest
+    │   │   └── sha256
+    │   │       ├── 039b991354af4dcbc534338f687e27643c717bb57e11b87c2e81d50bdd0b2376
+    │   │       ├── 09a4142c5c9dde2fbf35e7a6e6475eba75a8c28540c375c80be7eade4b7cb438
+    │   └── v2metadata-by-diffid
+    │       └── sha256
+    │           ├── 0683de2821778aa9546bf3d3e6944df779daba1582631b7ea3517bb36f9e4007
+    │           ├── 0f7493e3a35bab1679e587b41b353b041dca1e7043be230670969703f28a1d83
+```
+
+-   imagedb
+
+```shell
+    ├── imagedb
+    │   ├── content
+    │   │   └── sha256
+    │   │       ├── 708bc6af7e5e539bdb59707bbf1053cc2166622f5e1b17666f0ba5829ca6aaea
+    │   │       └── f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a
+    │   └── metadata
+    │       └── sha256
+```
+
+-   layerdb
+
+```shell
+    ├── layerdb
+    │   ├── mounts
+    │   ├── sha256
+    │   │   ├── b9835d6a62886d4e85b65abb120c0ea44ff1b3d116d7a707620785d4664d8c1a
+    │   │   │   ├── cache-id  # docker 下载镜像时随机生成的 id
+    │   │   │   ├── diff # 存放 layer 的 diffid
+    │   │   │   ├── parent # 放当前 layer 的父 layer 的 diffid，最底层的 layer 没有这个文件
+    │   │   │   ├── size # 该 layer 的大小
+    │   │   │   └── tar-split.json.gz
+```
+
+需要注意的是：tar-split.json.gz 文件是 layer tar 包的 split 文件，记录了 layer 解压后的文件在 tar 包中的位置（偏移量），通过这个文件可以还原 layer 的 tar 包，在 docker save 导出 image 的时候会用到，由根据它可以开倒车把解压的 layer 还原回 tar 包。详情可参考 [tar-split]( https://github.com/vbatts/tar-split)
 
 ### /var/lib/docker/overlay2
 
@@ -737,9 +807,14 @@ GET /v2/<name>/manifests/<reference>
 }
 ```
 
--   docker 守护进程解析这个 Manifest 文件获取镜像的 layer 的信息；
-
+-   dockerd 得到 `manifest` 后，读取里面 image config 文件的 `digest`，这个 sha256 值就是 image 的 `ID`
+-   根据 `ID` 在本地的 `repositories.json`中查找找有没有存在同样 `ID` 的 image，有的话就不用下载了
+-   如果没有，那么会给 registry 服务器发请求拿到  image config 文件
+-   根据 image config 文件中的 `diff_ids`在本地找对应的 layer 是否存在
+-   如果 layer 不存在，则根据 `manifest` 里面 layer 的 `sha256` 和 `media type` 去服务器拿相应的 layer（相当去拿压缩格式的包）
 -   dockerd 守护进程并行下载各 layer ，HTTP 请求为`GET /v2/<name>/blobs/<digest>`。 
+-   拿到后进行解压，并检查解压(gzip -d)后 tar 包的 sha256 是否和 image config 中的 `diff_id` 相同，不相同就翻车了
+-   等所有的 layer 都下载完成后，整个 image 的 layer 就下载完成，接着开始进行解压(tar -xf) layer 的 tar 包。
 -   dockerd 起一个单独的进程 `docker-untar` 来 gzip 解压缩已经下载完成的 layer 文件；对于有些比较大的镜像（比如几十 GB 的镜像），往往镜像的 layer 已经下载完成了，但还没有解压完😂。
 
 ```shell
@@ -748,7 +823,6 @@ docker-untar /var/lib/docker/overlay2/a076db6567c7306f3cdab6040cd7d083ef6a39d125
 
 -   验证 image config 中的 RootFS.DiffIDs 是否与下载（解压后）hash 相同；
 
--   解析 Manifest 获取镜像 Configuration，验证镜像是否正确。
 
 ### docker push
 
@@ -796,7 +870,7 @@ Content-Type: application/octet-stream
 <Last Layer Chunk Binary Data>
 ```
 
--   最后当所有的 layer 上传完之后，客户端再讲 manifest 推送上去就完事儿了。
+-   最后当所有的 layer 上传完之后，客户端再将 manifest 推送上去就完事儿了。
 
 ```json
 PUT /v2/<name>/manifests/<reference>
@@ -1422,6 +1496,7 @@ overlay on / type overlay (rw,relatime,lowerdir=/opt/docker/overlay2/l/4EPD2X5VF
 ### 博客
 
 - [镜像仓库中镜像存储的原理解析](https://supereagle.github.io/2018/04/24/docker-registry/)
+- [docker 在本地如何管理 image（镜像）?](https://fuckcloudnative.io/posts/how-manage-image/)
 - [ormb：像管理 Docker 容器镜像一样管理机器学习模型](http://gaocegege.com/Blog/ormb)
 - [镜像是怎样炼成的](https://blog.fleeto.us/post/how-are-docker-images-built/)
 - [docker pull分析](https://duyanghao.github.io/docker-registry-pull-manifest-v2/)
