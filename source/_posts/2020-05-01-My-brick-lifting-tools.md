@@ -116,7 +116,7 @@ yum install htop
 apt install htop
 ```
 
-![image-20200506142544440](img/image-20200506142544440.png)
+![image-20200506142544440](img/20200506142544440.png)
 
 ### [bashtop](https://github.com/aristocratos/bashtop)
 
@@ -136,7 +136,7 @@ curl -fsSL https://raw.githubusercontent.com/aristocratos/bashtop/master/bashtop
 curl -fsSL https://cdn.jsdelivr.net/gh/aristocratos/bashtop/bashtop  -o /usr/bin/bashtop ;chmod +x /usr/bin/bashtop
 ```
 
-![image-20200506151706148](img/image-20200506151706148.png)
+![image-20200506151706148](img/20200506151706148.png)
 
 #### pstree
 
@@ -301,7 +301,7 @@ apt install nload
 
 按下回车键可以切换不同的网卡
 
-![image-20200506143310955](img/image-20200506143310955.png)
+![image-20200506143310955](img/20200506143310955.png)
 
 ### ls 兄弟们
 
@@ -1575,7 +1575,7 @@ stress: dbug: [18174] <-- worker 18176 signalled normally
 stress: info: [18174] successful run completed in 3s
 ```
 
-![image-20200506154459952](img/image-20200506154459952.png)
+![image-20200506154459952](img/20200506154459952.png)
 
 
 ### 小工具

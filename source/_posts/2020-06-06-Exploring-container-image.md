@@ -1401,7 +1401,7 @@ sha256:b9caca385021f231e15aee34929eac332c49402372a79808d07ee66866792239
 > - config.json: 该文件包含了容器运行的配置信息，该文件必须存在 bundle 的根目录，且名字必须为 config.json
 > - 容器的根目录，可以由 config.json 中的 root.path 指定
 
-![img](img/006tNc79gy1fl7l7qihpmj30vi0lj756.jpg)
+![img](img/20200609_oci-04.jpg)
 
 ### docker run
 
