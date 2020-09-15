@@ -48,8 +48,6 @@ EFF Member | 搬砖社畜 | 屁民一只 🤦‍♂️垃圾佬🛠️翻车王�
 
 ## hobby
 
--   
-
 - 喜欢捡垃圾和折腾，这是我折腾过的 [垃圾](https://blog.k8s.li/phones-history.html) 和 [软件](https://blog.k8s.li/android-tools.html)
 - 有阅读的习惯，基本上全年每天都有阅读的是时间，每晚都会捧着 Kindle（催眠神器） 看书到困，这是我的 [书单](https://blog.k8s.li/booklist.html) 以及我的 kindle 读书笔记 [kindle.502.li](https://kindle.502.li)
 - 一般路过的二刺螈，超喜欢灵梦！
