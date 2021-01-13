@@ -19,7 +19,3 @@ rm -rf  ${post_dir}
 git checkout ${post_dir}
 find ${public_dir} -name '*.html' -type f -print0 | xargs -0 sed -i '/^[[:space:]]*$/d'
 sed -i '/muzi.disqus.com/d' ${public_dir}/index.html
-cd ${hexo_dir}
-rsync -avzru  --delete --force public/ -e ssh gce:/var/www/hexo/public/
-
-ssh oracle "~/deploy.sh"
