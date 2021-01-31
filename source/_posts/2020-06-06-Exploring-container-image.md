@@ -1103,7 +1103,7 @@ v2: digest: sha256:c805f078bb47c575e9602b09af7568eb27fd1c92073199acba68c187bc5bc
 
 树形的结构看着不太直观，木子就画了一张层级结构的图：
 
-![img](img/registry-arch.png)
+![img](img/registry-storage.jpeg)
 
 ### blobs 目录
 
