@@ -1,6 +1,6 @@
 ---
 title: docker registry 迁移至 harbor
-date: 2020-01-031
+date: 2021-01-031
 updated:
 slug: docker-registry-to-harbor
 categories: 技术
@@ -147,10 +147,10 @@ alpine/e50c909a8df2b7c8b92a6e8730e210ebe98e5082871e66edd8ef4d90838cbd25: ASCII t
 alpine/4c0d98bf9879488e0407f897d9dd4bf758555a78e39675e72b5124ccf12c2580: gzip compressed data
 ```
 
-从文件名和大小以及文件的内省我们可以判断出，manifest 文件对应的就是镜像的 manifests 文件；类型为 `ASCII text` 的文件正是镜像的 image config 文件，里面包含着镜像的元数据信息。而另一个 `gzip compressed data` 文件不就是经过 gzip 压缩过的镜像 layer 嘛。看一下manifest 文件的内容也再次印证了这个结论：
+从文件名和大小以及文件的内省我们可以判断出，manifest 文件对应的就是镜像的 manifests 文件；类型为 `ASCII text` 的文件正是镜像的 image config 文件，里面包含着镜像的元数据信息。而另一个 `gzip compressed data` 文件不就是经过 gzip 压缩过的镜像 layer 嘛。看一下 manifest 文件的内容也再次印证了这个结论：
 
 - 镜像的 config 字段对应的正是 e50c909a8df2，而文件类型正是 `image.v1+json` 文本文件。
-- 镜像的 layer 字段对应的也正是  4c0d98bf9879 而文件类型正是  `.tar.gzip`gzip 压缩文件。
+- 镜像的 layer 字段对应的也正是  4c0d98bf9879 而文件类型正是  `.tar.gzip` gzip 压缩文件。
 
 ```json
 alpine/4c0d98bf9879488e0407f897d9dd4bf758555a78e39675e72b5124ccf12c2580: gzip compressed data
@@ -224,18 +224,18 @@ alpine/4c0d98bf9879488e0407f897d9dd4bf758555a78e39675e72b5124ccf12c2580: gzip co
 26 directories, 8 files
 ```
 
-1. 通过 `repositories/library/alpine/_manifests/tags/3.11/current/link` 文件得到 manifests 文件的 sha256 值，然后根据这个 sha256 值去 blobs 找到镜像的 manifests;
+1. 通过 `repositories/library/alpine/_manifests/tags/latest/current/link` 文件得到 manifests 文件的 sha256 值，然后根据这个 sha256 值去 blobs 找到镜像的 manifests 文件;
 
 ```shell
-╭─root@sg-02 /var/lib/registry/docker/registry/v2/repositories/library/alpine/_manifests/tags/3.11/current
+╭─root@sg-02 /var/lib/registry/docker/registry/v2/repositories/library/alpine/_manifests/tags/latest/current/
 ╰─# cat link
 sha256:39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01#
 ```
 
-2. 根据 link 文件中的值在 blob 目录下找到与之对应的文件，blobs 目录下对应的文件为 blobs/sha256/39/39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01/data;
+2. 根据 link 文件中的 sha256 值在 blobs 目录下找到与之对应的文件，blobs 目录下对应的 manifests 文件为 blobs/sha256/39/39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01/data;
 
 ```json
-╭─root@sg-02 /var/lib/registry/docker/registry/v2/repositories/library/alpine/_manifests/tags/3.11/current
+╭─root@sg-02 /var/lib/registry/docker/registry/v2/repositories/library/alpine/_manifests/tags/latest/current
 ╰─# cat /var/lib/registry/docker/registry/v2/blobs/sha256/39/39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01/data
 {
    "schemaVersion": 2,
@@ -255,18 +255,20 @@ sha256:39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01#
 }
 ```
 
-3. 使用正则匹配，过滤出 manifests 文件中的所有 sha256 值，这些 sha256 值就对对应着 blobs 目录下的 image config 文件和 image layer 文件
+3. 使用正则匹配，过滤出 manifests 文件中的所有 sha256 值，这些 sha256 值就对应着 blobs 目录下的 image config 文件和 image layer 文件
 
 ```bash
-╭─root@sg-02 /var/lib/registry/docker/registry/v2/repositories/library/alpine/_manifests/tags/3.11/current
+╭─root@sg-02 /var/lib/registry/docker/registry/v2/repositories/library/alpine/_manifests/tags/latest/current
 ╰─# cat /var/lib/registry/docker/registry/v2/blobs/sha256/39/39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01/data | grep -Eo "\b[a-f0-9]{64}\b"
 f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a
 cbdbe7a5bc2a134ca8ec91be58565ec07d037386d1f1d8385412d224deafca08
 ```
 
-4. 根据 manifests 文件就可以得到 blobs 目录中镜像的所有 layer 和 image config 文件，然后将这些文件拼成一个 dir 格式的镜像。
+4. 根据 manifests 文件就可以得到 blobs 目录中镜像的所有 layer 和 image config 文件，然后将这些文件拼成一个 dir 格式的镜像，在这里使用 cp 的方式将镜像从 registry 存储目录里 `捞` 出来😂
 
 ```shell
+
+# 首先创建一个文件夹，为了保留镜像的 name 和 tag，文件夹的名称就对应的是 NAME:TAG
 ╭─root@sg-02 /var/lib/registry/docker
 ╰─# mkdir -p skopeo/library/alpine:latest
 ╭─root@sg-02 /var/lib/registry/docker
@@ -283,7 +285,10 @@ skopeo/library/alpine:latest
 └── manifest
 
 0 directories, 3 files
+
 ```
+
+和上面的 skopeo copy 出来的 dir 文件夹对比一下，到此为止镜像所需要的文件就基本上都齐全了，就差一个 version 文件，这个文件无关紧要可以去掉。
 
 5. 再优化一下，将步骤 4 中的 cp 操作修改成硬链接操作，能极大减少磁盘的 IO 操作。需要注意，硬链接文件不能跨分区，所以要和 registry 存储目录在同一个分区下才行。
 
@@ -304,9 +309,28 @@ skopeo/library/alpine:latest
 0 directories, 3 files
 ```
 
+然后使用 skopeo copy 或者 skopeo sync 将镜像 push 到 harbor
+
+- 使用 skopeo copy
+
+```shell
+skopeo copy  --insecure-policy --src-tls-verify=false --dest-tls-verify=false \
+dir:skopeo/library/alpine:latest docker://harbor.k8s.li/library/alpine:latest
+```
+
+- 使用 skopeo sync
+
+需要注意的是，skopeo sync 的方式是同步 project 级别的，镜像的 name 和 tag 就对应的是目录的名称
+
+```shell
+skopeo sync --insecure-policy --src-tls-verify=false --dest-tls-verify=false \
+--src dir --dest docker skopeo/library/ harbor.k8s.li/library/
+
+```
+
 ### 实现脚本
 
-大叫一声 shell 大法好！
+大叫一声 shell 大法好！😂
 
 ```shell
 #!/bin/bash
@@ -353,6 +377,8 @@ gen_skopeo_dir
 sync_image
 
 ```
+
+其实魔改一下 skopeo 的源码也是可以无缝支持 registry 存储目录的，目前正在研究中😃
 
 ## 对比
 
