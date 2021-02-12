@@ -47,6 +47,7 @@ rss: https://blog.k8s.li/atom.xml
 | [云游君的小站](https://www.yunyoujun.cn/about/site.html) | 前端、博客                         | 希望能成为一个有趣的人(o゜▽゜)o☆x                            |
 | [BobMaster's Blog](https://blog.hibobmaster.com/)        | 博客                               | 一个准通信工程专业学生（＞人＜；）                           |
 | [Ryan4Yin's Space](https://ryan4yin.space/)              | DevOps                             | 赞美快乐~                                                    |
+| [rxliuli](https://blog.rxliuli.com/)                     | 前端、算法                         |                                                              |
 
 ### 单~~恋~~链😂/有趣的人
 
