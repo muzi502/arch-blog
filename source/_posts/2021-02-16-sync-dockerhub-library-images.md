@@ -358,34 +358,24 @@ IMAGES=$(git diff --name-only --ignore-space-at-eol --ignore-space-change \
 
 ### 劝退三连😂
 
+- 首先要本地部署好镜像仓库并配置好 SSL 证书。镜像仓库建议使用 docker registry 或者 harbor，具体的部署方法可以在互联网上找到。
 - 需要个大盘鸡（大硬盘机器），当前 docker hub 上还在维护的 tag 镜像总大小为 128 GB 左右。
 - 如果是长期使用，本地镜像仓库的存储空间至少 1TB 以上。
 - 由于是使用 GitHub action 的机器将镜像 push 到本地镜像仓库，因此本地镜像仓库需要有个公网IP以及域名 + SSL 证书
 
 ### 增加配置
 
-首先要本地部署好镜像仓库并配置好 SSL 证书。镜像仓库建议使用 docker registry 或者 harbor，具体的部署方法可以在互联网上找到。
+首先 fork 官方的 repo [docker-library/official-images](https://github.com/docker-library/official-images)  到自己的 GitHub 账户下；
 
-然后 fork 这个 repo  [muzi502/official-images](https://github.com/muzi502/official-images) 到自己的账户下，并在 repo 的 `Settings >  Secrets` 中配置好如下三个变量：
+然后 fork 这个 repo [muzi502/sync-library-images](https://github.com/muzi502/sync-library-images) 到自己的 GitHub 账户下；
+
+最后在自己的 sync-library-images 这个 repo 的 `Settings >  Secrets` 中配置好如下三个变量：
 
 - REGISTRY_DOMAIN 设置为本地镜像仓库的域名
 - REGISTRY_USER 本地镜像仓库的用户名
 - REGISTRY_PASSWORD 设置为本地镜像仓库的密码
 
 ![image-20210216163441719](img/image-20210216163441719.png)
-
-### 触发更新
-
-首次的全量同步需要手动触发更新才行。在 fork 完 repo 之后，在本地 rebase 上游最新的代码，并 push 到自己的 repo 中。通过 push 操作来触发 action 运行。
-
-```bash
-# 修改为自己的 repo 地址
-git clone -b sync git@github.com:USER/official-images.git
-cd official-images
-git remote add upstream https://github.com/docker-library/official-images
-git fetch upstream
-git rebase upstream/master && git push origin
-```
 
 ## 参考
 
