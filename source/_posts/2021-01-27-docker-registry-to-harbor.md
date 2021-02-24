@@ -86,7 +86,7 @@ skopeo sync --insecure-policy --src-tls-verify=false --dest-tls-verify=false --s
 
 ## 方案三：迁移存储目录
 
-文章开篇提到 harbor 的后端镜像存储也是使用的  docker registry，对于一个 registry 来说，只要是使用的是 Docker Distribution V2 ，它后端的存储目录结构都是长得一摸一样的。那为何不直接将 registry 的存储目录打包复制并解压到 harbor 的 registry 存储目录呢？这样杨又能保证所有的镜像都迁移过去，不会落下任何一个。
+文章开篇提到 harbor 的后端镜像存储也是使用的  docker registry，对于一个 registry 来说，只要是使用的是 Docker Distribution V2 ，它后端的存储目录结构都是长得一摸一样的。那为何不直接将 registry 的存储目录打包复制并解压到 harbor 的 registry 存储目录呢？这样又能保证所有的镜像都迁移过去，不会落下任何一个。
 
 对于 harbor 1.x 版本来讲，将 docker registry 的存储目录直接迁移到 harbor 的 registry 存储目录，然后删除 harbor 的 redis 数据（因为 harbor 的 redis 缓存了镜像的元数据信息），重启 harbor 就完事儿了。重启 harbor 之后，harbor 会调用后端的 registry 去提取镜像的元数据信息并存储到 redis 中。这样就完成了迁移的工作。
 
