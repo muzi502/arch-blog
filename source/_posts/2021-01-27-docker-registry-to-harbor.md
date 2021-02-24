@@ -16,29 +16,37 @@ comment: true
 
 ### Docker Distribution
 
-[Docker Distribution](https://github.com/distribution/distribution) 是第一个是实现了打包、发布、存储和镜像分发的工具，起到 Docker registry 的作用。其中 Docker Distribution 中的 [spec 规范](https://github.com/distribution/distribution/tree/main/docs/spec) 后来也就成为了 OCI [distribution-spec](https://github.com/opencontainers/distribution-spec) 规范。可以认为 Docker Distribution 实现了大部分 OCI 镜像分发的规范，二者在很大程度上也是兼容的。 OCI 的指导思想时先有工业界的实践，再将这些实践总结成技术规范，因此尽管 OCI 的 [distribution-spec](https://github.com/opencontainers/distribution-spec) 规范还没有正式发布（目前版本是[v1.0.0-rc1](https://github.com/opencontainers/distribution-spec/releases/tag/v1.0.0-rc1)），但以 Docker Distribution 作为基础的镜像仓库已经成为普遍采用的方案，Docker registry HTTP API V2 也就成为了事实上的标准。
+[Docker Distribution](https://github.com/distribution/distribution) 是第一个是实现了打包、发布、存储和镜像分发的工具，起到 Docker registry 的作用。（目前 Distribution 已经捐赠给了 CNCF）。其中 Docker Distribution 中的 [spec 规范](https://github.com/distribution/distribution/tree/main/docs/spec) 后来也就成为了 OCI [distribution-spec](https://github.com/opencontainers/distribution-spec) 规范。可以认为 Docker Distribution 实现了大部分 OCI 镜像分发的规范，二者在很大程度上也是兼容的。 OCI 的指导思想时先有工业界的实践，再将这些实践总结成技术规范，因此尽管 OCI 的 [distribution-spec](https://github.com/opencontainers/distribution-spec) 规范还没有正式发布（目前版本是[v1.0.0-rc1](https://github.com/opencontainers/distribution-spec/releases/tag/v1.0.0-rc1)），但以 Docker Distribution 作为基础的镜像仓库已经成为普遍采用的方案，Docker registry HTTP API V2 也就成为了事实上的标准。
 
 ### Harbor
 
-Harbor 也是采用了 Docker Distribution （docker registry）作为后端镜像存储，在 Harbor 2.0 之前的版本，镜像相关的功能大部分是由 Docker Distribution 来处理，镜像和 OCI 等制品的元数据时 harbor 组件从 docker registry 中提取出来的；从 Harbor 2.0 版本之后，镜像等 OCI 制品相关的元数据由 Harbor 自己来维护，而且**元数据是在 PUSH 这些制品时写入到 harbor 的数据库中的**。也正因得益于此，Harbor 不再仅仅是个用来存储和管理镜像的服务，而一个云原生仓库服务，能够存储和管理符合 OCI 规范的 Helm Chart、CNAB、OPA Bundle等 Artifact 。
+Harbor 也是采用了 Docker Distribution （docker registry）作为后端镜像存储服务，在 Harbor 2.0 之前的版本，镜像相关的功能大部分是由 Docker Distribution 来处理，镜像和 OCI 等制品的元数据是 harbor 组件从 docker registry 中提取出来的；Harbor 在 2.0 版本之后，镜像等 OCI 制品相关的元数据由 Harbor 自己来维护，而且**元数据是在 PUSH 这些制品时写入到 harbor 的数据库中的**。也正因得益于此，Harbor 不再仅仅是个用来存储和管理镜像的服务，而一个云原生仓库服务，能够存储和管理符合 OCI 规范的 Helm Chart、CNAB、OPA Bundle 等多种 Artifact 。
 
 ### docker registry to harbor
 
 好了，扯了这么多没用的概念，回到本文要解决的问题：**如何将 docker registry 中的镜像迁移至 harbor？**
 
-> 假如内网环境中有两台机器，一台机器上运行着 docker registry，域名假设为 registry.k8s.li 。另一台机器运行着 harbor，假设域名为 harbor.k8s.li。现在 docker registry 中存放了五千个镜像。harbor 是刚刚部署了，里面还没有镜像。在磁盘和网络没有限制的情况下，如何将 docker registry 中的镜像迁移到 harbor 中？
+假如内网环境中有两台机器，一台机器上运行着 docker registry，域名假设为 registry.k8s.li 。另一台机器运行着 harbor，假设域名为 harbor.k8s.li。现在 docker registry 中存放了五千个镜像。harbor 是刚刚部署的，里面还没有镜像。在磁盘和网络没有限制的情况下，如何高效地将 docker registry 中的镜像迁移到 harbor 中呢？
 
 ## 获取 registry 所有镜像的列表
 
-根据木子在  [深入浅出容器镜像的一生🤔](https://blog.k8s.li/Exploring-container-image.html) 文章中提到的 registry 的存储目录结构，我们可以使用如下命令获取 registry 中的所有镜像的列表
+首先在迁移之前我们要拉清单，获取一份 docker registry 中镜像的列表，这样我们才能保证迁移后没有镜像丢失。根据木子在 [深入浅出容器镜像的一生🤔](https://blog.k8s.li/Exploring-container-image.html) 文章中提到的 registry 的存储目录结构。在 registry 存储目录中，每个镜像的 tag 都是由 `current/index` 这个文件指向该 tag 镜像的 manifests 文件的，由此我们可以通过遍历 registry 存储目录中 `current/index` 文件的方式来得到所有镜像的 tag，由此得到该 registry 中所有镜像的列表。注意，这样只能得到有 tag 的镜像，其他没 tag 的镜像无法获取到。
 
 ![img](img/registry-storage.jpeg)
+
+可通过如下命令在 registry 存储目录下获取镜像列表：
 
 ```bash
 # 首先进入到 registry 存储的主目录下
 cd  /var/lib/registry
 find docker -type d -name "current" | sed 's|docker/registry/v2/repositories/||g;s|/_manifests/tags/|:|g;s|/current||g' > images.list
 ```
+
+## harbor 创建 project
+
+对于新部署的 harbor 来说，上面只会有一个默认的 library 的 project，需要手动在 harbor 上创建 docker registry 中对应的 project。docker registry 中镜像的 project 就是 registry 存储目录中 `repositories` 下的目录名。
+
+得到了镜像列表，以及在 harbor 上完成了对应 project 的创建，我们就可以做正式的迁移工作啦。根据不同的场景，可使用如下几种方案：
 
 ## 方案一：docker retag
 
@@ -54,18 +62,18 @@ docker tag registry.k8s.li/library/alpine:latest harbor.k8s.li/library/alpine:la
 docker push harbor.k8s.li/library/alpine:latest
 ```
 
-如果你之前读过木子曾经写过的 [深入浅出容器镜像的一生🤔](https://blog.k8s.li/Exploring-container-image.html) 和 [镜像搬运工 skopeo 初体验](https://blog.k8s.li/skopeo.html) 并且已经在日常生活中使用 skopeo ，你一定会很觉着这个方案很蠢，因为 docker pull –> docker tag –> docker pull 的过程中会对镜像的 layer 进行解压缩，但对于只是将镜像从一个 registry 复制到另一个 registry 来说，这些过程中做了很多无用功。详细的原理可以翻看一下刚提到的两篇文章，在此就不再赘述。
+如果你之前读过木子曾经写过的 [深入浅出容器镜像的一生🤔](https://blog.k8s.li/Exploring-container-image.html) 和 [镜像搬运工 skopeo 初体验](https://blog.k8s.li/skopeo.html) 并且已经在日常生活中使用 skopeo ，你一定会很觉着这个方案很蠢，因为 docker pull –> docker tag –> docker pull 的过程中会对镜像的 layer 进行解压缩。对于只是将镜像从一个 registry 复制到另一个 registry 来说，这些 docker 在这些过程中做了很多无用功。详细的原理可以翻看一下刚提到的两篇文章，在此就不再赘述。
 
-那么对于准求极致的人来讲肯定不会采用 docker retag 这么蠢的办法啦，下面就讲一下方案二：
+那么为了追求高效，肯定不会使用 docker retag 这么蠢的办法啦，下面就讲一下方案二：
 
 ## 方案二：skopeo
 
-在 [镜像搬运工 skopeo 初体验](https://blog.k8s.li/skopeo.html) 中介绍过可以使用 skopeo copy 直接从一个 registry 中复制镜像原始的 layer 到另一个 registry 中，期间不会涉及镜像 layer 解压缩操作。至于性能和耗时，比 docker 高到不知道哪里去了😂。
+在 [镜像搬运工 skopeo 初体验](https://blog.k8s.li/skopeo.html) 中介绍过可以使用 skopeo copy 直接从一个 registry 中复制镜像原始 blobs 到另一个 registry 中，在此期间不会涉及镜像 layer 解压缩操作。至于性能和耗时，比使用 docker 的方式高到不知道哪里去了😂。
 
 - 使用 skopeo copy
 
 ```bash
-skopeo copy docker://registry.k8s.li/library/alpine:latest \ docker://harbor.k8s.li/library/alpine:latest
+skopeo copy --insecure-policy --src-tls-verify=false --dest-tls-verify=false --src docker://registry.k8s.li/library/alpine:latest docker://harbor.k8s.li/library/alpine:latest
 ```
 
 - 使用 skopeo sync
@@ -74,18 +82,32 @@ skopeo copy docker://registry.k8s.li/library/alpine:latest \ docker://harbor.k8s
 skopeo sync --insecure-policy --src-tls-verify=false --dest-tls-verify=false --src docker --dest docker registry.k8s.li/library/alpine:latest harbor.k8s.li/library/alpine:latest
 ```
 
-但还有没有更好的办法？要知道无论是 docker 和 skopeo 本质上都是通过 registry 的 HTTP API 下载和上传镜像的，在这过程中还是多了不少 HTTP 请求的，还有没有更好的办法？
+但还有没有更好的办法？要知道无论是 docker 和 skopeo 本质上都是通过 registry 的 HTTP API 下载和上传镜像的，在这过程中还是多了不少 HTTP 请求的，如果走的是 HTTPS 的话，还涉及了 HTTPS 加密和解密的过程，这期间也是做了很多~~无用功~~的。那么还有没有更好的办法？
 
 ## 方案三：迁移存储目录
 
-文章开篇提到 harbor 的后端镜像存储也是使用的  docker registry，那为何不直接将 registry 的存储目录打包复制并解压到 harbor 的 registry 存储目录呢？对于 harbor 1.x 版本来将，将 docker 的 registry 存储目录迁移到 harbor 的 registry 存储目录，然后删除 harbor 的 redis 数据，重启 harbor 就完事儿了。重启 harbor 之后，harbor 会调用后端的 registry 去提取镜像的元数据信息并存储到 redis 中。这样就完成了迁移的工作。
+文章开篇提到 harbor 的后端镜像存储也是使用的  docker registry，对于一个 registry 来说，只要是使用的是 Docker Distribution V2 ，它后端的存储目录结构都是长得一摸一样的。那为何不直接将 registry 的存储目录打包复制并解压到 harbor 的 registry 存储目录呢？这样杨又能保证所有的镜像都迁移过去，不会落下任何一个。
+
+对于 harbor 1.x 版本来讲，将 docker registry 的存储目录直接迁移到 harbor 的 registry 存储目录，然后删除 harbor 的 redis 数据（因为 harbor 的 redis 缓存了镜像的元数据信息），重启 harbor 就完事儿了。重启 harbor 之后，harbor 会调用后端的 registry 去提取镜像的元数据信息并存储到 redis 中。这样就完成了迁移的工作。
+
+在 docker registry 机器上备份 registry 存储目录
+
+```bash
+# 切换到 docker registry 的存储目录
+cd  /var/lib/registry
+
+# 注意，进行备份时无需进行压缩，因为 registry 中镜像的 layer 都是压缩过的
+tar -cpf docker.tar docker
+```
+
+备份完成之后将 docker.tar scp 到 harbor 机器上，然后在 harbor 机器上恢复 registry 存储目录
 
 ```bash
 # 切换到 harbor 的存储目录
 cd /data/harbor
 
-# 将 docker registry 备份的 docker 目录解压到 harbor 的 registry 目录下，目录层级一定要对应好
-tar -xf docker.tar.gz -C ./registry
+# 将备份的 docker 目录解压到 harbor 的 registry 目录下，目录层级一定要对应好
+tar -xpf docker.tar -C ./registry
 
 # 删除 harbor 的 regis 数据，重启 harbor 后会重建 redis 数据。
 rm -f redis/dump.rdb
@@ -95,13 +117,23 @@ cd /opt/harbor
 docker-compose restart
 ```
 
+这样迁移之后可能会遇到无法往 harbor push 镜像的问题。因为 docker registry 容器内 registry 存储目录的所属和所属组为 root ，而 harbor registry 容器内 registry 存储目录的所属和所属组为 10000:10000 ,二者权限并不相同，会导致 harbor 无法 push 镜像。因此在迁移完成之后需要修改一下 harbor registry 目录的所属和所属组。
+
+```bash
+# 切换到 harbor 的存储目录
+cd /data/harbor
+
+# 修改 registry 存储目录的所属和所属组为 10000
+chown -R 10000:10000 ./registry
+```
+
 ## 方案四：
 
-对于 harbor 2.x 来讲，由于 harbor 强化了 Artifact 的元数据管理能力，即元数据在 push 或者 sync 到 harbor 时会写入到 harbor 自身的数据库中。在 harbor 看来只要数据库中没有这个 Artifact 的 manifest 信息或者没有这一层 layer 的信息，harbor 都会认为该 Artifact 或者 layer 不存在，返回 404 的错误。所以按照方案三直接而将 registry 存储目录解压到 harbor 的 registry 存储目录时行不通的。那么现在看来只能通过 skopeo copy 的方法将镜像一个一个地 push 到 harbor 中了。
+对于 harbor 2.x 来讲，由于 harbor 强化了 Artifact 的元数据管理能力，即元数据要在 push 或者 sync 到 harbor 时写入到 harbor 自身的数据库中。在 harbor 看来只要数据库中没有这个 Artifact 的 manifest 信息或者没有这一层 layer 的信息，harbor 都会认为该 Artifact 或者 layer 不存在，返回 404 的错误。按照方案三直接而将 docker registry 存储目录解压到 harbor 的 registry 存储目录的方法行不通的。因为是将镜像解压到 registry 存储中的，虽然在 harbor 的 registry 容器看来是有镜像的，但因为 harbor 的数据库中没有镜像，harbor 就会认为没有镜像。那么现在看来只能通过方案二使用 skopeo 将镜像一个一个地 push 到 harbor 中了。
 
-对于某些特定的场景下，不能像方案二那样拥有一个 docker registry 的 HTTP 服务，只有一个 docker registry 的压缩包，这如何将 docker registry 的存储目录中的镜像迁移到 harbor 2.0 中呢？
+但对于某些特定的场景下，不能像方案二那样拥有一个 docker registry 的 HTTP 服务，只有一个 docker registry 的压缩包，这如何将 docker registry 的存储目录中的镜像迁移到 harbor 2.0 中呢？
 
-那么再次邀请我们的 skopeo 大佬出场，在 [镜像搬运工 skopeo 初体验](https://blog.k8s.li/skopeo.html) 中提到过 skopeo 支持的`镜像格式`有如下几种：
+在 [镜像搬运工 skopeo 初体验](https://blog.k8s.li/skopeo.html) 中提到过 skopeo 支持的`镜像格式`有如下几种：
 
 | IMAGE NAMES             | example                                    |
 | :---------------------- | :----------------------------------------- |
@@ -112,7 +144,7 @@ docker-compose restart
 | **docker-archive:**     | docker-archive:alpine.tar (docker save)    |
 | **oci:**                | oci:alpine:latest                          |
 
-> 需要注意的是，这几种镜像的名字，对应着镜像存在的方式，不同存在的方式对镜像的 layer 处理的方式也不一样，比如 `docker://` 这种方式是存在 registry 上的，`docker-daemon:` 是存在本地 docker pull 下来的，再比如 `docker-archive` 是通过 docker save 出来的镜像。同一个镜像有这几种存在的方式就像水有气体、液体、固体一样。可以这样去理解，他们表述的都是同一个镜像，只不过是存在的方式不一样而已。
+需要注意的是，这几种镜像的名字，对应着镜像存在的方式，不同存在的方式对镜像的 layer 处理的方式也不一样，比如 `docker://` 这种方式是存在 registry 上的；`docker-daemon:` 是存在本地 docker pull 下来的；再比如 `docker-archive` 是通过 docker save 出来的镜像；而 `dir:` 是镜像以文件夹的形式保存的。同一个镜像有这几种存在的方式就像水有气体、液体、固体一样。可以这样去理解，他们表述的都是同一个镜像，只不过是存在的方式不一样而已。
 
 既然镜像是存放在 registry 存储目录里的，那么使用 dir 的形式直接从文件系统读取镜像，理论上来讲会比方案二要好一些。虽然 skopeo 支持 dir 格式的镜像，但 skopeo 目前并不支持直接使用 registry 的存储目录，所以还是需要想办法将 docker registry 存储目录里的每一个镜像转换成 skopeo dir 的形式。
 
@@ -174,13 +206,13 @@ alpine/4c0d98bf9879488e0407f897d9dd4bf758555a78e39675e72b5124ccf12c2580: gzip co
 }
 ```
 
-### 从 registry 存储目录中抠镜像出来
+### 从 registry 存储目录中捞镜像出来
 
-接下来到本文的精彩的地方了。如何将 registry 存储里的镜像提取出来，转换成 skopeo 所支持的 dir 格式。
+接下来到本文的较为精彩的地方了。如何从 registry 存储里的 `捞` 镜像出来，转换成 skopeo 所支持的 dir 格式。
 
 ![img](img/registry-storage.jpeg)
 
-- 首先要得到镜像的 manifests 文件，从 manifests 文件中得到所有的 blob 文件。例如对于 registry 存储目录中的 `library/alpine:latest` 镜像。
+- 首先要得到镜像的 manifests 文件，从 manifests 文件中可以得到该镜像的所有 blob 文件。例如对于 registry 存储目录中的 `library/alpine:latest` 镜像来讲，它在 registry 中是这样存放的：
 
 ```shell
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2
@@ -224,7 +256,7 @@ alpine/4c0d98bf9879488e0407f897d9dd4bf758555a78e39675e72b5124ccf12c2580: gzip co
 26 directories, 8 files
 ```
 
-1. 通过 `repositories/library/alpine/_manifests/tags/latest/current/link` 文件得到 manifests 文件的 sha256 值，然后根据这个 sha256 值去 blobs 找到镜像的 manifests 文件;
+1. 通过 `repositories/library/alpine/_manifests/tags/latest/current/link` 文件得到 alpine 镜像 lasts 这个 tag 的 manifests 文件的 sha256 值，然后根据这个 sha256 值去 blobs 找到镜像的 manifests 文件;
 
 ```shell
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2/repositories/library/alpine/_manifests/tags/latest/current/
@@ -232,7 +264,7 @@ alpine/4c0d98bf9879488e0407f897d9dd4bf758555a78e39675e72b5124ccf12c2580: gzip co
 sha256:39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01#
 ```
 
-2. 根据 link 文件中的 sha256 值在 blobs 目录下找到与之对应的文件，blobs 目录下对应的 manifests 文件为 blobs/sha256/39/39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01/data;
+2. 根据 `current/link` 文件中的 sha256 值在 blobs 目录下找到与之对应的文件，blobs 目录下对应的 manifests 文件为 blobs/sha256/39/39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01/data;
 
 ```json
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2/repositories/library/alpine/_manifests/tags/latest/current
@@ -255,28 +287,34 @@ sha256:39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01#
 }
 ```
 
-3. 使用正则匹配，过滤出 manifests 文件中的所有 sha256 值，这些 sha256 值就对应着 blobs 目录下的 image config 文件和 image layer 文件
+3. 使用正则匹配，过滤出 manifests 文件中的所有 sha256 值，这些 sha256 值就对应着 blobs 目录下的 image config 文件和 image layer 文件;
 
 ```bash
 ╭─root@sg-02 /var/lib/registry/docker/registry/v2/repositories/library/alpine/_manifests/tags/latest/current
-╰─# cat /var/lib/registry/docker/registry/v2/blobs/sha256/39/39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01/data | grep -Eo "\b[a-f0-9]{64}\b"
+╰─# grep -Eo "\b[a-f0-9]{64}\b" /var/lib/registry/docker/registry/v2/blobs/sha256/39/39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01/data
 f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a
 cbdbe7a5bc2a134ca8ec91be58565ec07d037386d1f1d8385412d224deafca08
 ```
 
-4. 根据 manifests 文件就可以得到 blobs 目录中镜像的所有 layer 和 image config 文件，然后将这些文件拼成一个 dir 格式的镜像，在这里使用 cp 的方式将镜像从 registry 存储目录里 `捞` 出来😂
+4. 根据 manifests 文件就可以得到 blobs 目录中镜像的所有 layer 和 image config 文件，然后将这些文件拼成一个 dir 格式的镜像，在这里使用 cp 的方式将镜像从 registry 存储目录里复制出来，过程如下：
 
 ```shell
-
 # 首先创建一个文件夹，为了保留镜像的 name 和 tag，文件夹的名称就对应的是 NAME:TAG
 ╭─root@sg-02 /var/lib/registry/docker
 ╰─# mkdir -p skopeo/library/alpine:latest
+
+# 复制镜像的 manifest 文件
 ╭─root@sg-02 /var/lib/registry/docker
 ╰─# cp /var/lib/registry/docker/registry/v2/blobs/sha256/39/39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01/data skopeo/library/alpine:latest/manifest
-╭─root@sg-02 /var/lib/registry/docker
-╰─# cp /var/lib/registry/docker/registry/v2/blobs/sha256/f7/f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a/data skopeo/library/alpine:latest/f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a
-╭─root@sg-02 /var/lib/registry/docker
-╰─# cp /var/lib/registry/docker/registry/v2/blobs/sha256/cb/cbdbe7a5bc2a134ca8ec91be58565ec07d037386d1f1d8385412d224deafca08/data skopeo/library/alpine:latest/cbdbe7a5bc2a134ca8ec91be58565ec07d037386d1f1d8385412d224deafca08
+
+# 复制镜像的 blob 文件
+# cp /var/lib/registry/docker/registry/v2/blobs/sha256/f7/f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a/data skopeo/library/alpine:latest/f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a
+# cp /var/lib/registry/docker/registry/v2/blobs/sha256/cb/cbdbe7a5bc2a134ca8ec91be58565ec07d037386d1f1d8385412d224deafca08/data skopeo/library/alpine:latest/cbdbe7a5bc2a134ca8ec91be58565ec07d037386d1f1d8385412d224deafca08
+```
+
+最终得到的镜像格式如下：
+
+```bash
 ╭─root@sg-02 /var/lib/registry/docker
 ╰─# tree skopeo/library/alpine:latest
 skopeo/library/alpine:latest
@@ -285,20 +323,17 @@ skopeo/library/alpine:latest
 └── manifest
 
 0 directories, 3 files
-
 ```
 
-和上面的 skopeo copy 出来的 dir 文件夹对比一下，到此为止镜像所需要的文件就基本上都齐全了，就差一个 version 文件，这个文件无关紧要可以去掉。
+和上面的 skopeo copy 出来的 dir 文件夹对比一下，除了一个无关紧要的 version 文件，其他的都一摸一样。
 
-5. 再优化一下，将步骤 4 中的 cp 操作修改成硬链接操作，能极大减少磁盘的 IO 操作。需要注意，硬链接文件不能跨分区，所以要和 registry 存储目录在同一个分区下才行。
+5. 再优化一下，将步骤 4 中的 cp 操作修改成硬链接操作，能极大减少磁盘的 IO 操作。需要注意：硬链接文件不能跨分区，所以要和 registry 存储目录在同一个分区下才行。
 
 ```shell
 ╭─root@sg-02 /var/lib/registry/docker
 ╰─# ln /var/lib/registry/docker/registry/v2/blobs/sha256/39/39eda93d15866957feaee28f8fc5adb545276a64147445c64992ef69804dbf01/data skopeo/library/alpine:latest/manifest
-╭─root@sg-02 /var/lib/registry/docker
-╰─# ln /var/lib/registry/docker/registry/v2/blobs/sha256/f7/f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a/data skopeo/library/alpine:latest/f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a
-╭─root@sg-02 /var/lib/registry/docker
-╰─# ln /var/lib/registry/docker/registry/v2/blobs/sha256/cb/cbdbe7a5bc2a134ca8ec91be58565ec07d037386d1f1d8385412d224deafca08/data skopeo/library/alpine:latest/cbdbe7a5bc2a134ca8ec91be58565ec07d037386d1f1d8385412d224deafca08
+# ln /var/lib/registry/docker/registry/v2/blobs/sha256/f7/f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a/data skopeo/library/alpine:latest/f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a
+# ln /var/lib/registry/docker/registry/v2/blobs/sha256/cb/cbdbe7a5bc2a134ca8ec91be58565ec07d037386d1f1d8385412d224deafca08/data skopeo/library/alpine:latest/cbdbe7a5bc2a134ca8ec91be58565ec07d037386d1f1d8385412d224deafca08
 ╭─root@sg-02 /var/lib/registry/docker
 ╰─# tree skopeo/library/alpine:latest
 skopeo/library/alpine:latest
@@ -309,7 +344,7 @@ skopeo/library/alpine:latest
 0 directories, 3 files
 ```
 
-然后使用 skopeo copy 或者 skopeo sync 将镜像 push 到 harbor
+然后使用 skopeo copy 或者 skopeo sync 将捞出来的镜像 push 到 harbor
 
 - 使用 skopeo copy
 
@@ -325,7 +360,6 @@ dir:skopeo/library/alpine:latest docker://harbor.k8s.li/library/alpine:latest
 ```shell
 skopeo sync --insecure-policy --src-tls-verify=false --dest-tls-verify=false \
 --src dir --dest docker skopeo/library/ harbor.k8s.li/library/
-
 ```
 
 ### 实现脚本
@@ -398,5 +432,5 @@ sync_image
 
 ## 参考
 
-- [《harbor权威指南》]()
+- [《harbor权威指南]()
 - [Harbor 2.0 takes a giant leap in expanding supported artifacts with OCI support](https://goharbor.io/blog/harbor-2.0/)
